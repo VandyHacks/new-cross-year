@@ -1,0 +1,104 @@
+{
+	"glyphs": {
+		"S": {
+			"x_min": 0,
+			"x_max": 826,
+			"ha": 915,
+			"o": "m 826 306 q 701 55 826 148 q 423 -29 587 -29 q 138 60 255 -29 q 0 318 13 154 l 208 318 q 288 192 216 238 q 437 152 352 152 q 559 181 506 152 q 623 282 623 217 q 466 411 623 372 q 176 487 197 478 q 18 719 18 557 q 136 958 18 869 q 399 1040 244 1040 q 670 956 561 1040 q 791 713 791 864 l 591 713 q 526 826 583 786 q 393 866 469 866 q 277 838 326 866 q 218 742 218 804 q 374 617 218 655 q 667 542 646 552 q 826 306 826 471 "
+		},
+		"D": {
+			"x_min": 0,
+			"x_max": 864,
+			"ha": 968,
+			"o": "m 400 1013 q 736 874 608 1013 q 864 523 864 735 q 717 146 864 293 q 340 0 570 0 l 0 0 l 0 1013 l 400 1013 m 398 837 l 206 837 l 206 182 l 372 182 q 584 276 507 182 q 657 504 657 365 q 594 727 657 632 q 398 837 522 837 "
+		},
+		"C": {
+			"x_min": 0,
+			"x_max": 970.828125,
+			"ha": 1043,
+			"o": "m 970 345 q 802 70 933 169 q 490 -29 672 -29 q 130 130 268 -29 q 0 506 0 281 q 134 885 0 737 q 502 1040 275 1040 q 802 939 668 1040 q 965 679 936 838 l 745 679 q 649 809 716 761 q 495 857 582 857 q 283 747 361 857 q 214 508 214 648 q 282 267 214 367 q 493 154 359 154 q 651 204 584 154 q 752 345 718 255 l 970 345 "
+		},
+		"X": {
+			"x_min": 0,
+			"x_max": 894.453125,
+			"ha": 999,
+			"o": "m 894 0 l 654 0 l 445 351 l 238 0 l 0 0 l 316 516 l 0 1013 l 238 1013 l 445 659 l 652 1013 l 894 1013 l 577 519 l 894 0 "
+		},
+		"N": {
+			"x_min": 0,
+			"x_max": 833,
+			"ha": 949,
+			"o": "m 833 0 l 617 0 l 206 695 l 206 0 l 0 0 l 0 1013 l 216 1013 l 629 315 l 629 1013 l 833 1013 l 833 0 "
+		},
+		"?": {
+			"x_min": 1,
+			"x_max": 687,
+			"ha": 785,
+			"o": "m 687 734 q 621 563 687 634 q 501 454 560 508 q 436 293 436 386 l 251 293 l 251 391 q 363 557 251 462 q 476 724 476 653 q 432 827 476 788 q 332 866 389 866 q 238 827 275 866 q 195 699 195 781 l 1 699 q 110 955 1 861 q 352 1040 210 1040 q 582 963 489 1040 q 687 734 687 878 m 446 0 l 243 0 l 243 203 l 446 203 l 446 0 "
+		},
+		"H": {
+			"x_min": 0,
+			"x_max": 838,
+			"ha": 953,
+			"o": "m 838 0 l 628 0 l 628 450 l 210 450 l 210 0 l 0 0 l 0 1013 l 210 1013 l 210 635 l 628 635 l 628 1013 l 838 1013 l 838 0 "
+		},
+		"V": {
+			"x_min": 0,
+			"x_max": 895.828125,
+			"ha": 997,
+			"o": "m 895 1013 l 550 0 l 347 0 l 0 1013 l 231 1013 l 447 256 l 666 1013 l 895 1013 "
+		},
+		"K": {
+			"x_min": 0,
+			"x_max": 900,
+			"ha": 996,
+			"o": "m 900 0 l 647 0 l 316 462 l 208 355 l 208 0 l 0 0 l 0 1013 l 208 1013 l 208 595 l 604 1013 l 863 1013 l 461 603 l 900 0 "
+		},
+		"Y": {
+			"x_min": 0,
+			"x_max": 836,
+			"ha": 931,
+			"o": "m 836 1013 l 532 376 l 532 0 l 322 0 l 322 376 l 0 1013 l 208 1013 l 427 576 l 626 1013 l 836 1013 "
+		},
+		" ": { "x_min": 0, "x_max": 0, "ha": 375 },
+		"I": {
+			"x_min": 41,
+			"x_max": 249,
+			"ha": 365,
+			"o": "m 249 0 l 41 0 l 41 1013 l 249 1013 l 249 0 "
+		},
+		"A": {
+			"x_min": 0,
+			"x_max": 966.671875,
+			"ha": 1069,
+			"o": "m 966 0 l 747 0 l 679 208 l 286 208 l 218 0 l 0 0 l 361 1013 l 600 1013 l 966 0 m 623 376 l 480 810 l 340 376 l 623 376 "
+		}
+	},
+	"cssFontWeight": "bold",
+	"ascender": 1216,
+	"underlinePosition": -100,
+	"cssFontStyle": "normal",
+	"boundingBox": { "yMin": -333, "xMin": -162, "yMax": 1216, "xMax": 1681 },
+	"resolution": 1000,
+	"original_font_information": {
+		"postscript_name": "Helvetiker-Bold",
+		"version_string": "Version 1.00 2004 initial release",
+		"vendor_url": "http://www.magenta.gr",
+		"full_font_name": "Helvetiker Bold",
+		"font_family_name": "Helvetiker",
+		"copyright": "Copyright (c) Magenta ltd, 2004.",
+		"description": "",
+		"trademark": "",
+		"designer": "",
+		"designer_url": "",
+		"unique_font_identifier": "Magenta ltd:Helvetiker Bold:22-10-104",
+		"license_url": "http://www.ellak.gr/fonts/MgOpen/license.html",
+		"license_description": "Copyright (c) 2004 by MAGENTA Ltd. All Rights Reserved.\r\n\r\nPermission is hereby granted, free of charge, to any person obtaining a copy of the fonts accompanying this license (\"Fonts\") and associated documentation files (the \"Font Software\"), to reproduce and distribute the Font Software, including without limitation the rights to use, copy, merge, publish, distribute, and/or sell copies of the Font Software, and to permit persons to whom the Font Software is furnished to do so, subject to the following conditions: \r\n\r\nThe above copyright and this permission notice shall be included in all copies of one or more of the Font Software typefaces.\r\n\r\nThe Font Software may be modified, altered, or added to, and in particular the designs of glyphs or characters in the Fonts may be modified and additional glyphs or characters may be added to the Fonts, only if the fonts are renamed to names not containing the word \"MgOpen\", or if the modifications are accepted for inclusion in the Font Software itself by the each appointed Administrator.\r\n\r\nThis License becomes null and void to the extent applicable to Fonts or Font Software that has been modified and is distributed under the \"MgOpen\" name.\r\n\r\nThe Font Software may be sold as part of a larger software package but no copy of one or more of the Font Software typefaces may be sold by itself. \r\n\r\nTHE FONT SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL MAGENTA OR PERSONS OR BODIES IN CHARGE OF ADMINISTRATION AND MAINTENANCE OF THE FONT SOFTWARE BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM OTHER DEALINGS IN THE FONT SOFTWARE.",
+		"manufacturer_name": "Magenta ltd",
+		"font_sub_family_name": "Bold"
+	},
+	"descender": -334,
+	"familyName": "Helvetiker",
+	"lineHeight": 1549,
+	"underlineThickness": 50
+}

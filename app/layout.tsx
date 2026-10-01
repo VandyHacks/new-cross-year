@@ -1,31 +1,25 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-import { cn } from "@/lib/utils";
+import { cn } from "cn";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
-
-const geistSans = Geist({
-	variable: "--font-geist-sans",
-	subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-	variable: "--font-geist-mono",
-	subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-	title: "VHXIII"
-};
+export const metadata: Metadata = { title: "VandyHacks XIII" };
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
 	return (
 		<html
 			lang="en"
-			className={cn("dark", "h-full", "antialiased", "font-sans", inter.variable)}
+			className="dark scheme-dark scroll-smooth scroll-pt-6 motion-reduce:scroll-auto"
 		>
-			<body className="min-h-full flex flex-col">{children}</body>
+			<body
+				className={cn(
+					"w-full bg-black font-sans leading-[normal] bg-[radial-gradient(125%_125%_at_50%_0%,_#000000_50%,_#7e51a488)] text-[#f1f0f3] selection:bg-[#ba87f8] selection:text-black",
+					inter.variable,
+				)}
+			>
+				{children}
+			</body>
 		</html>
 	);
 }
