@@ -1,14 +1,15 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useEffect, useRef } from "react";
+import { motion, useReducedMotion } from "motion/react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Color } from "three";
 import { loadGlyphAtlas } from "@/lib/ascii-logo/glyph-atlas.js";
 import { AsciiLogoRenderer } from "@/lib/ascii-logo/renderer.js";
+import { screenFlicker } from "@/lib/intro-motion";
 
 type RotationAxis = { value: number; velocity: number };
 
-// Exact critically damped spring: continuous velocity, with no overshoot.
 function smoothRotation(axis: RotationAxis, target: number, delta: number) {
 	const speed = 5;
 	const offset = axis.value - target;
@@ -18,12 +19,20 @@ function smoothRotation(axis: RotationAxis, target: number, delta: number) {
 	axis.velocity = (axis.velocity - speed * step) * decay;
 }
 
-function AsciiWordmarkScene() {
+function AsciiWordmarkScene({
+	onReady,
+	introActive,
+}: {
+	onReady: () => void;
+	introActive: boolean;
+}) {
 	const { gl, size } = useThree();
 	const renderer = useRef<AsciiLogoRenderer | null>(null);
+	const firstFrameRendered = useRef(false);
 	const reducedMotion = useRef(false);
 	const pointer = useRef({ x: 0, y: 0 });
 	const animationTime = useRef(0);
+	const glitchTime = useRef(0);
 	const rotation = useRef({
 		x: { value: 0.25, velocity: 0 },
 		y: { value: -0.12, velocity: 0 },
@@ -95,6 +104,7 @@ function AsciiWordmarkScene() {
 				cellHeight,
 			);
 			renderer.current = ascii;
+			firstFrameRendered.current = false;
 		});
 
 		return () => {
@@ -116,7 +126,6 @@ function AsciiWordmarkScene() {
 		);
 	}, [gl, size]);
 
-	// A positive priority lets the ASCII passes take over Fiber's final render.
 	useFrame((_, delta) => {
 		// Resume gently after an inactive tab or a stalled frame.
 		const dt = Math.min(delta, 1 / 30);
@@ -128,6 +137,7 @@ function AsciiWordmarkScene() {
 			axes.x.velocity = axes.y.velocity = axes.z.velocity = 0;
 		} else {
 			animationTime.current += dt * 0.25;
+			if (introActive && renderer.current) glitchTime.current += dt;
 			const t = animationTime.current;
 			smoothRotation(
 				axes.x,
@@ -141,25 +151,53 @@ function AsciiWordmarkScene() {
 			);
 			smoothRotation(axes.z, -0.025 + Math.sin(t * 0.6) * 0.015, dt);
 		}
-		renderer.current?.render({
-			elevation: 0,
-			azimuth: 0,
-			rotateX: axes.x.value,
-			rotateY: axes.y.value,
-			rotateZ: axes.z.value,
-			bob: 0,
-		});
+		renderer.current?.render(
+			{
+				elevation: 0,
+				azimuth: 0,
+				rotateX: axes.x.value,
+				rotateY: axes.y.value,
+				rotateZ: axes.z.value,
+				bob: 0,
+			},
+			{
+				time: glitchTime.current,
+				glitch: introActive && !reducedMotion.current ? 1 : 0,
+			},
+		);
+		if (renderer.current && !firstFrameRendered.current) {
+			firstFrameRendered.current = true;
+			onReady();
+		}
 	}, 1);
 
 	return null;
 }
 
-export default function AsciiWordmark() {
+export default function AsciiWordmark({
+	introActive = true,
+	onIntroComplete,
+}: {
+	introActive?: boolean;
+	onIntroComplete?: () => void;
+}) {
+	const [ready, setReady] = useState(false);
+	const reducedMotion = useReducedMotion();
+	const onReady = useCallback(() => setReady(true), []);
+
 	return (
-		<div
-			className="absolute inset-x-0 inset-y-[20%] -translate-x-18 z-0 max-[600px]:top-[26%] max-[600px]:bottom-[39%] [&_canvas]:block [&_canvas]:size-full"
+		<motion.div
+			data-intro
+			className="absolute inset-x-0 inset-y-[20%] z-0 max-[600px]:top-[26%] max-[600px]:bottom-[39%] [&_canvas]:block [&_canvas]:size-full"
 			role="img"
 			aria-label="VANDYHACKSXIII rendered as a purple ASCII 3D solid"
+			initial="hidden"
+			animate={introActive && ready ? "visible" : "hidden"}
+			variants={screenFlicker}
+			custom={{ reducedMotion }}
+			onAnimationComplete={(definition) => {
+				if (definition === "visible") onIntroComplete?.();
+			}}
 		>
 			<Canvas
 				linear
@@ -170,8 +208,11 @@ export default function AsciiWordmark() {
 					powerPreference: "high-performance",
 				}}
 			>
-				<AsciiWordmarkScene />
+				<AsciiWordmarkScene
+					onReady={onReady}
+					introActive={introActive}
+				/>
 			</Canvas>
-		</div>
+		</motion.div>
 	);
 }
