@@ -9,7 +9,7 @@ html {
 	scrollbar-gutter: stable;
 }
 
-/* Lock scrolling from the initial HTML until every intro animation finishes. */
+/* Lock scrolling from the initial HTML until the hero navigation is revealed. */
 html:has([data-intro-pending="true"]),
 body:has([data-intro-pending="true"]) {
 	overflow: hidden;
@@ -199,6 +199,10 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
+	[data-scroll-reveal-word] {
+		opacity: 1 !important;
+	}
+
 	.retro-noise::before {
 		animation: none;
 	}

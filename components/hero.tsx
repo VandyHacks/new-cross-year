@@ -20,9 +20,8 @@ const navLinkClassName =
 
 export default function Hero() {
 	const [stage, setStage] = useState<IntroStage>("loading");
-	const [linesComplete, setLinesComplete] = useState(false);
-	const [linksComplete, setLinksComplete] = useState(false);
-	const introComplete = linesComplete && linksComplete;
+	// Unlock after the navigation flicker; the slower background lines can settle.
+	const [introComplete, setIntroComplete] = useState(false);
 	const [heroCovered, setHeroCovered] = useState(false);
 	const heroRef = useRef<HTMLDivElement>(null);
 	const reducedMotion = useReducedMotion();
@@ -84,9 +83,6 @@ export default function Hero() {
 							: "hidden"
 					}
 					variants={sequenceStage}
-					onAnimationComplete={(definition) => {
-						if (definition === "visible") setLinesComplete(true);
-					}}
 				>
 					{Array.from({ length: 5 }, (_, i) => (
 						<motion.span
@@ -122,7 +118,7 @@ export default function Hero() {
 						variants={sequenceStage}
 						onAnimationComplete={(definition) => {
 							if (definition === "visible")
-								setLinksComplete(true);
+								setIntroComplete(true);
 						}}
 					>
 						<motion.a
