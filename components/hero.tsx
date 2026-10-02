@@ -35,7 +35,8 @@ export default function Hero() {
 		mass: 0.5,
 	});
 	const scale = useTransform(progress, [0, 1], [1, 0.8]);
-	const opacity = useTransform(progress, [0, 1], [1, 0.5]);
+	const opacity = useTransform(progress, [0, 1], [1, 0]);
+	const y = useTransform(progress, [0, 1], [0, 10]);
 
 	useMotionValueEvent(scrollYProgress, "change", (value) => {
 		setHeroCovered(value >= 1);
@@ -68,6 +69,7 @@ export default function Hero() {
 				style={{
 					scale: reducedMotion ? 1 : scale,
 					opacity: reducedMotion ? 1 : opacity,
+					y: reducedMotion ? 0 : y
 				}}
 				inert={heroCovered}
 				aria-hidden={heroCovered}
