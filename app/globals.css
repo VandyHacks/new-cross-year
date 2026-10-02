@@ -1,8 +1,20 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "lenis/dist/lenis.css";
 
 @custom-variant dark (&:is(.dark *));
+
+html {
+	scrollbar-gutter: stable;
+}
+
+/* Lock scrolling from the initial HTML until every intro animation finishes. */
+html:has([data-intro-pending="true"]),
+body:has([data-intro-pending="true"]) {
+	overflow: hidden;
+	overscroll-behavior: none;
+}
 
 @theme inline {
 	--color-background: var(--background);

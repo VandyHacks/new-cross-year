@@ -89,7 +89,11 @@ function AsciiWordmarkScene({
 		motion.addEventListener("change", updateMotion);
 		gl.setClearColor(0x000000, 0);
 
-		void loadGlyphAtlas("monospace", "400", 0.6).then((atlas) => {
+		// Finish font loading and the first render before starting the page intro.
+		void Promise.all([
+			loadGlyphAtlas("monospace", "400", 0.6),
+			document.fonts.ready,
+		]).then(([atlas]) => {
 			if (disposed) return;
 			const ascii = new AsciiLogoRenderer(gl, atlas);
 			ascii.setPaper(false);
@@ -127,6 +131,9 @@ function AsciiWordmarkScene({
 	}, [gl, size]);
 
 	useFrame((_, delta) => {
+		const ascii = renderer.current;
+		if (!ascii) return;
+
 		// Resume gently after an inactive tab or a stalled frame.
 		const dt = Math.min(delta, 1 / 30);
 		const axes = rotation.current;
@@ -135,9 +142,9 @@ function AsciiWordmarkScene({
 			axes.y.value = -0.12;
 			axes.z.value = -0.025;
 			axes.x.velocity = axes.y.velocity = axes.z.velocity = 0;
-		} else {
+		} else if (introActive && firstFrameRendered.current) {
 			animationTime.current += dt * 0.25;
-			if (introActive && renderer.current) glitchTime.current += dt;
+			glitchTime.current += dt;
 			const t = animationTime.current;
 			smoothRotation(
 				axes.x,
@@ -151,7 +158,7 @@ function AsciiWordmarkScene({
 			);
 			smoothRotation(axes.z, -0.025 + Math.sin(t * 0.6) * 0.015, dt);
 		}
-		renderer.current?.render(
+		ascii.render(
 			{
 				elevation: 0,
 				azimuth: 0,
@@ -165,7 +172,7 @@ function AsciiWordmarkScene({
 				glitch: introActive && !reducedMotion.current ? 1 : 0,
 			},
 		);
-		if (renderer.current && !firstFrameRendered.current) {
+		if (!firstFrameRendered.current) {
 			firstFrameRendered.current = true;
 			onReady();
 		}
@@ -176,14 +183,19 @@ function AsciiWordmarkScene({
 
 export default function AsciiWordmark({
 	introActive = true,
+	onReady,
 	onIntroComplete,
 }: {
 	introActive?: boolean;
+	onReady?: () => void;
 	onIntroComplete?: () => void;
 }) {
 	const [ready, setReady] = useState(false);
 	const reducedMotion = useReducedMotion();
-	const onReady = useCallback(() => setReady(true), []);
+	const handleReady = useCallback(() => {
+		setReady(true);
+		onReady?.();
+	}, [onReady]);
 
 	return (
 		<motion.div
@@ -201,6 +213,7 @@ export default function AsciiWordmark({
 		>
 			<Canvas
 				linear
+				resize={{ offsetSize: true }}
 				dpr={[1, 1.5]}
 				gl={{
 					alpha: true,
@@ -209,7 +222,7 @@ export default function AsciiWordmark({
 				}}
 			>
 				<AsciiWordmarkScene
-					onReady={onReady}
+					onReady={handleReady}
 					introActive={introActive}
 				/>
 			</Canvas>
