@@ -8,7 +8,7 @@ export default function About() {
 	return (
 		<section
 			id="about"
-			className="relative z-10 isolate flex min-h-svh items-center overflow-hidden bg-black px-[clamp(20px,3vw,64px)] pt-[max(20svh,160px)] pb-[max(20svh,160px)]"
+			className="relative z-10 isolate flex min-h-svh items-center overflow-hidden bg-black px-[clamp(20px,3vw,64px)] pt-[max(20svh,160px)] pb-[max(20svh,160px)] mask-[linear-gradient(to_bottom,transparent_0%,rgb(0_0_0/0.25)_2%,rgb(0_0_0/0.6)_4%,rgb(0_0_0/0.85)_6%,black_10%)]"
 			aria-labelledby="about-title"
 		>
 			<MatrixRain />

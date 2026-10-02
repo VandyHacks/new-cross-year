@@ -4,6 +4,7 @@ import AsciiWordmark from "@/components/ascii-wordmark";
 import { screenFlicker, sequenceStage } from "@/lib/intro-motion";
 import {
 	motion,
+	type Variants,
 	useMotionValueEvent,
 	useReducedMotion,
 	useScroll,
@@ -25,6 +26,15 @@ export default function Hero() {
 	const [heroCovered, setHeroCovered] = useState(false);
 	const heroRef = useRef<HTMLDivElement>(null);
 	const reducedMotion = useReducedMotion();
+	const copyFade: Variants = {
+		hidden: { opacity: 0 },
+		visible: {
+			opacity: 1,
+			transition: reducedMotion
+				? { duration: 0 }
+				: { delay: 0.85, type: "spring", damping: 20 },
+		},
+	};
 	const { scrollYProgress } = useScroll({
 		target: heroRef,
 		offset: ["start start", "end start"],
@@ -48,7 +58,8 @@ export default function Hero() {
 		const lenis = new Lenis({
 			autoRaf: true,
 			anchors: true,
-			lerp: 0.085,
+			lerp: 0.055,
+			wheelMultiplier: 0.65,
 		});
 		return () => lenis.destroy();
 	}, [introComplete, reducedMotion]);
@@ -183,15 +194,7 @@ export default function Hero() {
 						<motion.div className="overflow-hidden">
 							<motion.span
 								data-intro
-								variants={{
-									hidden: { opacity: 0 },
-									visible: {
-										opacity: 1,
-										transition: reducedMotion
-											? { duration: 0 }
-											: { delay: 1, ease: "easeInOut" },
-									},
-								}}
+								variants={copyFade}
 								className="mb-[18px] block font-mono text-[11px] font-normal tracking-[0.04em] uppercase max-[600px]:mb-3 max-[600px]:text-[10px]"
 							>
 								Code. Collaborate. Create.
@@ -243,19 +246,7 @@ export default function Hero() {
 					<div className="max-w-[260px] justify-self-end overflow-hidden pb-1 text-sm leading-normal text-[#99959e] min-[1800px]:max-w-[320px] min-[1800px]:text-[17px]">
 						<motion.p
 							data-intro
-							variants={{
-								hidden: { opacity: 0 },
-								visible: {
-									opacity: 1,
-									transition: reducedMotion
-										? { duration: 0 }
-										: {
-												delay: 0.85,
-												type: "spring",
-												damping: 20,
-											},
-								},
-							}}
+							variants={copyFade}
 						>
 							A weekend to meet new people, learn something new,
 							and make something you can call yours.
