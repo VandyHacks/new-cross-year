@@ -35,7 +35,7 @@ export default function Hero() {
 		mass: 0.5,
 	});
 	const scale = useTransform(progress, [0, 1], [1, 0.8]);
-	const opacity = useTransform(progress, [0, 1], [1, 0]);
+	const opacity = useTransform(progress, [0, 1], [1, 0.2]);
 	const y = useTransform(progress, [0, 1], [0, 10]);
 
 	useMotionValueEvent(scrollYProgress, "change", (value) => {
@@ -75,6 +75,7 @@ export default function Hero() {
 				aria-hidden={heroCovered}
 				aria-labelledby="event-title"
 			>
+				<div className="retro-noise" aria-hidden="true" />
 				<motion.div
 					className="pointer-events-none absolute inset-y-0 inset-x-[clamp(20px,3vw,64px)] -z-10 flex justify-between"
 					aria-hidden="true"

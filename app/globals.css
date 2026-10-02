@@ -134,8 +134,7 @@ button {
 	outline: 0;
 }
 
-.retro-screen::before,
-.retro-noise {
+.retro-screen::before {
 	position: fixed;
 	inset: 0;
 	pointer-events: none;
@@ -153,6 +152,9 @@ button {
 }
 
 .retro-noise {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
 	z-index: 51;
 	overflow: hidden;
 	mix-blend-mode: normal;

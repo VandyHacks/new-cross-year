@@ -18,8 +18,8 @@ type ScrollRevealProps = {
 };
 
 // Longer, overlapping fades keep the word sequence gradual.
-const WORD_DURATION = 1.2;
-const WORD_STAGGER = 0.05;
+const WORD_DURATION = 3;
+const WORD_STAGGER = 0.1;
 
 function RevealWord({
 	children,
@@ -57,7 +57,7 @@ function RevealWord({
 export default function ScrollReveal({
 	children,
 	className,
-	baseOpacity = 0.1,
+	baseOpacity = 0.07,
 }: ScrollRevealProps) {
 	const textRef = useRef<HTMLParagraphElement>(null);
 	const reducedMotion = useReducedMotion();

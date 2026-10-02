@@ -29,7 +29,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 		>
 			<body className="retro-screen w-full bg-black font-sans leading-[normal] bg-[radial-gradient(125%_125%_at_50%_0%,_#000000_50%,_#7e51a4ff)] text-[#f1f0f3] selection:bg-[#ba87f8] selection:text-black">
 				{children}
-				<div className="retro-noise" aria-hidden="true" />
 			</body>
 		</html>
 	);

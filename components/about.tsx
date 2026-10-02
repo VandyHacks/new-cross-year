@@ -13,7 +13,7 @@ export default function About() {
 			<div className="mx-auto w-full max-w-[1400px]">
 				<h2
 					id="about-title"
-					className="mb-10 font-mono text-[11px] tracking-[0.08em] text-[#ba87f8] uppercase max-[600px]:mb-7 max-[600px]:text-[10px]"
+					className="mb-10 font-heading text-[11px] tracking-[0.08em] text-[#ba87f8] uppercase max-[600px]:mb-7 max-[600px]:text-[10px]"
 				>
 					About
 				</h2>
