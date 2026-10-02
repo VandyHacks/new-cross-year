@@ -75,7 +75,6 @@ export default function Hero() {
 				aria-hidden={heroCovered}
 				aria-labelledby="event-title"
 			>
-				<div className="retro-noise" aria-hidden="true" />
 				<motion.div
 					className="pointer-events-none absolute inset-y-0 inset-x-[clamp(20px,3vw,64px)] -z-10 flex justify-between"
 					aria-hidden="true"

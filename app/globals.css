@@ -151,62 +151,48 @@ button {
 	);
 }
 
-.retro-noise {
-	position: absolute;
+.retro-screen {
+	text-shadow:
+		1px 0 rgb(255 110 160 / 0.38),
+		-1px 0 rgb(100 190 255 / 0.38),
+		0 0 8px rgb(210 185 255 / 0.22);
+}
+
+.retro-screen canvas {
+	transform: scaleY(0.97);
+	filter: blur(0.3px) contrast(1.1) saturate(0.9);
+}
+
+.retro-crt {
+	position: fixed;
 	inset: 0;
 	pointer-events: none;
 	z-index: 51;
 	overflow: hidden;
-	mix-blend-mode: normal;
+	mix-blend-mode: multiply;
+	opacity: 0.4;
 }
 
-.retro-noise::before {
+.retro-crt::before {
 	content: "";
 	position: absolute;
-	inset: -180px;
-	background-image: url("/textures/grain.svg");
-	background-size: 180px 180px;
-	opacity: 0.07;
-	/* filter: contrast(130%); */
-	scale: 110%;
-	animation: tv-static 0.8s steps(1, end) infinite;
-}
-
-@keyframes tv-static {
-	0%,
-	100% {
-		transform: translate3d(0, 0, 0);
-	}
-	12.5% {
-		transform: translate3d(-43px, 57px, 0);
-	}
-	25% {
-		transform: translate3d(67px, -29px, 0);
-	}
-	37.5% {
-		transform: translate3d(-81px, -63px, 0);
-	}
-	50% {
-		transform: translate3d(31px, 83px, 0);
-	}
-	62.5% {
-		transform: translate3d(-57px, 13px, 0);
-	}
-	75% {
-		transform: translate3d(89px, -51px, 0);
-	}
-	87.5% {
-		transform: translate3d(17px, 47px, 0);
-	}
+	inset: 0;
+	background-image:
+		url("/textures/crt-scanlines.svg"),
+		repeating-linear-gradient(
+			90deg,
+			rgb(255 65 65 / 0.11) 0 2px,
+			rgb(70 255 110 / 0.07) 2px 4px,
+			rgb(90 110 255 / 0.11) 4px 6px
+		);
+	background-size:
+		100% 24px,
+		6px 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {
 	[data-scroll-reveal-word] {
 		opacity: 1 !important;
-	}
-
-	.retro-noise::before {
-		animation: none;
 	}
 
 	[data-intro] {

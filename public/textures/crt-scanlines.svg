@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="16" viewBox="0 0 1440 16" preserveAspectRatio="none">
+  <g fill="none" stroke="#000" stroke-linecap="butt">
+    <path d="M0 1 Q720 3.8 1440 1 M0 5 Q720 7.8 1440 5 M0 9 Q720 11.8 1440 9 M0 13 Q720 15.8 1440 13" stroke-width="1.6" opacity=".36"/>
+    <path d="M0 1 Q720 3.8 1440 1 M0 5 Q720 7.8 1440 5 M0 9 Q720 11.8 1440 9 M0 13 Q720 15.8 1440 13" stroke-width=".8" opacity=".2"/>
+  </g>
+</svg>
