@@ -190,6 +190,25 @@ button {
 		6px 100%;
 }
 
+.about-matrix {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	opacity: 0.34;
+	mask-image: linear-gradient(transparent, black 18%, black 82%, transparent);
+}
+
+.about-matrix::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: radial-gradient(
+		ellipse at center,
+		rgb(0 0 0 / 0.65),
+		transparent 75%
+	);
+}
+
 @media (prefers-reduced-motion: reduce) {
 	[data-scroll-reveal-word] {
 		opacity: 1 !important;
