@@ -12,7 +12,6 @@ export default function Home() {
 			<About />
 			<Stats />
 			<Sponsors />
-			<Team />
 			<Footer />
 		</main>
 	);

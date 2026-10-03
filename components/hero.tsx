@@ -76,7 +76,7 @@ export default function Hero() {
 			data-intro-pending={!introComplete}
 		>
 			<motion.section
-				className="fixed inset-0 isolate z-0 flex h-svh origin-center flex-col overflow-hidden bg-[radial-gradient(125%_125%_at_50%_0%,_#000000_50%,_#7e51a4ff)] px-[clamp(20px,3vw,64px)]"
+				className="fixed inset-0 isolate z-0 flex h-svh origin-center flex-col overflow-hidden bg-[radial-gradient(125%_125%_at_50%_0%,_#000000_50%,_#7e51a477)] px-[clamp(20px,3vw,64px)]"
 				style={{
 					scale: reducedMotion ? 1 : scale,
 					opacity: reducedMotion ? 1 : opacity,

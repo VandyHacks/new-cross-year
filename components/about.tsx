@@ -1,6 +1,8 @@
 import ScrollReveal from "@/components/scroll-reveal";
 import MatrixRain from "@/components/matrix-rain";
 
+// mask-[linear-gradient(to_bottom,transparent_0%,rgb(0_0_0/0.25)_2%,rgb(0_0_0/0.6)_4%,rgb(0_0_0/0.85)_6%,black_10%)]"
+
 const aboutText =
 	"Code, collaborate, learn, and network at Vanderbilt's official collegiate hackathon, VandyHacks! This in-person event brings students together for workshops, games, networking, meals, speaker events, and a weekend of building ambitious projects. Whether this is your first hackathon or your thirteenth, we hope to see you at VandyHacks XIII in March 2027. Go Hackers!";
 
@@ -8,7 +10,7 @@ export default function About() {
 	return (
 		<section
 			id="about"
-			className="relative z-10 isolate flex min-h-svh items-center overflow-hidden bg-black px-[clamp(20px,3vw,64px)] pt-[max(20svh,160px)] pb-[max(20svh,160px)] mask-[linear-gradient(to_bottom,transparent_0%,rgb(0_0_0/0.25)_2%,rgb(0_0_0/0.6)_4%,rgb(0_0_0/0.85)_6%,black_10%)]"
+			className="relative z-10 isolate flex min-h-svh items-center overflow-hidden bg-black px-[clamp(20px,3vw,64px)] pt-[max(20svh,160px)] pb-[max(20svh,160px)]"
 			aria-labelledby="about-title"
 		>
 			<MatrixRain />
