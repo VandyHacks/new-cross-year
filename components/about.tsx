@@ -10,7 +10,7 @@ export default function About() {
 	return (
 		<section
 			id="about"
-			className="relative z-10 isolate flex min-h-svh items-center overflow-hidden bg-black px-[clamp(20px,3vw,64px)] pt-[max(20svh,160px)] pb-[max(20svh,160px)]"
+			className="relative z-10 isolate flex min-h-svh items-center overflow-hidden bg-black px-[clamp(20px,3vw,64px)] pt-[max(20svh,160px)] pb-[clamp(40px,8svh,96px)]"
 			aria-labelledby="about-title"
 		>
 			<MatrixRain />
