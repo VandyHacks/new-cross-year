@@ -1,5 +1,4 @@
 import ScrollReveal from "@/components/scroll-reveal";
-import MatrixRain from "@/components/matrix-rain";
 
 // mask-[linear-gradient(to_bottom,transparent_0%,rgb(0_0_0/0.25)_2%,rgb(0_0_0/0.6)_4%,rgb(0_0_0/0.85)_6%,black_10%)]"
 
@@ -10,10 +9,9 @@ export default function About() {
 	return (
 		<section
 			id="about"
-			className="relative z-10 isolate flex min-h-svh items-center overflow-hidden bg-black px-[clamp(20px,3vw,64px)] pt-[max(20svh,160px)] pb-[clamp(40px,8svh,96px)]"
+			className="relative z-10 isolate flex min-h-svh items-center overflow-hidden px-[clamp(20px,3vw,64px)] pt-[max(20svh,160px)] pb-[clamp(40px,8svh,96px)]"
 			aria-labelledby="about-title"
 		>
-			<MatrixRain />
 			<div className="relative z-10 mx-auto w-full max-w-[1400px]">
 				<h2
 					id="about-title"

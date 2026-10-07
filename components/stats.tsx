@@ -1,5 +1,3 @@
-import MatrixRain from "@/components/matrix-rain";
-
 const metrics = [
 	{
 		value: "2,000+",
@@ -37,20 +35,11 @@ export default function Stats() {
 	return (
 		<section
 			id="stats"
-			className="relative z-10 isolate overflow-hidden bg-black px-[clamp(8px,3vw,64px)] pt-[clamp(8px,1vw,16px)] pb-[clamp(120px,18vw,220px)]"
+			className="relative z-10 isolate overflow-hidden px-[clamp(8px,3vw,64px)] pt-[clamp(8px,1vw,16px)] pb-[clamp(120px,18vw,220px)]"
 			aria-labelledby="stats-title"
 		>
-			<MatrixRain />
 			<div className="relative z-10 mx-auto w-full max-w-[1400px]">
-				<div className="relative z-10 mx-auto w-full max-w-[1400px]">
-					<h2
-						id="stats-title"
-						className="mb-10 font-heading text-[11px] tracking-[0.08em] text-[#ba87f8] uppercase max-[600px]:mb-7 max-[600px]:text-[10px]"
-					>
-						Numbers
-					</h2>
-				</div>
-				<div className="grid grid-cols-6 items-start gap-[clamp(4px,1vw,20px)] pt-4 pb-10">
+				<div className="grid grid-cols-6 items-start gap-[clamp(4px,1vw,20px)] pt-7 pb-10">
 					{metrics.map((metric) => (
 						<article
 							key={metric.label}

@@ -194,7 +194,7 @@ button {
 	position: absolute;
 	inset: 0;
 	pointer-events: none;
-	opacity: 0.25;
+	opacity: 0.4;
 	mask-image: linear-gradient(transparent, black 18%, black 82%, transparent);
 }
 
