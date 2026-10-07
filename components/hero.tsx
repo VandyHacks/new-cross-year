@@ -80,7 +80,7 @@ export default function Hero() {
 				style={{
 					scale: reducedMotion ? 1 : scale,
 					opacity: reducedMotion ? 1 : opacity,
-					y: reducedMotion ? 0 : y
+					y: reducedMotion ? 0 : y,
 				}}
 				inert={heroCovered}
 				aria-hidden={heroCovered}
@@ -124,7 +124,7 @@ export default function Hero() {
 						VandyHacks XIII — Vanderbilt’s collegiate hackathon
 					</h1>
 					<motion.nav
-						className="grid grid-cols-4 gap-px text-xs leading-[normal] uppercase max-[600px]:grid-cols-2 max-[600px]:gap-y-2.5 max-[600px]:text-[10px]"
+						className="grid grid-cols-5 gap-px text-xs leading-[normal] uppercase max-[900px]:grid-cols-3 max-[600px]:grid-cols-2 max-[600px]:gap-y-2.5 max-[600px]:text-[10px]"
 						aria-label="Main navigation"
 						initial="hidden"
 						animate={stage === "links" ? "visible" : "hidden"}
@@ -142,6 +142,15 @@ export default function Hero() {
 							href="#home"
 						>
 							Home <span>↗</span>
+						</motion.a>
+						<motion.a
+							data-intro
+							variants={screenFlicker}
+							custom={{ delay: 0.36, reducedMotion }}
+							className={navLinkClassName}
+							href="#stats"
+						>
+							Stats <span>↓</span>
 						</motion.a>
 						<motion.a
 							data-intro
@@ -244,10 +253,7 @@ export default function Hero() {
 						</motion.div>
 					</motion.div>
 					<div className="max-w-[260px] justify-self-end overflow-hidden pb-1 text-sm leading-normal text-[#99959e] min-[1800px]:max-w-[320px] min-[1800px]:text-[17px]">
-						<motion.p
-							data-intro
-							variants={copyFade}
-						>
+						<motion.p data-intro variants={copyFade}>
 							A weekend to meet new people, learn something new,
 							and make something you can call yours.
 						</motion.p>
