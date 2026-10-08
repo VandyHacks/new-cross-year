@@ -16,6 +16,10 @@ body:has([data-intro-pending="true"]) {
 	overscroll-behavior: none;
 }
 
+html:has([data-intro-pending="true"]) [data-footer-reveal] {
+	visibility: hidden;
+}
+
 @theme inline {
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
@@ -58,6 +62,19 @@ body:has([data-intro-pending="true"]) {
 	--radius-2xl: calc(var(--radius) * 1.8);
 	--radius-3xl: calc(var(--radius) * 2.2);
 	--radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@theme {
+	--animate-sponsor-scroll: sponsor-scroll 80s linear infinite;
+
+	@keyframes sponsor-scroll {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(-50%);
+		}
+	}
 }
 
 :root {
@@ -210,7 +227,8 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
-	[data-scroll-reveal-word] {
+	[data-scroll-reveal-word],
+	[data-stat-card] {
 		opacity: 1 !important;
 	}
 

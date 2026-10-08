@@ -3,7 +3,6 @@ import About from "@/components/about";
 import Stats from "@/components/stats";
 import MatrixRain from "@/components/matrix-rain";
 import Sponsors from "@/components/sponsors";
-import Team from "@/components/team";
 import Footer from "@/components/footer";
 
 export default function Home() {
@@ -14,8 +13,8 @@ export default function Home() {
 				<MatrixRain />
 				<About />
 				<Stats />
+				<Sponsors />
 			</div>
-			<Sponsors />
 			<Footer />
 		</main>
 	);

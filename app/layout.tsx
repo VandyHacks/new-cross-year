@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Michroma, Space_Mono } from "next/font/google";
+import { Michroma } from "next/font/google";
 import "./globals.css";
 import { cn } from "cn";
 

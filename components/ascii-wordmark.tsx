@@ -30,6 +30,7 @@ function AsciiWordmarkScene({
 	const renderer = useRef<AsciiLogoRenderer | null>(null);
 	const firstFrameRendered = useRef(false);
 	const reducedMotion = useRef(false);
+	const frontFacing = useRef(false);
 	const pointer = useRef({ x: 0, y: 0 });
 	const animationTime = useRef(0);
 	const glitchTime = useRef(0);
@@ -39,14 +40,33 @@ function AsciiWordmarkScene({
 		z: { value: -0.025, velocity: 0 },
 	});
 	const viewport = useRef(size);
+	const resizeRenderer = useCallback(() => {
+		const { width, height } = viewport.current;
+		const cellHeight = Math.max(3, Math.min(10, width / 155));
+		renderer.current?.setInk(
+			frontFacing.current
+				? new Color().setRGB(0.95, 0.65, 1.35)
+				: new Color().setRGB(0.68, 0.39, 1),
+		);
+		renderer.current?.resize(
+			width,
+			height,
+			gl.getPixelRatio(),
+			cellHeight * 0.6,
+			cellHeight,
+			{ frontFacing: frontFacing.current },
+		);
+	}, [gl]);
+
 	useEffect(() => {
 		viewport.current = size;
-	}, [size]);
+		resizeRenderer();
+	}, [size, resizeRenderer]);
 
 	useEffect(() => {
 		const canvas = gl.domElement;
 		const move = (event: PointerEvent) => {
-			if (event.pointerType === "touch") return;
+			if (frontFacing.current || event.pointerType === "touch") return;
 			const bounds = canvas.getBoundingClientRect();
 			if (!bounds.width || !bounds.height) return;
 			pointer.current.x = Math.max(
@@ -82,11 +102,21 @@ function AsciiWordmarkScene({
 	useEffect(() => {
 		let disposed = false;
 		const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+		const mobile = window.matchMedia(
+			"(max-width: 767px), (hover: none) and (pointer: coarse)",
+		);
 		const updateMotion = () => {
 			reducedMotion.current = motion.matches;
 		};
 		updateMotion();
 		motion.addEventListener("change", updateMotion);
+		const updateMobile = () => {
+			frontFacing.current = mobile.matches;
+			pointer.current = { x: 0, y: 0 };
+			resizeRenderer();
+		};
+		updateMobile();
+		mobile.addEventListener("change", updateMobile);
 		gl.setClearColor(0x000000, 0);
 
 		// Finish font loading and the first render before starting the page intro.
@@ -97,38 +127,19 @@ function AsciiWordmarkScene({
 			if (disposed) return;
 			const ascii = new AsciiLogoRenderer(gl, atlas);
 			ascii.setPaper(false);
-			ascii.setInk(new Color().setRGB(0.68, 0.39, 1));
-			const { width, height } = viewport.current;
-			const cellHeight = Math.max(3, Math.min(10, width / 155));
-			ascii.resize(
-				width,
-				height,
-				gl.getPixelRatio(),
-				cellHeight * 0.6,
-				cellHeight,
-			);
 			renderer.current = ascii;
+			resizeRenderer();
 			firstFrameRendered.current = false;
 		});
 
 		return () => {
 			disposed = true;
 			motion.removeEventListener("change", updateMotion);
+			mobile.removeEventListener("change", updateMobile);
 			renderer.current?.destroy();
 			renderer.current = null;
 		};
-	}, [gl]);
-
-	useEffect(() => {
-		const cellHeight = Math.max(3, Math.min(10, size.width / 155));
-		renderer.current?.resize(
-			size.width,
-			size.height,
-			gl.getPixelRatio(),
-			cellHeight * 0.6,
-			cellHeight,
-		);
-	}, [gl, size]);
+	}, [gl, resizeRenderer]);
 
 	useFrame((_, delta) => {
 		const ascii = renderer.current;
@@ -137,7 +148,10 @@ function AsciiWordmarkScene({
 		// Resume gently after an inactive tab or a stalled frame.
 		const dt = Math.min(delta, 1 / 30);
 		const axes = rotation.current;
-		if (reducedMotion.current) {
+		if (frontFacing.current) {
+			axes.x.value = axes.y.value = axes.z.value = 0;
+			axes.x.velocity = axes.y.velocity = axes.z.velocity = 0;
+		} else if (reducedMotion.current) {
 			axes.x.value = 0.25;
 			axes.y.value = -0.12;
 			axes.z.value = -0.025;
@@ -169,7 +183,12 @@ function AsciiWordmarkScene({
 			},
 			{
 				time: glitchTime.current,
-				glitch: introActive && !reducedMotion.current ? 1 : 0,
+				glitch:
+					introActive &&
+					!reducedMotion.current &&
+					!frontFacing.current
+						? 1
+						: 0,
 			},
 		);
 		if (!firstFrameRendered.current) {
@@ -200,9 +219,9 @@ export default function AsciiWordmark({
 	return (
 		<motion.div
 			data-intro
-			className="absolute inset-x-0 inset-y-[20%] z-0 max-[600px]:top-[26%] max-[600px]:bottom-[39%] [&_canvas]:block [&_canvas]:size-full"
+			className="absolute inset-x-0 inset-y-[20%] z-0 max-[767px]:top-[27%] max-[767px]:bottom-[27%] [&_canvas]:block [&_canvas]:size-full"
 			role="img"
-			aria-label="VANDYHACKSXIII rendered as a purple ASCII 3D solid"
+			aria-label="VandyHacks rendered in purple ASCII"
 			initial="hidden"
 			animate={introActive && ready ? "visible" : "hidden"}
 			variants={screenFlicker}
