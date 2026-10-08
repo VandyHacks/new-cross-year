@@ -54,7 +54,13 @@ function AsciiWordmarkScene({
 			gl.getPixelRatio(),
 			cellHeight * 0.6,
 			cellHeight,
-			{ frontFacing: frontFacing.current },
+			{
+				frontFacing: frontFacing.current,
+				// Match the extra canvas space in the mobile wordmark styles.
+				bloomPadding: window.matchMedia("(max-width: 767px)").matches
+					? 64
+					: 0,
+			},
 		);
 	}, [gl]);
 
@@ -236,7 +242,7 @@ export default function AsciiWordmark({
 	return (
 		<motion.div
 			data-intro
-			className="absolute inset-x-0 inset-y-[20%] z-0 max-[767px]:top-[27%] max-[767px]:bottom-[27%] [&_canvas]:block [&_canvas]:size-full"
+			className="absolute inset-x-0 inset-y-[20%] z-0 max-[767px]:-inset-x-16 max-[767px]:top-[calc(27%-64px)] max-[767px]:bottom-[calc(27%-64px)] [&_canvas]:block [&_canvas]:size-full"
 			role="img"
 			aria-label="VandyHacks rendered in purple ASCII"
 			initial="hidden"

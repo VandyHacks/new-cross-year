@@ -9,7 +9,7 @@ export default function Home() {
 	return (
 		<main className="relative isolate bg-black">
 			<Hero />
-			<div className="relative z-10 isolate overflow-hidden bg-black">
+			<div className="relative z-10 isolate overflow-clip bg-black">
 				<MatrixRain />
 				<About />
 				<Stats />

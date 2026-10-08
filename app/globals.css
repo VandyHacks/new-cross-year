@@ -211,8 +211,17 @@ button {
 	position: absolute;
 	inset: 0;
 	pointer-events: none;
-	opacity: 0.4;
-	mask-image: linear-gradient(transparent, black 18%, black 82%, transparent);
+	opacity: 0.5;
+	mask-image: linear-gradient(
+		transparent,
+		black 18%,
+		black calc(100% - 80px),
+		transparent
+	);
+}
+
+.retro-screen .about-matrix canvas {
+	transform: none;
 }
 
 .about-matrix::after {
