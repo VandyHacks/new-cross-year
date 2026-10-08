@@ -5,8 +5,8 @@ import { screenFlicker, sequenceStage } from "@/lib/intro-motion";
 import {
 	motion,
 	type Variants,
+	useMotionValue,
 	useReducedMotion,
-	useScroll,
 	useSpring,
 	useTransform,
 } from "motion/react";
@@ -55,10 +55,7 @@ export default function Hero() {
 				: { delay: 0.85, type: "spring", damping: 20 },
 		},
 	};
-	const { scrollYProgress } = useScroll({
-		target: heroRef,
-		offset: ["start start", "end start"],
-	});
+	const scrollYProgress = useMotionValue(0);
 	const progress = useSpring(scrollYProgress, {
 		stiffness: 160,
 		damping: 30,
@@ -68,15 +65,36 @@ export default function Hero() {
 	const opacity = useTransform(progress, [0, 1], [1, 0]);
 	const y = useTransform(progress, [0, 1], [0, 10]);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const target = heroRef.current;
 		if (!target) return;
-		const observer = new IntersectionObserver(([entry]) => {
-			setHeroCovered(entry.boundingClientRect.bottom <= 0);
-		});
-		observer.observe(target);
-		return () => observer.disconnect();
-	}, []);
+		let frame = 0;
+		const measure = () => {
+			frame = 0;
+			const { top, height } = target.getBoundingClientRect();
+			const next =
+				height > 0 ? Math.max(0, Math.min(1, -top / height)) : 0;
+			scrollYProgress.set(next);
+			if (next === 0) progress.jump(0);
+			setHeroCovered(next >= 1);
+		};
+		const scheduleMeasure = () => {
+			if (!frame) frame = requestAnimationFrame(measure);
+		};
+		measure();
+		window.addEventListener("scroll", scheduleMeasure, { passive: true });
+		window.addEventListener("resize", scheduleMeasure);
+		window.addEventListener("pageshow", scheduleMeasure);
+		const resize = new ResizeObserver(scheduleMeasure);
+		resize.observe(target);
+		return () => {
+			cancelAnimationFrame(frame);
+			window.removeEventListener("scroll", scheduleMeasure);
+			window.removeEventListener("resize", scheduleMeasure);
+			window.removeEventListener("pageshow", scheduleMeasure);
+			resize.disconnect();
+		};
+	}, [scrollYProgress, progress]);
 
 	useEffect(() => {
 		if (!introComplete || reducedMotion !== false) return;

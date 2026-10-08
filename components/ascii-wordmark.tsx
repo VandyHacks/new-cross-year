@@ -113,6 +113,11 @@ function AsciiWordmarkScene({
 		const updateMobile = () => {
 			frontFacing.current = mobile.matches;
 			pointer.current = { x: 0, y: 0 };
+			if (mobile.matches) {
+				const axes = rotation.current;
+				axes.x.value = axes.y.value = axes.z.value = 0;
+				axes.x.velocity = axes.y.velocity = axes.z.velocity = 0;
+			}
 			resizeRenderer();
 		};
 		updateMobile();
@@ -149,8 +154,20 @@ function AsciiWordmarkScene({
 		const dt = Math.min(delta, 1 / 30);
 		const axes = rotation.current;
 		if (frontFacing.current) {
-			axes.x.value = axes.y.value = axes.z.value = 0;
-			axes.x.velocity = axes.y.velocity = axes.z.velocity = 0;
+			if (
+				reducedMotion.current ||
+				!introActive ||
+				!firstFrameRendered.current
+			) {
+				axes.x.value = axes.y.value = axes.z.value = 0;
+				axes.x.velocity = axes.y.velocity = axes.z.velocity = 0;
+			} else {
+				animationTime.current += dt * 0.25;
+				const t = animationTime.current;
+				smoothRotation(axes.x, Math.sin(t) * 0.06, dt);
+				smoothRotation(axes.y, Math.sin(t * 0.7) * 0.1, dt);
+				smoothRotation(axes.z, Math.sin(t * 0.6) * 0.015, dt);
+			}
 		} else if (reducedMotion.current) {
 			axes.x.value = 0.25;
 			axes.y.value = -0.12;
