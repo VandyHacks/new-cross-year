@@ -18,11 +18,12 @@ import {
 	useState,
 } from "react";
 import Lenis from "lenis";
+import { ArrowUpRight } from "lucide-react";
 
 type IntroStage = "loading" | "copy" | "lines" | "links";
 
 const navLinkClassName =
-	"flex justify-between px-2.5 py-[7px] transition-colors duration-200 hover:bg-[#ba87f8] hover:text-black focus-visible:outline-2 focus-visible:outline-[#ba87f8] focus-visible:outline-offset-5 motion-reduce:transition-none max-[767px]:px-2 [-webkit-tap-highlight-color:transparent] [&_span]:opacity-55";
+	"flex items-center justify-between px-2.5 py-[7px] transition-colors duration-200 hover:bg-[#ba87f8] hover:text-black focus-visible:outline-2 focus-visible:outline-[#ba87f8] focus-visible:outline-offset-5 motion-reduce:transition-none max-[767px]:px-2 [-webkit-tap-highlight-color:transparent] [&_svg]:size-[1em] [&_svg]:shrink-0 [&_svg]:opacity-55";
 //  bg-[radial-gradient(125%_125%_at_50%_0%,_#000000_50%,_#7e51a477)]
 export default function Hero() {
 	const [stage, setStage] = useState<IntroStage>("loading");
@@ -192,7 +193,7 @@ export default function Hero() {
 							className={`${navLinkClassName} bg-[#f1f0f3] text-black`}
 							href="#home"
 						>
-							Home <span>↗</span>
+							Home <ArrowUpRight aria-hidden="true" />
 						</motion.a>
 						<motion.a
 							data-intro
@@ -201,7 +202,7 @@ export default function Hero() {
 							className={navLinkClassName}
 							href="mailto:info@vandyhacks.org?subject=Sponsoring%20VandyHacks%20XIII"
 						>
-							Sponsor <span>↗</span>
+							Sponsor <ArrowUpRight aria-hidden="true" />
 						</motion.a>
 						<motion.a
 							data-intro
@@ -212,7 +213,7 @@ export default function Hero() {
 							target="_blank"
 							rel="noreferrer"
 						>
-							Instagram <span>↗</span>
+							Instagram <ArrowUpRight aria-hidden="true" />
 						</motion.a>
 						<motion.a
 							data-intro
@@ -221,7 +222,7 @@ export default function Hero() {
 							className={navLinkClassName}
 							href="mailto:info@vandyhacks.org"
 						>
-							Contact <span>↗</span>
+							Contact <ArrowUpRight aria-hidden="true" />
 						</motion.a>
 					</motion.nav>
 				</header>
