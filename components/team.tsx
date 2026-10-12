@@ -15,8 +15,7 @@ export default function Team() {
 					Meet the exec team
 				</h2>
 				<p className="mb-8 max-w-2xl text-sm leading-6 text-[#c3c8dc]">
-					The people bringing VandyHacks XIII to life. Team profiles
-					will be announced soon.
+					tbd
 				</p>
 				<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
 					{teamProfiles.map((profile) => (

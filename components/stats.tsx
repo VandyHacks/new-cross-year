@@ -44,10 +44,13 @@ function Stat({
 	index: number;
 	progress: MotionValue<number>;
 }) {
-	const phase = useTransform(
-		progress,
-		(latest) => latest * metrics.length - index,
-	);
+	const phase = useTransform(progress, (latest) => {
+		const current = latest * metrics.length - index;
+		if (current <= 0.7) return current;
+
+		const endProgress = Math.min((current - 0.7) / 0.3, 1);
+		return 0.7 + 0.3 * (1 - (1 - endProgress) ** 1.5);
+	});
 	// Enter, count in the center, hold the final value, then scroll out.
 	const opacity = useTransform(phase, [-0.12, 0, 0.84, 1], [0, 1, 1, 0]);
 	const y = useTransform(phase, [-0.12, 0, 0.84, 1], [72, 0, 0, -72]);
