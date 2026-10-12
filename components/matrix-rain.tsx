@@ -87,14 +87,14 @@ export default function MatrixRain() {
 					context.shadowBlur = 0;
 					if (row < 3 || tear) {
 						const split = tear ? 1.5 : 0.65;
-						context.fillStyle = "#ff6ea0";
+						context.fillStyle = "#c8a2ff";
 						context.fillText(character, x + split, y);
-						context.fillStyle = "#64beff";
+						context.fillStyle = "#77a9ff";
 						context.fillText(character, x - split, y);
 					}
-					context.shadowColor = "#ac64ff";
+					context.shadowColor = "#a77ae9";
 					context.shadowBlur = row < 3 ? 6 : 0;
-					context.fillStyle = row === 0 ? "#d2b9ff" : "#ac64ff";
+					context.fillStyle = row === 0 ? "#eadcff" : "#a77ae9";
 					context.fillText(character, x, y);
 				}
 			}

@@ -1,8 +1,3 @@
-import ScrollReveal from "@/components/scroll-reveal";
-import SectionTitle from "@/components/section-title";
-
-// mask-[linear-gradient(to_bottom,transparent_0%,rgb(0_0_0/0.25)_2%,rgb(0_0_0/0.6)_4%,rgb(0_0_0/0.85)_6%,black_10%)]"
-
 const aboutText =
 	"Code, collaborate, learn, and network at Vanderbilt's official collegiate hackathon, VandyHacks! This in-person event brings students together for workshops, games, networking, meals, speaker events, and a weekend of building ambitious projects. Whether this is your first hackathon or your thirteenth, we hope to see you at VandyHacks XIII in March 2027. Go Hackers!";
 
@@ -10,14 +5,16 @@ export default function About() {
 	return (
 		<section
 			id="about"
-			className="relative z-10 isolate flex min-h-svh items-center overflow-hidden px-[clamp(20px,3vw,64px)] pt-[max(20svh,160px)] pb-[clamp(40px,8svh,96px)] max-[767px]:min-h-0 max-[767px]:pt-20 max-[767px]:pb-16"
-			aria-labelledby="about-title"
+			className="relative z-10 scroll-mt-20 px-[clamp(20px,5vw,72px)] py-[clamp(48px,7vw,88px)]"
+			aria-label="About VandyHacks"
 		>
-			<div className="relative z-10 mx-auto w-full max-w-[1400px]">
-				<SectionTitle id="about-title">whats vh?</SectionTitle>
-				<ScrollReveal className="font-heading text-[clamp(22px,2.65vw,44px)] leading-[1.5] tracking-[-0.035em] text-[#f1f0f3] max-[767px]:text-[clamp(16px,3.5vw,22px)] max-[767px]:leading-[1.7]">
+			<div className="mx-auto w-full max-w-4xl">
+				<h2 className="mb-6 font-heading text-2xl tracking-tight text-white sm:text-3xl">
+					About VandyHacks
+				</h2>
+				<p className="text-base leading-8 text-[#d5d9e8] sm:text-lg">
 					{aboutText}
-				</ScrollReveal>
+				</p>
 			</div>
 		</section>
 	);

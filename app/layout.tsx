@@ -3,7 +3,11 @@ import { Michroma } from "next/font/google";
 import "./globals.css";
 import { cn } from "cn";
 
-export const metadata: Metadata = { title: "VandyHacks XIII" };
+export const metadata: Metadata = {
+	title: "VandyHacks XIII",
+	description:
+		"Code, collaborate, learn, and build at VandyHacks XIII, Vanderbilt's collegiate hackathon in March 2027.",
+};
 const michroma = Michroma({
 	subsets: ["latin"],
 	weight: "400",
@@ -22,12 +26,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 		<html
 			lang="en"
 			className={cn(
-				"dark scheme-dark scroll-smooth scroll-pt-6 motion-reduce:scroll-auto",
+				"dark scheme-dark scroll-smooth scroll-pt-20 motion-reduce:scroll-auto",
 				michroma.variable,
 				spaceMono.variable,
 			)}
 		>
-			<body className="retro-screen w-full bg-black font-sans leading-[normal] bg-[radial-gradient(125%_125%_at_50%_0%,_#000000_50%,_#7e51a4ff)] text-[#f1f0f3] selection:bg-[#ba87f8] selection:text-black">
+			<body className="retro-screen w-full bg-[#080d20] font-sans leading-[normal] bg-[radial-gradient(125%_125%_at_50%_0%,_#080d20_48%,_#171432_100%)] text-[#f1f0f3] selection:bg-[#c8a2ff] selection:text-[#080d20]">
 				{children}
 				<div className="retro-crt" aria-hidden="true" />
 			</body>

@@ -1,307 +1,83 @@
-"use client";
-
 import AsciiWordmark from "@/components/ascii-wordmark";
-import { screenFlicker, sequenceStage } from "@/lib/intro-motion";
-import {
-	motion,
-	type Variants,
-	useMotionValue,
-	useReducedMotion,
-	useSpring,
-	useTransform,
-} from "motion/react";
-import {
-	useCallback,
-	useEffect,
-	useLayoutEffect,
-	useRef,
-	useState,
-} from "react";
-import Lenis from "lenis";
 
-type IntroStage = "loading" | "copy" | "lines" | "links";
+const navigationLinks = [
+	{ label: "Home", href: "#home" },
+	{ label: "Stats", href: "#stats" },
+	{ label: "About", href: "#about" },
+	{ label: "Sponsors", href: "#sponsors" },
+	{ label: "Team", href: "#team" },
+	{ label: "FAQ", href: "#faq" },
+];
 
-const navLinkClassName =
-	"flex justify-between px-2.5 py-[7px] transition-colors duration-200 hover:bg-[#ba87f8] hover:text-black focus-visible:outline-2 focus-visible:outline-[#ba87f8] focus-visible:outline-offset-5 motion-reduce:transition-none max-[767px]:px-2 [-webkit-tap-highlight-color:transparent] [&_span]:opacity-55";
-//  bg-[radial-gradient(125%_125%_at_50%_0%,_#000000_50%,_#7e51a477)]
-export default function Hero() {
-	const [stage, setStage] = useState<IntroStage>("loading");
-	// Unlock after the navigation flicker; the slower background lines can settle.
-	const [introComplete, setIntroComplete] = useState(false);
-	const [heroCovered, setHeroCovered] = useState(false);
-	const heroRef = useRef<HTMLDivElement>(null);
-
-	useLayoutEffect(() => {
-		const previousRestoration = window.history.scrollRestoration;
-		window.history.scrollRestoration = "manual";
-		const resetScroll = () => {
-			window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-		};
-		resetScroll();
-		window.addEventListener("pageshow", resetScroll);
-		return () => {
-			window.removeEventListener("pageshow", resetScroll);
-			window.history.scrollRestoration = previousRestoration;
-		};
-	}, []);
-
-	const reducedMotion = useReducedMotion();
-	const copyFade: Variants = {
-		hidden: { opacity: 0 },
-		visible: {
-			opacity: 1,
-			transition: reducedMotion
-				? { duration: 0 }
-				: { delay: 0.85, type: "spring", damping: 20 },
-		},
-	};
-	const scrollYProgress = useMotionValue(0);
-	const progress = useSpring(scrollYProgress, {
-		stiffness: 160,
-		damping: 30,
-		mass: 0.5,
-	});
-	const scale = useTransform(progress, [0, 1], [1, 0.8]);
-	const opacity = useTransform(progress, [0, 1], [1, 0]);
-	const y = useTransform(progress, [0, 1], [0, 10]);
-
-	useLayoutEffect(() => {
-		const target = heroRef.current;
-		if (!target) return;
-		let frame = 0;
-		const measure = () => {
-			frame = 0;
-			const { top, height } = target.getBoundingClientRect();
-			const next =
-				height > 0 ? Math.max(0, Math.min(1, -top / height)) : 0;
-			scrollYProgress.set(next);
-			if (next === 0) progress.jump(0);
-			setHeroCovered(next >= 1);
-		};
-		const scheduleMeasure = () => {
-			if (!frame) frame = requestAnimationFrame(measure);
-		};
-		measure();
-		window.addEventListener("scroll", scheduleMeasure, { passive: true });
-		window.addEventListener("resize", scheduleMeasure);
-		window.addEventListener("pageshow", scheduleMeasure);
-		const resize = new ResizeObserver(scheduleMeasure);
-		resize.observe(target);
-		return () => {
-			cancelAnimationFrame(frame);
-			window.removeEventListener("scroll", scheduleMeasure);
-			window.removeEventListener("resize", scheduleMeasure);
-			window.removeEventListener("pageshow", scheduleMeasure);
-			resize.disconnect();
-		};
-	}, [scrollYProgress, progress]);
-
-	useEffect(() => {
-		if (!introComplete || reducedMotion !== false) return;
-
-		const lenis = new Lenis({
-			autoRaf: true,
-			anchors: true,
-			lerp: 0.055,
-			wheelMultiplier: 0.65,
-		});
-		return () => lenis.destroy();
-	}, [introComplete, reducedMotion]);
-
-	const startIntro = useCallback(() => {
-		setStage((current) => (current === "loading" ? "copy" : current));
-	}, []);
-	const finishWordmark = useCallback(() => setStage("links"), []);
+export function SiteNavigation() {
 	return (
-		<div
-			ref={heroRef}
-			id="home"
-			className="h-svh"
-			data-intro-pending={!introComplete}
-		>
-			<motion.section
-				className="fixed inset-0 isolate z-0 flex h-svh origin-center flex-col overflow-hidden px-[clamp(20px,3vw,64px)]"
-				style={{
-					scale: reducedMotion ? 1 : scale,
-					opacity: reducedMotion ? 1 : opacity,
-					y: reducedMotion ? 0 : y,
-					visibility: heroCovered ? "hidden" : "visible",
-				}}
-				inert={heroCovered}
-				aria-hidden={heroCovered}
-				aria-labelledby="event-title"
+		<header className="sticky top-0 z-50 border-b border-white/10 bg-[#080d20]/90 px-[clamp(16px,3vw,48px)] text-white shadow-lg shadow-black/20 backdrop-blur-xl">
+			<nav
+				className="mx-auto flex min-h-14 max-w-7xl flex-wrap items-center justify-center gap-1 py-2 text-xs uppercase tracking-[0.08em] sm:gap-2"
+				aria-label="Main navigation"
 			>
-				<motion.div
-					className="pointer-events-none absolute inset-y-0 inset-x-[clamp(20px,3vw,64px)] -z-10 grid grid-cols-4 max-[767px]:grid-cols-2"
-					aria-hidden="true"
-					initial="hidden"
-					animate={
-						stage === "lines" || stage === "links"
-							? "visible"
-							: "hidden"
-					}
-					variants={sequenceStage}
-				>
-					{Array.from({ length: 4 }, (_, i) => (
-						<motion.span
-							key={i}
-							data-intro
-							className="block w-px bg-[linear-gradient(#ffffff24,#ffffff0c_65%,#ffffff24)] max-[767px]:even:hidden"
-							variants={{
-								hidden: { clipPath: "inset(0 0 100% 0)" },
-								visible: {
-									clipPath: "inset(0 0 0% 0)",
-									transition: reducedMotion
-										? { duration: 0 }
-										: {
-												type: "spring",
-												delay: i * 0.4,
-												damping: 30,
-												stiffness: 80,
-											},
-								},
-							}}
-						/>
-					))}
-				</motion.div>
-				<header className="relative z-2 pt-7 max-[767px]:pt-5">
-					<h1 id="event-title" className="sr-only">
-						VandyHacks XIII — Vanderbilt’s collegiate hackathon
-					</h1>
-					<motion.nav
-						className="grid grid-cols-4 text-xs leading-[normal] uppercase max-[767px]:grid-cols-2 max-[767px]:gap-y-2.5 max-[767px]:text-[10px]"
-						aria-label="Main navigation"
-						initial="hidden"
-						animate={stage === "links" ? "visible" : "hidden"}
-						variants={sequenceStage}
-						onAnimationComplete={(definition) => {
-							if (definition === "visible" && !introComplete) {
-								window.scrollTo({
-									top: 0,
-									left: 0,
-									behavior: "instant",
-								});
-								setIntroComplete(true);
-							}
-						}}
+				{navigationLinks.map((link) => (
+					<a
+						key={link.href}
+						className="rounded-md px-3 py-2 transition-colors hover:bg-white/10 hover:text-[#c8a2ff] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c8a2ff]"
+						href={link.href}
 					>
-						<motion.a
-							data-intro
-							variants={screenFlicker}
-							custom={{ delay: 0.28, reducedMotion }}
-							className={`${navLinkClassName} bg-[#f1f0f3] text-black`}
-							href="#home"
-						>
-							Home <span>↗</span>
-						</motion.a>
-						<motion.a
-							data-intro
-							variants={screenFlicker}
-							custom={{ delay: 0, reducedMotion }}
-							className={navLinkClassName}
-							href="mailto:info@vandyhacks.org?subject=Sponsoring%20VandyHacks%20XIII"
-						>
-							Sponsor <span>↗</span>
-						</motion.a>
-						<motion.a
-							data-intro
-							variants={screenFlicker}
-							custom={{ delay: 0.44, reducedMotion }}
-							className={navLinkClassName}
-							href="https://www.instagram.com/vandyhacks"
-							target="_blank"
-							rel="noreferrer"
-						>
-							Instagram <span>↗</span>
-						</motion.a>
-						<motion.a
-							data-intro
-							variants={screenFlicker}
-							custom={{ delay: 0.12, reducedMotion }}
-							className={navLinkClassName}
-							href="mailto:info@vandyhacks.org"
-						>
-							Contact <span>↗</span>
-						</motion.a>
-					</motion.nav>
-				</header>
-				<AsciiWordmark
-					introActive={stage === "lines" || stage === "links"}
-					onReady={startIntro}
-					onIntroComplete={finishWordmark}
-				/>
-				<motion.div
-					className="pointer-events-none relative z-1 mt-auto grid grid-cols-[3fr_1fr] items-end gap-[30px] px-2.5 pb-10 min-[1800px]:pb-[60px] max-[900px]:grid-cols-2 max-[900px]:gap-6 max-[767px]:grid-cols-1 max-[767px]:gap-4 max-[767px]:px-2 max-[767px]:pb-[max(20px,env(safe-area-inset-bottom))]"
-					initial="hidden"
-					animate={stage === "loading" ? "hidden" : "visible"}
-					variants={sequenceStage}
-					onAnimationComplete={(definition) => {
-						if (definition === "visible" && stage === "copy") {
-							setStage("lines");
-						}
-					}}
+						{link.label}
+					</a>
+				))}
+				<a
+					className="rounded-md bg-[#7138c7] px-3 py-2 text-white transition-colors hover:bg-[#8853dc] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c8a2ff]"
+					href="https://vandyhacks.devpost.com/"
+					target="_blank"
+					rel="noreferrer"
 				>
-					<motion.div>
-						<motion.div className="overflow-hidden">
-							<motion.span
-								data-intro
-								variants={copyFade}
-								className="mb-[18px] block font-mono text-[11px] font-normal tracking-[0.04em] uppercase max-[767px]:mb-3 max-[767px]:text-[9px]"
-							>
-								Code. Collaborate. Create.
-							</motion.span>
-						</motion.div>
-						<motion.div className="overflow-hidden">
-							<motion.div className="overflow-hidden font-heading text-[clamp(36px,3.7vw,72px)] leading-[0.98] font-normal tracking-[-0.055em] max-[767px]:text-[clamp(26px,6.5vw,40px)] max-[767px]:leading-[1.1]">
-								<motion.div
-									data-intro
-									variants={{
-										hidden: { y: "100%" },
-										visible: {
-											y: "0%",
-											transition: reducedMotion
-												? { duration: 0 }
-												: {
-														delay: 0.2,
-														type: "spring",
-														damping: 20,
-													},
-										},
-									}}
-								>
-									The south&apos;s
-								</motion.div>
-							</motion.div>
-							<motion.div className="overflow-hidden font-heading text-[clamp(36px,3.7vw,72px)] leading-[0.98] font-normal tracking-[-0.055em] max-[767px]:text-[clamp(26px,6.5vw,40px)] max-[767px]:leading-[1.1]">
-								<motion.div
-									data-intro
-									variants={{
-										hidden: { y: "100%" },
-										visible: {
-											y: "0%",
-											transition: reducedMotion
-												? { duration: 0 }
-												: {
-														delay: 0.55,
-														type: "spring",
-														damping: 20,
-													},
-										},
-									}}
-								>
-									premier hackathon.
-								</motion.div>
-							</motion.div>
-						</motion.div>
-					</motion.div>
-					<div className="max-w-[260px] justify-self-end overflow-hidden pb-1 text-sm leading-normal text-[#99959e] min-[1800px]:max-w-[320px] min-[1800px]:text-[17px] max-[767px]:max-w-[360px] max-[767px]:justify-self-start max-[767px]:text-xs">
-						<motion.p data-intro variants={copyFade}>
-							A weekend to meet new people, learn something new,
-							and make something you can call yours.
-						</motion.p>
+					Devpost
+					<span className="sr-only"> (opens in a new tab)</span>
+				</a>
+			</nav>
+		</header>
+	);
+}
+
+export default function Hero() {
+	return (
+		<section
+			id="home"
+			className="relative isolate scroll-mt-20 overflow-hidden border-b border-white/10 bg-[radial-gradient(ellipse_at_50%_42%,_#242052_0%,_#101731_48%,_#080d20_100%)] px-[clamp(20px,5vw,72px)]"
+			aria-labelledby="event-title"
+		>
+			<div
+				className="pointer-events-none absolute inset-0 -z-10 opacity-25 [background-image:linear-gradient(to_right,rgb(255_255_255/0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgb(255_255_255/0.08)_1px,transparent_1px)] [background-size:64px_64px] [mask-image:linear-gradient(to_bottom,black,transparent_85%)]"
+				aria-hidden="true"
+			/>
+			<div className="mx-auto flex min-h-[min(760px,calc(100svh-3.5rem))] max-w-7xl flex-col justify-center py-10 sm:py-12">
+				<h1
+					id="event-title"
+					className="relative mx-auto mb-2 h-[clamp(220px,42vw,440px)] w-full max-w-6xl shrink-0"
+				>
+					<span className="sr-only">VandyHacks</span>
+					<div className="absolute inset-0" aria-hidden="true">
+						<AsciiWordmark introActive />
 					</div>
-				</motion.div>
-			</motion.section>
-		</div>
+				</h1>
+				<div className="relative z-10 text-center">
+					<p className="mb-4 font-mono text-xs tracking-[0.28em] text-[#c8a2ff] uppercase sm:text-sm">
+						Code. Collaborate. Create.
+					</p>
+					<div className="mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+						<p className="rounded-full border border-[#a77ae9]/50 bg-[#7138c7]/20 px-4 py-2 font-mono text-sm text-[#eadcff] sm:text-base">
+							XIII
+						</p>
+						<p className="font-mono text-sm text-[#c3c8dc] sm:text-base">
+							March 2027 · Vanderbilt University · Nashville, TN
+						</p>
+					</div>
+					<p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-[#c3c8dc] sm:text-base">
+						A weekend to meet new people, learn something new, and
+						make something you can call yours.
+					</p>
+				</div>
+			</div>
+		</section>
 	);
 }
