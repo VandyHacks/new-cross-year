@@ -1,3 +1,5 @@
+"use client";
+
 import AsciiWordmark from "@/components/ascii-wordmark";
 
 const navigationLinks = [

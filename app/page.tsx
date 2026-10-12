@@ -14,10 +14,10 @@ export default function Home() {
 			<SiteNavigation />
 			<main className="relative isolate bg-[#080d20]">
 				<Hero />
-				<div className="relative isolate overflow-hidden bg-[#0d142c]">
+				<div className="relative z-10 isolate overflow-clip bg-[#0d142c]">
 					<MatrixRain />
-					<Stats />
 					<About />
+					<Stats />
 					<Sponsors />
 					<Team />
 					<FAQ />
