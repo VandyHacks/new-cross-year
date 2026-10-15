@@ -4,10 +4,10 @@ import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 
 const linkClassName =
-	"inline-block rounded-sm text-sm text-[#d5d9e8] underline-offset-4 transition-colors hover:text-white hover:underline hover:decoration-[#c8a2ff] focus-visible:text-white focus-visible:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c8a2ff]";
+	"type-body-sm inline-block rounded-sm text-[#d5d9e8] underline-offset-4 transition-colors hover:text-white hover:underline hover:decoration-[#c8a2ff] focus-visible:text-white focus-visible:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c8a2ff]";
 
 const labelClassName =
-	"mb-4 font-mono text-xs tracking-[0.12em] text-[#c8a2ff] uppercase";
+	"type-label mb-4 text-[#c8a2ff]";
 
 const iconLinkClassName =
 	"inline-flex size-9 shrink-0 items-center justify-center rounded-md border border-white/15 text-[#d5d9e8] transition-colors hover:border-[#c8a2ff] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c8a2ff]";
@@ -17,11 +17,11 @@ const iconLinkClassName =
 const exploreColumns = [
 	[
 		{ label: "Home", href: "#home" },
+		{ label: "Mission", href: "#mission" },
 		{ label: "About", href: "#about" },
-		{ label: "Stats", href: "#stats" },
 	],
 	[
-		{ label: "Sponsors", href: "#sponsors" },
+		{ label: "Past Sponsors", href: "#sponsors" },
 		{ label: "Team", href: "#team" },
 		{ label: "FAQ", href: "#faq" },
 	],
@@ -160,7 +160,7 @@ export default function Footer() {
 						height={231}
 						className="block h-[138px] w-auto"
 					/>
-					<p className="mt-4 text-sm leading-6 text-[#aeb5cd]">
+					<p className="type-body-sm mt-4 text-[#aeb5cd]">
 						Vanderbilt University
 						<br />
 						Nashville, TN

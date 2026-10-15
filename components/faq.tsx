@@ -1,3 +1,6 @@
+import SectionContainer from "@/components/section-container";
+import SectionTitle from "@/components/section-title";
+
 const questions = [
 	{
 		question: "What is VandyHacks?",
@@ -30,20 +33,15 @@ export default function FAQ() {
 	return (
 		<section
 			id="faq"
-			className="relative z-10 scroll-mt-20 px-[clamp(20px,5vw,72px)] pt-[clamp(48px,7vw,88px)] pb-[clamp(64px,9vw,112px)]"
+			className="relative z-10 scroll-mt-20 pt-[clamp(48px,7vw,88px)] pb-[clamp(64px,9vw,112px)]"
 			aria-labelledby="faq-title"
 		>
-			<div className="mx-auto w-full max-w-4xl">
-				<h2
-					id="faq-title"
-					className="mb-8 font-heading text-2xl tracking-tight text-white sm:text-3xl"
-				>
-					FAQ
-				</h2>
+			<SectionContainer>
+				<SectionTitle id="faq-title">FAQ</SectionTitle>
 				<div className="divide-y divide-white/10 border-y border-white/10">
 					{questions.map(({ question, answer }) => (
 						<details key={question} className="group py-5">
-							<summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-mono text-sm text-white marker:content-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c8a2ff] sm:text-base">
+							<summary className="type-subheading flex cursor-pointer list-none items-center justify-between gap-4 text-white marker:content-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c8a2ff]">
 								{question}
 								<span
 									className="text-lg text-[#c8a2ff] transition-transform group-open:rotate-45"
@@ -52,13 +50,13 @@ export default function FAQ() {
 									+
 								</span>
 							</summary>
-							<p className="max-w-3xl pt-4 pr-8 text-sm leading-7 text-[#c3c8dc]">
+							<p className="type-body max-w-3xl pt-4 pr-8 text-[#c3c8dc]">
 								{answer}
 							</p>
 						</details>
 					))}
 				</div>
-			</div>
+			</SectionContainer>
 		</section>
 	);
 }

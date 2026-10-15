@@ -242,7 +242,7 @@ export default function AsciiWordmark({
 	return (
 		<motion.div
 			data-intro
-			className="absolute inset-x-0 inset-y-[20%] z-0 max-[767px]:-inset-x-16 max-[767px]:top-[calc(27%-64px)] max-[767px]:bottom-[calc(27%-64px)] [&_canvas]:block [&_canvas]:size-full"
+			className="absolute inset-x-0 inset-y-[8%] z-0 [&_canvas]:block [&_canvas]:size-full"
 			role="img"
 			aria-label="VandyHacks rendered in purple ASCII"
 			initial="hidden"

@@ -232,6 +232,35 @@ button {
 	}
 }
 
+@layer components {
+	/* Shared type scale — apply these instead of one-off font sizes/weights.
+	   All Michroma (weight 400); Anton is reserved for the display titles. */
+	.type-heading {
+		@apply font-heading text-2xl leading-tight tracking-tight sm:text-3xl;
+	}
+	.type-subheading {
+		@apply font-heading text-base leading-normal;
+	}
+	.type-lead {
+		@apply font-sans text-lg leading-8;
+	}
+	.type-body {
+		@apply font-sans text-base leading-7;
+	}
+	.type-body-sm {
+		@apply font-sans text-sm leading-6;
+	}
+	.type-nav {
+		@apply font-sans text-xs uppercase tracking-[0.1em];
+	}
+	.type-label {
+		@apply font-mono text-xs uppercase tracking-[0.18em];
+	}
+	.type-button {
+		@apply font-sans text-xs uppercase tracking-[0.12em];
+	}
+}
+
 @layer base {
 	* {
 		@apply border-border outline-ring/50;

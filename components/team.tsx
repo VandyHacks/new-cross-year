@@ -1,22 +1,18 @@
+import SectionContainer from "@/components/section-container";
+import SectionTitle from "@/components/section-title";
+
 const teamProfiles = Array.from({ length: 4 }, (_, index) => index);
 
 export default function Team() {
 	return (
 		<section
 			id="team"
-			className="relative z-10 scroll-mt-20 px-[clamp(20px,5vw,72px)] py-[clamp(48px,7vw,88px)]"
+			className="relative z-10 scroll-mt-20 py-[clamp(48px,7vw,88px)]"
 			aria-labelledby="team-title"
 		>
-			<div className="mx-auto w-full max-w-7xl">
-				<h2
-					id="team-title"
-					className="mb-3 font-heading text-2xl tracking-tight text-white sm:text-3xl"
-				>
-					Meet the exec team
-				</h2>
-				<p className="mb-8 max-w-2xl text-sm leading-6 text-[#c3c8dc]">
-					tbd
-				</p>
+			<SectionContainer>
+				<SectionTitle id="team-title">Team</SectionTitle>
+				<p className="type-body mb-8 max-w-2xl text-[#c3c8dc]">tbd</p>
 				<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
 					{teamProfiles.map((profile) => (
 						<article
@@ -29,16 +25,16 @@ export default function Team() {
 							>
 								VH
 							</div>
-							<h3 className="font-mono text-sm text-white">
+							<h3 className="type-subheading text-white">
 								Exec team member
 							</h3>
-							<p className="mt-1 font-mono text-xs text-[#c3c8dc]">
+							<p className="type-body-sm mt-1 text-[#c3c8dc]">
 								Role
 							</p>
 						</article>
 					))}
 				</div>
-			</div>
+			</SectionContainer>
 		</section>
 	);
 }

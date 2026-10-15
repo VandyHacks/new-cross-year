@@ -9,12 +9,12 @@ import {
 } from "motion/react";
 import { useRef } from "react";
 import Counter from "@/components/counter";
+import SectionContainer from "@/components/section-container";
 import SectionTitle from "@/components/section-title";
 
 const columnsClassName =
-	"mx-auto grid w-full max-w-[1400px] grid-cols-2 items-center gap-[clamp(24px,6vw,96px)] max-[767px]:gap-5";
-const headingClassName =
-	"[&_h2]:m-0 [&_h2]:text-center [&_h2]:text-[clamp(64px,9vw,128px)] max-[767px]:[&_h2]:text-[clamp(36px,8vw,60px)]";
+	"grid grid-cols-2 items-center gap-[clamp(24px,6vw,96px)] max-[767px]:gap-5";
+const headingClassName = "[&_h2]:m-0 [&_h2]:text-left";
 const valueClassName =
 	"flex items-center justify-center font-heading text-[clamp(40px,6.5vw,96px)] leading-[1.2] tracking-[-0.04em] text-[#ba87f8] max-[767px]:text-[clamp(20px,5vw,38px)]";
 const labelClassName =
@@ -88,14 +88,14 @@ function StickyStats() {
 	return (
 		<section
 			ref={sectionRef}
-			id="stats"
+			id="about"
 			className="relative z-10 h-[460svh]"
-			aria-labelledby="stats-title"
+			aria-labelledby="about-title"
 		>
-			<div className="sticky top-0 flex h-svh items-center px-[clamp(20px,3vw,64px)]">
-				<div className={columnsClassName}>
+			<div className="sticky top-0 flex h-svh items-center">
+				<SectionContainer className={columnsClassName}>
 					<div className={headingClassName}>
-						<SectionTitle id="stats-title">about us</SectionTitle>
+						<SectionTitle id="about-title">About</SectionTitle>
 					</div>
 					<div className="grid min-w-0">
 						{metrics.map((metric, index) => (
@@ -107,7 +107,7 @@ function StickyStats() {
 							/>
 						))}
 					</div>
-				</div>
+				</SectionContainer>
 			</div>
 			<dl className="sr-only">
 				{metrics.map((metric) => (
@@ -128,13 +128,13 @@ export default function Stats() {
 
 	return (
 		<section
-			id="stats"
-			className="relative z-10 scroll-mt-20 px-[clamp(20px,5vw,72px)] py-[clamp(48px,7vw,88px)]"
-			aria-labelledby="stats-title"
+			id="about"
+			className="relative z-10 scroll-mt-20 py-[clamp(48px,7vw,88px)]"
+			aria-labelledby="about-title"
 		>
-			<div className="mx-auto w-full max-w-7xl">
-				<h2 id="stats-title" className="sr-only">
-					Stats
+			<SectionContainer>
+				<h2 id="about-title" className="sr-only">
+					About
 				</h2>
 				<motion.div
 					className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6"
@@ -169,13 +169,13 @@ export default function Stats() {
 							<p className="mb-2 font-heading text-xl leading-tight tracking-[-0.04em] text-[#c8a2ff] sm:text-2xl">
 								{formattedValue(metric)}
 							</p>
-							<h3 className="break-words font-mono text-xs font-normal leading-relaxed text-[#e6e8f2] sm:text-sm">
+							<h3 className="type-body-sm break-words text-[#e6e8f2]">
 								{metric.label}
 							</h3>
 						</motion.article>
 					))}
 				</motion.div>
-			</div>
+			</SectionContainer>
 		</section>
 	);
 }
