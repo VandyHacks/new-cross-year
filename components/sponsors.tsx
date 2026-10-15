@@ -1,188 +1,126 @@
 import Image from "next/image";
+import SectionTitle from "@/components/section-title";
 
-const sponsors = [
-	"AllianceBernstein",
-	"Asurion",
-	"AT&T",
-	"BNY Mellon",
-	"Capital One",
-	"Centene",
-	"Contrary Capital",
-	"Defang",
-	"Digital Reasoning",
-	"DigitalOcean",
-	"DigiKey",
-	"Dollar General",
-	"Domain.com",
-	"Epic",
-	"Eventbrite",
-	"Fidelity Investments",
-	"FulcrumGT",
-	"GIPHY",
-	"GoDaddy Registry",
-	"Google Cloud",
-	"GitHub",
-	"HashiCorp",
-	"Hillman",
-	"Hudson River Trading",
-	"IMC Trading",
-	"Initial State",
-	"L3Harris",
-	"Launch Tennessee",
-	"LeanKit",
-	"Lexmark",
-	"Lunar Lincoln",
-	"Macy's Tech",
-	"Mercury",
-	"Metova",
-	"Microsoft",
-	"MicroStrategy",
-	"MongoDB",
-	"Perplexity AI",
-	"Red Ventures",
-	"Salesforce",
-	"Sauce Labs",
-	"SeatGeek",
-	"Sticker Mule",
-	"The Home Depot",
-	"Tractor Supply Co.",
-	"Twilio",
-	"Ubisoft",
-	"UiPath",
-	"Vanguard",
-	"Wix",
-	"Wolfram Alpha",
-	"Yik Yak",
-	"Major League Hacking (MLH)",
-	"Vanderbilt School of Engineering",
-	"Vanderbilt Ventures Group",
+type Sponsor = { name: string; file: string | null };
+
+const sponsorRows: Sponsor[][] = [
+	[
+		{ name: "AllianceBernstein", file: "alliancebernstein.png" },
+		{ name: "Asurion", file: "asurion.png" },
+		{ name: "AT&T", file: "att.png" },
+		{ name: "BNY Mellon", file: "bny-mellon.png" },
+		{ name: "Capital One", file: "capital-one.png" },
+		{ name: "Centene", file: "centene.png" },
+		{ name: "Contrary Capital", file: "contrary-capital.jpg" },
+		{ name: "Defang", file: "defang.jpg" },
+		{ name: "Digital Reasoning", file: "digital-reasoning.png" },
+		{ name: "DigitalOcean", file: "digitalocean.svg" },
+		{ name: "DigiKey", file: "digikey.png" },
+		{ name: "Dollar General", file: "dollar-general.png" },
+		{ name: "Domain.com", file: "domain.png" },
+		{ name: "Epic", file: "epic.png" },
+		{ name: "Eventbrite", file: "eventbrite.png" },
+		{ name: "Fidelity Investments", file: "fidelity.png" },
+		{ name: "FulcrumGT", file: "fulcrumgt.png" },
+		{ name: "GIPHY", file: "giphy.svg" },
+		{ name: "GoDaddy Registry", file: "godaddy.svg" },
+		{ name: "Google Cloud", file: "googlecloud.svg" },
+		{ name: "Github", file: "github.svg" },
+		{ name: "HashiCorp", file: "hashicorp.svg" },
+		{ name: "Hillman", file: "hillman.png" },
+		{ name: "Hudson River Trading", file: "hudson-river-trading.png" },
+		{ name: "IMC Trading", file: "imc-trading.png" },
+		{ name: "Initial State", file: "initial-state.png" },
+	],
+	[
+		{ name: "L3Harris", file: "l3harris.jpg" },
+		{ name: "Launch Tennessee", file: "launch-tennessee.png" },
+		{ name: "LeanKit", file: "leankit.png" },
+		{ name: "Lexmark", file: "lexmark.png" },
+		{ name: "Lunar Lincoln", file: null },
+		{ name: "Macy's Tech", file: "macys.png" },
+		{ name: "Mercury", file: "mercury.png" },
+		{ name: "Metova", file: "metova.png" },
+		{ name: "Microsoft", file: "microsoft.png" },
+		{ name: "MicroStrategy", file: "microstrategy.svg" },
+		{ name: "MongoDB", file: "mongodb.svg" },
+		{ name: "Perplexity AI", file: "perplexity.svg" },
+		{ name: "Red Ventures", file: "red-ventures.png" },
+		{ name: "Salesforce", file: "salesforce.png" },
+		{ name: "Sauce Labs", file: "saucelabs.svg" },
+		{ name: "SeatGeek", file: "seatgeek.svg" },
+		{ name: "Sticker Mule", file: "sticker-mule.png" },
+		{ name: "The Home Depot", file: "home-depot.png" },
+		{ name: "Tractor Supply Co.", file: "tractor-supply.png" },
+		{ name: "Twilio", file: "twilio.png" },
+		{ name: "Ubisoft", file: "ubisoft.svg" },
+		{ name: "UiPath", file: "uipath.svg" },
+		{ name: "Vanguard", file: "vanguard.jpg" },
+		{ name: "Wix", file: "wix.svg" },
+		{ name: "Wolfram Alpha", file: "wolfram.svg" },
+		{ name: "Yik Yak", file: "yik-yak.png" },
+	],
 ];
-
-const sponsorLogos: Record<string, string> = {
-	AllianceBernstein: "alliancebernstein.png",
-	Asurion: "asurion.png",
-	"AT&T": "att.png",
-	"BNY Mellon": "bny-mellon.png",
-	"Capital One": "capital-one.png",
-	Centene: "centene.png",
-	"Contrary Capital": "contrary-capital.jpg",
-	Defang: "defang.jpg",
-	"Digital Reasoning": "digital-reasoning.png",
-	DigitalOcean: "digitalocean.svg",
-	DigiKey: "digikey.png",
-	"Dollar General": "dollar-general.png",
-	"Domain.com": "domain.png",
-	Epic: "epic.png",
-	Eventbrite: "eventbrite.png",
-	"Fidelity Investments": "fidelity.png",
-	FulcrumGT: "fulcrumgt.png",
-	GIPHY: "giphy.svg",
-	"GoDaddy Registry": "godaddy.svg",
-	"Google Cloud": "googlecloud.svg",
-	GitHub: "github.svg",
-	HashiCorp: "hashicorp.svg",
-	Hillman: "hillman.png",
-	"Hudson River Trading": "hudson-river-trading.png",
-	"IMC Trading": "imc-trading.png",
-	"Initial State": "initial-state.png",
-	L3Harris: "l3harris.jpg",
-	"Launch Tennessee": "launch-tennessee.png",
-	LeanKit: "leankit.png",
-	Lexmark: "lexmark.png",
-	"Macy's Tech": "macys.png",
-	Mercury: "mercury.png",
-	Metova: "metova.png",
-	Microsoft: "microsoft.png",
-	MicroStrategy: "microstrategy.svg",
-	MongoDB: "mongodb.svg",
-	"Perplexity AI": "perplexity.svg",
-	"Red Ventures": "red-ventures.png",
-	Salesforce: "salesforce.png",
-	"Sauce Labs": "saucelabs.svg",
-	SeatGeek: "seatgeek.svg",
-	"Sticker Mule": "sticker-mule.png",
-	"The Home Depot": "home-depot.png",
-	"Tractor Supply Co.": "tractor-supply.png",
-	Twilio: "twilio.png",
-	Ubisoft: "ubisoft.svg",
-	UiPath: "uipath.svg",
-	Vanguard: "vanguard.jpg",
-	Wix: "wix.svg",
-	"Wolfram Alpha": "wolfram.svg",
-	"Yik Yak": "yik-yak.png",
-	"Major League Hacking (MLH)": "majorleaguehacking.svg",
-	"Vanderbilt School of Engineering": "vanderbilt-engineering.png",
-	"Vanderbilt Ventures Group": "vanderbilt-ventures.png",
-};
 
 export default function Sponsors() {
 	return (
 		<section
 			id="sponsors"
-			className="relative z-10 scroll-mt-20 px-[clamp(20px,5vw,72px)] py-[clamp(48px,7vw,88px)]"
+			className="relative z-10 overflow-hidden pt-[clamp(48px,6vw,88px)] pb-[clamp(80px,10vw,160px)]"
 			aria-labelledby="sponsors-title"
 		>
-			<div className="mx-auto w-full max-w-7xl">
-				<h2
-					id="sponsors-title"
-					className="mb-3 font-heading text-2xl tracking-tight text-white sm:text-3xl"
-				>
-					Past sponsors &amp; supporters
-				</h2>
-				<p className="mb-8 max-w-2xl text-sm leading-6 text-[#c3c8dc]">
-					Thank you to the organizations that have supported
-					VandyHacks over the years.
-				</p>
-				<ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-					{sponsors.map((sponsor) => (
-						<li
-							key={sponsor}
-							className="group relative isolate h-[220px] overflow-hidden rounded-2xl border border-white/20 bg-[#0d142c] p-1 transition-colors hover:border-[#c8a2ff]/60"
+			<div className="px-[clamp(20px,3vw,64px)]">
+				<SectionTitle id="sponsors-title">PAST SPONSORS</SectionTitle>
+			</div>
+			<div className="space-y-[clamp(12px,1.5vw,20px)]">
+				{sponsorRows.map((sponsors, row) => (
+					<div
+						key={row}
+						className="overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] motion-reduce:px-[clamp(20px,3vw,64px)] motion-reduce:[mask-image:none]"
+					>
+						<div
+							className={`flex w-max animate-sponsor-scroll motion-reduce:w-full motion-reduce:animate-none ${row === 1 ? "[animation-duration:95s] [animation-direction:reverse]" : ""}`}
 						>
-							<div
-								aria-hidden="true"
-								className="absolute inset-0 bg-gradient-to-br from-[#c8a2ff]/70 via-[#77a9ff]/35 to-[#151e3d]"
-							/>
-							<div
-								aria-hidden="true"
-								className="absolute inset-1 rounded-xl rounded-tr-[100px] rounded-br-[40px] bg-[#0d142c]"
-							/>
-							<div
-								aria-hidden="true"
-								className="absolute left-1/2 top-1/2 size-32 -translate-x-1/2 -translate-y-1/2 animate-spin rounded-full bg-gradient-to-tr from-[#7138c7] to-[#315caa] opacity-80 motion-reduce:animate-none [animation-duration:12s]"
-							/>
-							<div className="absolute inset-2 flex items-center justify-center rounded-xl backdrop-blur-xl">
-								<div className="relative z-10 flex size-24 items-center justify-center">
-									{sponsorLogos[sponsor] ? (
-										<Image
-											src={`/sponsors/${sponsorLogos[sponsor]}`}
-											alt=""
-											width={96}
-											height={96}
-											className={`max-h-full max-w-full object-contain ${sponsorLogos[sponsor].endsWith(".svg") ? "brightness-0 invert" : ""}`}
-										/>
-									) : (
-										<span className="font-heading text-xl tracking-tight text-[#f0eff8]">
-											{sponsor
-												.split(/\s+/)
-												.map((word) => word[0])
-												.join("")
-												.slice(0, 2)}
-										</span>
+							{[0, 1].map((copy) => (
+								<div
+									key={copy}
+									className={`flex min-w-screen shrink-0 gap-[clamp(12px,1.5vw,20px)] pr-[clamp(12px,1.5vw,20px)] motion-reduce:grid motion-reduce:w-full motion-reduce:min-w-0 motion-reduce:grid-cols-3 motion-reduce:pr-0 motion-reduce:max-[600px]:grid-cols-2 ${copy === 1 ? "motion-reduce:hidden" : ""}`}
+									data-sponsor-copy={copy}
+									aria-hidden={copy === 1 ? true : undefined}
+								>
+									{[0, 1].flatMap((repeat) =>
+										sponsors.map((sponsor) => (
+											<div
+												key={`${repeat}-${sponsor.name}`}
+												className={`flex h-[clamp(140px,15vw,216px)] w-[clamp(180px,22vw,320px)] shrink-0 items-center justify-center motion-reduce:w-auto ${repeat === 1 ? "motion-reduce:hidden" : ""}`}
+												data-sponsor-repeat={repeat}
+												aria-hidden={
+													repeat === 1
+														? true
+														: undefined
+												}
+											>
+												{sponsor.file ? (
+													<Image
+														src={`/sponsors/${sponsor.file}`}
+														alt={sponsor.name}
+														width={180}
+														height={180}
+														className={`size-[clamp(100px,13vw,180px)] object-contain opacity-80 ${sponsor.file.endsWith(".svg") ? "invert" : ""}`}
+													/>
+												) : (
+													<span className="px-4 text-center font-heading text-[clamp(16px,2vw,28px)] tracking-tight text-[#f1f0f3] opacity-80">
+														{sponsor.name}
+													</span>
+												)}
+											</div>
+										)),
 									)}
 								</div>
-								<span className="absolute left-2 top-2 z-20 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[#c8a2ff]">
-									Sponsor
-								</span>
-								<div className="absolute inset-x-1 bottom-1 z-20 rounded-xl border border-white/10 bg-[#0d142c]/75 px-2.5 py-2 text-center text-[#f0eff8] backdrop-blur-lg">
-									<p className="break-words font-mono text-[11px] font-medium leading-snug sm:text-xs">
-										{sponsor}
-									</p>
-								</div>
-							</div>
-						</li>
-					))}
-				</ul>
+							))}
+						</div>
+					</div>
+				))}
 			</div>
 		</section>
 	);

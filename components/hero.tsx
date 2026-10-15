@@ -4,8 +4,8 @@ import AsciiWordmark from "@/components/ascii-wordmark";
 
 const navigationLinks = [
 	{ label: "Home", href: "#home" },
-	{ label: "Stats", href: "#stats" },
 	{ label: "About", href: "#about" },
+	{ label: "Stats", href: "#stats" },
 	{ label: "Sponsors", href: "#sponsors" },
 	{ label: "Team", href: "#team" },
 	{ label: "FAQ", href: "#faq" },
@@ -27,16 +27,10 @@ export function SiteNavigation() {
 						{link.label}
 					</a>
 				))}
-				<a
-					className="rounded-md bg-[#7138c7] px-3 py-2 text-white transition-colors hover:bg-[#8853dc] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c8a2ff]"
-					href="https://vandyhacks.devpost.com/"
-					target="_blank"
-					rel="noreferrer"
-				>
-					Devpost
-					<span className="sr-only"> (opens in a new tab)</span>
-				</a>
-			</nav>
+					<span className="rounded-md bg-[#7138c7] px-3 py-2 text-white select-none">
+						XIII
+					</span>
+				</nav>
 		</header>
 	);
 }

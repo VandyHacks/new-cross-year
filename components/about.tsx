@@ -1,5 +1,7 @@
+import ScrollReveal from "@/components/scroll-reveal";
+
 const aboutText =
-	"Code, collaborate, learn, and network at Vanderbilt's official collegiate hackathon, VandyHacks! This in-person event brings students together for workshops, games, networking, meals, speaker events, and a weekend of building ambitious projects. Whether this is your first hackathon or your thirteenth, we hope to see you at VandyHacks XIII in March 2027. Go Hackers!";
+	"At VandyHacks, we believe the next big idea can come from anyone. We bring together curious minds, bold thinkers, and passionate builders to turn ideas into reality through hackathons, hands-on workshops, and collaborations with industry leaders. From first-time coders to experienced developers, we create a space where students can experiment with emerging technologies, challenge what's possible, and build connections that last beyond the event. Join us on April 3–4, 2027, for **VandyHacks XIII**, the thirteenth edition of Vanderbilt University's annual student-run hackathon, where innovation meets opportunity and ideas come to life.";
 
 export default function About() {
 	return (
@@ -12,9 +14,9 @@ export default function About() {
 				<h2 className="mb-6 font-heading text-2xl tracking-tight text-white sm:text-3xl">
 					About VandyHacks
 				</h2>
-				<p className="text-base leading-8 text-[#d5d9e8] sm:text-lg">
+				<ScrollReveal className="text-base leading-8 text-[#d5d9e8] sm:text-lg">
 					{aboutText}
-				</p>
+				</ScrollReveal>
 			</div>
 		</section>
 	);
