@@ -1,25 +1,27 @@
 import Hero from "@/components/hero";
 import Navbar from "@/components/navbar";
-import Mission from "@/components/about";
-import About from "@/components/stats";
+import About from "@/components/about";
+import Impact from "@/components/stats";
 import MatrixRain from "@/components/matrix-rain";
 import Sponsors from "@/components/sponsors";
 import Footer from "@/components/footer";
 import FAQ from "@/components/faq";
 import Team from "@/components/team";
+import GetInvolved from "@/components/get-involved";
 
 export default function Home() {
 	return (
 		<>
 			<Navbar />
-			<main className="relative isolate bg-[#080d20]">
+			<main className="relative isolate bg-vh-navy-950">
 				<Hero />
-				<div className="relative z-10 isolate overflow-clip bg-[#0d142c]">
+				<div className="relative z-10 isolate overflow-clip bg-vh-navy-900">
 					<MatrixRain />
-					<Mission />
 					<About />
+					<Impact />
 					<Sponsors />
 					<Team />
+					<GetInvolved />
 					<FAQ />
 				</div>
 			</main>

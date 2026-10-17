@@ -2,26 +2,26 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
+import { CTA, EVENT } from "@/lib/event";
 
 const linkClassName =
-	"type-body-sm inline-block rounded-sm text-[#d5d9e8] underline-offset-4 transition-colors hover:text-white hover:underline hover:decoration-[#c8a2ff] focus-visible:text-white focus-visible:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c8a2ff]";
+	"type-body-sm inline-block rounded-sm text-vh-text-soft underline-offset-4 transition-colors hover:text-white hover:underline hover:decoration-vh-purple-300 focus-visible:text-white focus-visible:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300";
 
-const labelClassName =
-	"type-label mb-4 text-[#c8a2ff]";
+const labelClassName = "type-label mb-4 text-vh-purple-300";
 
 const iconLinkClassName =
-	"inline-flex size-9 shrink-0 items-center justify-center rounded-md border border-white/15 text-[#d5d9e8] transition-colors hover:border-[#c8a2ff] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c8a2ff]";
+	"inline-flex size-9 shrink-0 items-center justify-center rounded-md border border-white/15 text-vh-text-soft transition-colors hover:border-vh-purple-300 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300";
 
 // Same sections as the navbar, same order, same anchors (XIII omitted — it has no link yet).
 // Split into two sub-columns of three under the single "Explore" label.
 const exploreColumns = [
 	[
 		{ label: "Home", href: "#home" },
-		{ label: "Mission", href: "#mission" },
 		{ label: "About", href: "#about" },
+		{ label: "Impact", href: "#impact" },
 	],
 	[
-		{ label: "Past Sponsors", href: "#sponsors" },
+		{ label: "Sponsors", href: "#sponsors" },
 		{ label: "Team", href: "#team" },
 		{ label: "FAQ", href: "#faq" },
 	],
@@ -41,7 +41,13 @@ function InstagramIcon() {
 		>
 			<rect x="3" y="3" width="18" height="18" rx="5" />
 			<circle cx="12" cy="12" r="4" />
-			<circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+			<circle
+				cx="17.5"
+				cy="6.5"
+				r="1"
+				fill="currentColor"
+				stroke="none"
+			/>
 		</svg>
 	);
 }
@@ -128,7 +134,7 @@ export default function Footer() {
 	return (
 		<footer
 			id="footer"
-			className="relative isolate overflow-hidden border-t border-white/10 bg-[#080d20] px-[clamp(20px,5vw,72px)] pt-[clamp(72px,12vw,150px)] pb-[clamp(32px,5vw,60px)] text-white"
+			className="relative isolate overflow-hidden border-t border-white/10 bg-vh-navy-950 px-[clamp(20px,5vw,72px)] pt-[clamp(72px,12vw,150px)] pb-[clamp(32px,5vw,60px)] text-white"
 		>
 			{/* Background glow: CSS gradient rising from the bottom edge, behind all content. */}
 			<motion.div
@@ -160,7 +166,7 @@ export default function Footer() {
 						height={231}
 						className="block h-[138px] w-auto"
 					/>
-					<p className="type-body-sm mt-4 text-[#aeb5cd]">
+					<p className="type-body-sm mt-4 text-vh-subtle">
 						Vanderbilt University
 						<br />
 						Nashville, TN
@@ -198,23 +204,21 @@ export default function Footer() {
 						<h2 className={labelClassName}>Get involved</h2>
 						<ul className="flex flex-col gap-3.5">
 							<li>
-								<a
-									className={linkClassName}
-									href="mailto:info@vandyhacks.org"
-								>
+								<a className={linkClassName} href={CTA.sponsor}>
 									Become a Sponsor
 								</a>
 							</li>
 							<li>
-								{/* TODO: Add Become a Judge URL — none in codebase */}
-								<a className={linkClassName} href="#">
+								<a className={linkClassName} href={CTA.judge}>
 									Become a Judge
 								</a>
 							</li>
 							<li>
-								{/* TODO: Add registration URL — none in codebase */}
-								<a className={linkClassName} href="#">
-									Register for XIII
+								<a
+									className={linkClassName}
+									href={CTA.interest}
+								>
+									Get notified for {EVENT.edition}
 								</a>
 							</li>
 						</ul>
@@ -228,9 +232,9 @@ export default function Footer() {
 						<h2 className={labelClassName}>Contact</h2>
 						<a
 							className={linkClassName}
-							href="mailto:info@vandyhacks.org"
+							href={`mailto:${EVENT.email}`}
 						>
-							info@vandyhacks.org
+							{EVENT.email}
 						</a>
 						<ul className="mt-3 flex flex-nowrap gap-2.5">
 							<li>
@@ -297,7 +301,7 @@ export default function Footer() {
 					{...reveal(4)}
 				>
 					<a
-						className="inline-flex w-fit rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c8a2ff]"
+						className="inline-flex w-fit rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-vh-purple-300"
 						href="https://mlh.io/seasons/2027/events/"
 						target="_blank"
 						rel="noreferrer"
@@ -317,12 +321,12 @@ export default function Footer() {
 
 			{/* Bottom bar */}
 			<motion.div
-				className="mx-auto mt-[clamp(48px,6vw,80px)] flex max-w-7xl flex-col gap-2 border-t border-white/10 pt-6 text-[13px] text-[#8b93ad] sm:flex-row sm:items-center sm:justify-between"
+				className="mx-auto mt-[clamp(48px,6vw,80px)] flex max-w-7xl flex-col gap-2 border-t border-white/10 pt-6 text-[13px] text-vh-faint sm:flex-row sm:items-center sm:justify-between"
 				{...reveal(5)}
 			>
 				<p>© {year} VandyHacks</p>
 				<a
-					className="rounded-sm underline-offset-4 transition-colors hover:underline focus-visible:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c8a2ff]"
+					className="rounded-sm underline-offset-4 transition-colors hover:underline focus-visible:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300"
 					href="https://mlh.io/code-of-conduct"
 					target="_blank"
 					rel="noopener noreferrer"

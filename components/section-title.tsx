@@ -11,7 +11,7 @@ export default function SectionTitle({
 	return (
 		<h2
 			id={id}
-			className="mb-[clamp(20px,3vw,36px)] font-mono text-[clamp(28px,3.6vw,52px)] leading-tight font-normal tracking-[0.18em] text-[#c8a2ff] uppercase"
+			className="mb-[clamp(20px,3vw,36px)] font-heading text-[clamp(28px,3.6vw,52px)] leading-tight font-normal tracking-[0.18em] text-vh-purple-300 uppercase"
 		>
 			{children}
 		</h2>

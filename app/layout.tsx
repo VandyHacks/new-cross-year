@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Michroma } from "next/font/google";
+import { Michroma, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "cn";
+import { EVENT } from "@/lib/event";
 
 export const metadata: Metadata = {
-	title: "VandyHacks XIII",
-	description:
-		"Code, collaborate, learn, and build at VandyHacks XIII, Vanderbilt's collegiate hackathon in March 2027.",
+	title: EVENT.name,
+	description: `Code, collaborate, learn, and build at ${EVENT.name}, Vanderbilt's collegiate hackathon, ${EVENT.dateLabel} in ${EVENT.city}.`,
 };
 const michroma = Michroma({
 	subsets: ["latin"],
@@ -14,9 +14,9 @@ const michroma = Michroma({
 	variable: "--font-michroma",
 	display: "swap",
 });
-const spaceMono = Michroma({
+const spaceMono = Space_Mono({
 	subsets: ["latin"],
-	weight: "400",
+	weight: ["400", "700"],
 	variable: "--font-space-mono",
 	display: "swap",
 });
@@ -31,7 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 				spaceMono.variable,
 			)}
 		>
-			<body className="retro-screen w-full bg-[#080d20] font-sans leading-[normal] bg-[radial-gradient(125%_125%_at_50%_0%,_#080d20_48%,_#171432_100%)] text-[#f1f0f3] selection:bg-[#c8a2ff] selection:text-[#080d20]">
+			<body className="retro-screen w-full bg-vh-navy-950 font-sans leading-[normal] bg-[radial-gradient(125%_125%_at_50%_0%,_#080d20_48%,_#171432_100%)] text-vh-text selection:bg-vh-purple-300 selection:text-vh-navy-950">
 				{children}
 				<div className="retro-crt" aria-hidden="true" />
 			</body>
