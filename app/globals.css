@@ -70,17 +70,6 @@ html {
 	--color-vh-muted: #c3c8dc;
 	--color-vh-subtle: #aeb5cd;
 	--color-vh-faint: #8b93ad;
-
-	--animate-sponsor-scroll: sponsor-scroll 80s linear infinite;
-
-	@keyframes sponsor-scroll {
-		from {
-			transform: translateX(0);
-		}
-		to {
-			transform: translateX(-50%);
-		}
-	}
 }
 
 :root {
