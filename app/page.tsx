@@ -7,6 +7,7 @@ import Sponsors from "@/components/sponsors";
 import Footer from "@/components/footer";
 import FAQ from "@/components/faq";
 import Team from "@/components/team";
+import GetInvolved from "@/components/get-involved";
 
 export default function Home() {
 	return (
@@ -20,6 +21,7 @@ export default function Home() {
 					<Impact />
 					<Sponsors />
 					<Team />
+					<GetInvolved />
 					<FAQ />
 				</div>
 			</main>

@@ -12,13 +12,10 @@ export const EVENT = {
 	email: "info@vandyhacks.org",
 } as const;
 
-// Stopgap CTAs until the on-page Get Involved forms exist (Phase 4) —
-// swap these for the form anchors then.
-const mailto = (subject: string) =>
-	`mailto:${EVENT.email}?subject=${encodeURIComponent(subject)}`;
-
+// In-page deep links into the Get Involved section (components/get-involved.tsx
+// switches to the matching tab and scrolls to it).
 export const CTA = {
-	interest: mailto(`${EVENT.name}: keep me posted`),
-	judge: mailto(`${EVENT.name}: judging / mentoring`),
-	sponsor: mailto(`${EVENT.name}: sponsorship`),
+	interest: "#get-involved/interest",
+	judge: "#get-involved/judge",
+	sponsor: "#get-involved/sponsor",
 } as const;
