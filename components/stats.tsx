@@ -16,17 +16,20 @@ const columnsClassName =
 	"grid grid-cols-2 items-center gap-[clamp(24px,6vw,96px)] max-[767px]:gap-5";
 const headingClassName = "[&_h2]:m-0 [&_h2]:text-left";
 const valueClassName =
-	"flex items-center justify-center font-heading text-[clamp(40px,6.5vw,96px)] leading-[1.2] tracking-[-0.04em] text-[#ba87f8] max-[767px]:text-[clamp(20px,5vw,38px)]";
+	"flex items-center justify-center font-heading text-[clamp(40px,6.5vw,96px)] leading-[1.2] tracking-[-0.04em] text-vh-purple-300 max-[767px]:text-[clamp(20px,5vw,38px)]";
 const labelClassName =
-	"mx-auto mt-4 max-w-[28ch] text-center text-[clamp(12px,1.2vw,18px)] leading-[1.6] text-[#f1f0f3] max-[767px]:mt-3 max-[767px]:text-[10px]";
+	"mx-auto mt-4 max-w-[28ch] text-center text-[clamp(12px,1.2vw,18px)] leading-[1.6] text-vh-text max-[767px]:mt-3 max-[767px]:text-[10px]";
 
+// Totals across all 13 past events (I–XII + Summer Edition 2020), from each
+// event's Devpost page: 2,273 registrants, 723 projects, $125,829 in listed
+// prizes. Sponsor count is the Past Sponsors list. See
+// docs/client-feedback-plan.md for the per-edition breakdown.
 const metrics = [
-	{ value: 2000, suffix: "+", label: "Hackers around the world" },
-	{ value: 500, suffix: "+", label: "Projects Created" },
-	{ value: 20, suffix: "+", label: "Speakers Hosted" },
-	{ value: 25, suffix: "+", label: "Different Schools Represented" },
-	{ value: 13, suffix: "", label: "Editions of VandyHacks" },
-	{ value: 50, prefix: "$", suffix: "K", label: "Total prize pool" },
+	{ value: 12, suffix: "", label: "Hackathons hosted since 2015" },
+	{ value: 2000, suffix: "+", label: "Hackers from around the world" },
+	{ value: 720, suffix: "+", label: "Projects built" },
+	{ value: 125, prefix: "$", suffix: "K+", label: "In prizes awarded" },
+	{ value: 50, suffix: "+", label: "Sponsoring companies" },
 ];
 
 type Metric = (typeof metrics)[number];
@@ -88,14 +91,14 @@ function StickyStats() {
 	return (
 		<section
 			ref={sectionRef}
-			id="about"
-			className="relative z-10 h-[460svh]"
-			aria-labelledby="about-title"
+			id="impact"
+			className="relative z-10 h-[300svh]"
+			aria-labelledby="impact-title"
 		>
 			<div className="sticky top-0 flex h-svh items-center">
 				<SectionContainer className={columnsClassName}>
 					<div className={headingClassName}>
-						<SectionTitle id="about-title">About</SectionTitle>
+						<SectionTitle id="impact-title">Impact</SectionTitle>
 					</div>
 					<div className="grid min-w-0">
 						{metrics.map((metric, index) => (
@@ -128,16 +131,16 @@ export default function Stats() {
 
 	return (
 		<section
-			id="about"
+			id="impact"
 			className="relative z-10 scroll-mt-20 py-[clamp(48px,7vw,88px)]"
-			aria-labelledby="about-title"
+			aria-labelledby="impact-title"
 		>
 			<SectionContainer>
-				<h2 id="about-title" className="sr-only">
-					About
+				<h2 id="impact-title" className="sr-only">
+					Impact
 				</h2>
 				<motion.div
-					className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6"
+					className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5"
 					initial={reducedMotion ? false : "hidden"}
 					whileInView="visible"
 					viewport={{ once: true, amount: 0.3 }}
@@ -154,7 +157,7 @@ export default function Stats() {
 						<motion.article
 							key={metric.label}
 							data-stat-card
-							className="flex min-h-32 min-w-0 flex-col items-center justify-center rounded-xl border border-white/10 bg-[#151e3d]/85 p-4 text-center shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_12px_40px_rgb(0_0_0/0.18)] backdrop-blur-xl sm:min-h-36"
+							className="flex min-h-32 min-w-0 flex-col items-center justify-center rounded-xl border border-white/10 bg-vh-navy-800/85 p-4 text-center shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_12px_40px_rgb(0_0_0/0.18)] backdrop-blur-xl sm:min-h-36"
 							variants={{
 								hidden: { opacity: 0 },
 								visible: {
@@ -166,10 +169,10 @@ export default function Stats() {
 								},
 							}}
 						>
-							<p className="mb-2 font-heading text-xl leading-tight tracking-[-0.04em] text-[#c8a2ff] sm:text-2xl">
+							<p className="mb-2 font-heading text-xl leading-tight tracking-[-0.04em] text-vh-purple-300 sm:text-2xl">
 								{formattedValue(metric)}
 							</p>
-							<h3 className="type-body-sm break-words text-[#e6e8f2]">
+							<h3 className="type-body-sm break-words text-vh-text-soft">
 								{metric.label}
 							</h3>
 						</motion.article>

@@ -3,21 +3,17 @@
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { primaryButtonClassName } from "@/lib/button-styles";
+import { CTA } from "@/lib/event";
 
 const navigationLinks = [
 	{ label: "Home", href: "#home", id: "home" },
-	{ label: "Mission", href: "#mission", id: "mission" },
 	{ label: "About", href: "#about", id: "about" },
-	{ label: "Past Sponsors", href: "#sponsors", id: "sponsors" },
+	{ label: "Impact", href: "#impact", id: "impact" },
+	{ label: "Sponsors", href: "#sponsors", id: "sponsors" },
 	{ label: "Team", href: "#team", id: "team" },
 	{ label: "FAQ", href: "#faq", id: "faq" },
 ];
-
-// TODO: No registration URL yet — point "Apply to XIII" here when it exists.
-const APPLY_HREF = "#";
-
-const applyButtonClassName =
-	"type-button inline-flex items-center justify-center rounded-full bg-[#7138c7] px-5 py-2.5 text-white shadow-[0_0_20px_rgba(113,56,199,0.55)] transition-[transform,box-shadow,background-color] duration-200 hover:-translate-y-0.5 hover:bg-[#8853dc] hover:shadow-[0_0_28px_rgba(136,83,220,0.8)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c8a2ff] motion-reduce:transition-none motion-reduce:hover:translate-y-0";
 
 function useActiveSection() {
 	const [active, setActive] = useState("home");
@@ -82,8 +78,8 @@ export default function Navbar() {
 			transition={{ duration: 0.5, ease: "easeOut" }}
 			className={`sticky top-0 z-50 border-b backdrop-blur-xl transition-[background-color,border-color,box-shadow,padding] duration-300 ${
 				scrolled
-					? "border-white/10 bg-[#080d20]/90 py-2 shadow-lg shadow-black/30"
-					: "border-transparent bg-[#080d20]/60 py-4"
+					? "border-white/10 bg-vh-navy-950/90 py-2 shadow-lg shadow-black/30"
+					: "border-transparent bg-vh-navy-950/60 py-4"
 			}`}
 		>
 			<div className="mx-auto flex max-w-7xl items-center justify-between px-[clamp(16px,3vw,48px)]">
@@ -91,7 +87,7 @@ export default function Navbar() {
 				<a
 					href="#home"
 					aria-label="VandyHacks — back to top"
-					className="shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#c8a2ff]"
+					className="shrink-0 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-vh-purple-300"
 				>
 					<Image
 						src="/logo-trimmed.png"
@@ -117,17 +113,17 @@ export default function Navbar() {
 								key={link.href}
 								href={link.href}
 								aria-current={isActive ? "true" : undefined}
-								className={`type-nav relative rounded-md px-3 py-2 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c8a2ff] ${
+								className={`type-nav relative rounded-md px-3 py-2 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300 ${
 									isActive
 										? "text-white"
-										: "text-[#c3c8dc] hover:text-[#c8a2ff]"
+										: "text-vh-muted hover:text-vh-purple-300"
 								}`}
 							>
 								{link.label}
 								{isActive && (
 									<motion.span
 										layoutId="nav-active-pill"
-										className="absolute inset-x-2 -bottom-0.5 h-0.5 rounded-full bg-[#c8a2ff]"
+										className="absolute inset-x-2 -bottom-0.5 h-0.5 rounded-full bg-vh-purple-300"
 										transition={
 											reducedMotion
 												? { duration: 0 }
@@ -146,8 +142,8 @@ export default function Navbar() {
 
 				{/* Right cluster: Apply button + mobile hamburger */}
 				<div className="flex shrink-0 items-center gap-2">
-					<a className={applyButtonClassName} href={APPLY_HREF}>
-						Apply to XIII
+					<a className={primaryButtonClassName} href={CTA.interest}>
+						Get notified
 					</a>
 					<button
 						type="button"
@@ -155,7 +151,7 @@ export default function Navbar() {
 						aria-expanded={menuOpen}
 						aria-controls="mobile-menu"
 						aria-label={menuOpen ? "Close menu" : "Open menu"}
-						className="inline-flex size-10 items-center justify-center rounded-md text-white transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c8a2ff] md:hidden"
+						className="inline-flex size-10 items-center justify-center rounded-md text-white transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300 md:hidden"
 					>
 						<svg
 							viewBox="0 0 24 24"
@@ -188,9 +184,13 @@ export default function Navbar() {
 						aria-label="Mobile navigation"
 						initial={reducedMotion ? false : { opacity: 0, y: -8 }}
 						animate={{ opacity: 1, y: 0 }}
-						exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+						exit={
+							reducedMotion
+								? { opacity: 0 }
+								: { opacity: 0, y: -8 }
+						}
 						transition={{ duration: 0.2, ease: "easeOut" }}
-						className="border-t border-white/10 bg-[#080d20]/95 backdrop-blur-xl md:hidden"
+						className="border-t border-white/10 bg-vh-navy-950/95 backdrop-blur-xl md:hidden"
 					>
 						<ul className="flex flex-col gap-1 px-[clamp(16px,3vw,48px)] py-4">
 							{navigationLinks.map((link) => (
@@ -199,12 +199,14 @@ export default function Navbar() {
 										href={link.href}
 										onClick={() => setMenuOpen(false)}
 										aria-current={
-											active === link.id ? "true" : undefined
-										}
-										className={`type-nav block rounded-md px-3 py-3 text-2xl transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c8a2ff] ${
 											active === link.id
-												? "text-[#c8a2ff]"
-												: "text-white hover:text-[#c8a2ff]"
+												? "true"
+												: undefined
+										}
+										className={`type-nav block rounded-md px-3 py-3 text-2xl transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300 ${
+											active === link.id
+												? "text-vh-purple-300"
+												: "text-white hover:text-vh-purple-300"
 										}`}
 									>
 										{link.label}

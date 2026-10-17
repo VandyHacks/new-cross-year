@@ -123,7 +123,7 @@ export default function Sponsors() {
 																? undefined
 																: true
 														}
-														className="group flex size-full items-center justify-center rounded-md transition-transform duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#c8a2ff] motion-reduce:transition-none motion-reduce:hover:scale-100"
+														className="group flex size-full items-center justify-center rounded-md transition-transform duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300 motion-reduce:transition-none motion-reduce:hover:scale-100"
 													>
 														{sponsor.file ? (
 															<Image
@@ -134,7 +134,7 @@ export default function Sponsors() {
 																className={`size-[clamp(100px,13vw,180px)] object-contain opacity-80 transition-opacity duration-200 group-hover:opacity-100 ${sponsor.file.endsWith(".svg") ? "invert" : ""}`}
 															/>
 														) : (
-															<span className="px-4 text-center font-heading text-[clamp(16px,2vw,28px)] tracking-tight text-[#f1f0f3] opacity-80 transition-opacity duration-200 group-hover:opacity-100">
+															<span className="px-4 text-center font-heading text-[clamp(16px,2vw,28px)] tracking-tight text-vh-text opacity-80 transition-opacity duration-200 group-hover:opacity-100">
 																{sponsor.name}
 															</span>
 														)}

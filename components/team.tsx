@@ -12,15 +12,15 @@ export default function Team() {
 		>
 			<SectionContainer>
 				<SectionTitle id="team-title">Team</SectionTitle>
-				<p className="type-body mb-8 max-w-2xl text-[#c3c8dc]">tbd</p>
+				<p className="type-body mb-8 max-w-2xl text-vh-muted">tbd</p>
 				<div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
 					{teamProfiles.map((profile) => (
 						<article
 							key={profile}
-							className="flex min-h-48 flex-col items-center justify-center rounded-xl border border-white/10 bg-[#151e3d]/80 p-5 text-center"
+							className="flex min-h-48 flex-col items-center justify-center rounded-xl border border-white/10 bg-vh-navy-800/80 p-5 text-center"
 						>
 							<div
-								className="mb-4 flex size-16 items-center justify-center rounded-full border border-[#a77ae9]/50 bg-[#7138c7]/25 font-heading text-xl text-[#eadcff]"
+								className="mb-4 flex size-16 items-center justify-center rounded-full border border-vh-purple-400/50 bg-vh-purple-700/25 font-heading text-xl text-vh-purple-100"
 								aria-hidden="true"
 							>
 								VH
@@ -28,7 +28,7 @@ export default function Team() {
 							<h3 className="type-subheading text-white">
 								Exec team member
 							</h3>
-							<p className="type-body-sm mt-1 text-[#c3c8dc]">
+							<p className="type-body-sm mt-1 text-vh-muted">
 								Role
 							</p>
 						</article>

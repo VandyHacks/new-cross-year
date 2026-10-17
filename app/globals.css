@@ -55,6 +55,22 @@ html {
 }
 
 @theme {
+	/* Brand palette — dark navy + dark purple. Use these (bg-vh-navy-950,
+	   text-vh-purple-300, …) instead of hard-coded hex values. */
+	--color-vh-navy-950: #080d20;
+	--color-vh-navy-900: #0d142c;
+	--color-vh-navy-800: #151e3d;
+	--color-vh-purple-700: #7138c7;
+	--color-vh-purple-600: #8853dc;
+	--color-vh-purple-400: #a77ae9;
+	--color-vh-purple-300: #c8a2ff;
+	--color-vh-purple-100: #eadcff;
+	--color-vh-text: #f1f0f3;
+	--color-vh-text-soft: #d5d9e8;
+	--color-vh-muted: #c3c8dc;
+	--color-vh-subtle: #aeb5cd;
+	--color-vh-faint: #8b93ad;
+
 	--animate-sponsor-scroll: sponsor-scroll 80s linear infinite;
 
 	@keyframes sponsor-scroll {
@@ -100,41 +116,40 @@ html {
 	--sidebar-accent-foreground: oklch(0.205 0 0);
 	--sidebar-border: oklch(0.922 0 0);
 	--sidebar-ring: oklch(0.708 0 0);
-	user-select: none;
 }
 
 .dark {
-	--background: oklch(0.145 0 0);
-	--foreground: oklch(0.985 0 0);
-	--card: oklch(0.205 0 0);
-	--card-foreground: oklch(0.985 0 0);
-	--popover: oklch(0.205 0 0);
-	--popover-foreground: oklch(0.985 0 0);
-	--primary: oklch(0.922 0 0);
-	--primary-foreground: oklch(0.205 0 0);
-	--secondary: oklch(0.269 0 0);
-	--secondary-foreground: oklch(0.985 0 0);
-	--muted: oklch(0.269 0 0);
-	--muted-foreground: oklch(0.708 0 0);
-	--accent: oklch(0.269 0 0);
-	--accent-foreground: oklch(0.985 0 0);
+	--background: var(--color-vh-navy-950);
+	--foreground: var(--color-vh-text);
+	--card: var(--color-vh-navy-800);
+	--card-foreground: var(--color-vh-text);
+	--popover: var(--color-vh-navy-900);
+	--popover-foreground: var(--color-vh-text);
+	--primary: var(--color-vh-purple-700);
+	--primary-foreground: oklch(1 0 0);
+	--secondary: var(--color-vh-navy-800);
+	--secondary-foreground: var(--color-vh-text);
+	--muted: var(--color-vh-navy-900);
+	--muted-foreground: var(--color-vh-muted);
+	--accent: var(--color-vh-navy-800);
+	--accent-foreground: var(--color-vh-purple-300);
 	--destructive: oklch(0.704 0.191 22.216);
 	--border: oklch(1 0 0 / 10%);
 	--input: oklch(1 0 0 / 15%);
-	--ring: oklch(0.556 0 0);
-	--chart-1: oklch(0.87 0 0);
-	--chart-2: oklch(0.556 0 0);
-	--chart-3: oklch(0.439 0 0);
-	--chart-4: oklch(0.371 0 0);
-	--chart-5: oklch(0.269 0 0);
-	--sidebar: oklch(0.205 0 0);
-	--sidebar-foreground: oklch(0.985 0 0);
-	--sidebar-primary: oklch(0.488 0.243 264.376);
-	--sidebar-primary-foreground: oklch(0.985 0 0);
-	--sidebar-accent: oklch(0.269 0 0);
-	--sidebar-accent-foreground: oklch(0.985 0 0);
+	--ring: var(--color-vh-purple-300);
+	--chart-1: var(--color-vh-purple-300);
+	--chart-2: var(--color-vh-purple-400);
+	--chart-3: var(--color-vh-purple-600);
+	--chart-4: var(--color-vh-purple-700);
+	--chart-5: var(--color-vh-navy-800);
+	--sidebar: var(--color-vh-navy-900);
+	--sidebar-foreground: var(--color-vh-text);
+	--sidebar-primary: var(--color-vh-purple-700);
+	--sidebar-primary-foreground: oklch(1 0 0);
+	--sidebar-accent: var(--color-vh-navy-800);
+	--sidebar-accent-foreground: var(--color-vh-text);
 	--sidebar-border: oklch(1 0 0 / 10%);
-	--sidebar-ring: oklch(0.556 0 0);
+	--sidebar-ring: var(--color-vh-purple-300);
 }
 
 button {
@@ -234,7 +249,7 @@ button {
 
 @layer components {
 	/* Shared type scale — apply these instead of one-off font sizes/weights.
-	   All Michroma (weight 400); Anton is reserved for the display titles. */
+	   Headings are Michroma; body, nav, labels, and buttons are Space Mono. */
 	.type-heading {
 		@apply font-heading text-2xl leading-tight tracking-tight sm:text-3xl;
 	}
