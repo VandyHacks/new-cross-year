@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
+import { sessionCookieOptions } from "@/lib/supabase/config";
 
 // Runs only on /admin. It refreshes the Supabase session cookie and does an
 // optimistic redirect for visitors with no session. It is NOT the security
@@ -11,6 +12,7 @@ export async function proxy(request: NextRequest) {
 
 	let response = NextResponse.next({ request });
 	const supabase = createServerClient(url, anonKey, {
+		cookieOptions: sessionCookieOptions,
 		cookies: {
 			getAll: () => request.cookies.getAll(),
 			setAll(cookiesToSet) {

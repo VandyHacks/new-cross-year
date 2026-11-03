@@ -46,11 +46,25 @@ export async function sendMagicLink(formData: FormData) {
 	}
 
 	if (admin) {
+		// Public sign-ups are off in Supabase Auth (anyone holding the public
+		// key could otherwise create users and send mail through our SMTP), so
+		// the server creates the auth user itself, only for allowlisted emails.
+		const { error: createError } = await service.auth.admin.createUser({
+			email: parsed.data,
+			email_confirm: true,
+		});
+		const alreadyExists =
+			createError?.code === "email_exists" ||
+			createError?.code === "user_already_exists";
+		if (createError && !alreadyExists) {
+			console.error("Admin auth user creation failed", createError);
+			redirect("/admin/login?error=server");
+		}
 		const { error: otpError } = await session.auth.signInWithOtp({
 			email: parsed.data,
 			options: {
 				emailRedirectTo: `${await siteOrigin()}/auth/callback`,
-				shouldCreateUser: true,
+				shouldCreateUser: false,
 			},
 		});
 		if (otpError) {
@@ -96,4 +110,64 @@ export async function updateSubmission(kindId: string, formData: FormData) {
 	}
 	revalidatePath(`/admin/${kindId}`);
 	revalidatePath("/admin");
+}
+
+// Hard delete, for spam. Real submissions should be archived instead.
+export async function deleteSubmission(kindId: string, formData: FormData) {
+	await requireAdmin();
+	if (!isKindId(kindId)) throw new Error("Unknown submission type");
+	const id = z.uuid().safeParse(formData.get("id"));
+	if (!id.success) throw new Error("Invalid submission");
+
+	const service = getServiceClient();
+	if (!service) throw new Error("Database is not configured");
+	const { error } = await service
+		.from(kinds[kindId].table)
+		.delete()
+		.eq("id", id.data);
+	if (error) {
+		console.error("Submission delete failed", error);
+		throw new Error("Could not delete submission");
+	}
+	revalidatePath(`/admin/${kindId}`);
+	revalidatePath("/admin");
+}
+
+export async function addAdmin(formData: FormData) {
+	await requireAdmin();
+	const email = z.email().safeParse(
+		String(formData.get("email") ?? "")
+			.trim()
+			.toLowerCase(),
+	);
+	if (!email.success) redirect("/admin/admins?error=email");
+
+	const service = getServiceClient();
+	if (!service) throw new Error("Database is not configured");
+	const { error } = await service
+		.from("admins")
+		.upsert({ email: email.data }, { ignoreDuplicates: true });
+	if (error) {
+		console.error("Add admin failed", error);
+		redirect("/admin/admins?error=server");
+	}
+	revalidatePath("/admin/admins");
+	redirect("/admin/admins");
+}
+
+export async function removeAdmin(formData: FormData) {
+	const { email: self } = await requireAdmin();
+	const email = String(formData.get("email") ?? "").toLowerCase();
+	// Removing yourself would lock you out mid-session; ask another admin.
+	if (!email || email === self) redirect("/admin/admins?error=self");
+
+	const service = getServiceClient();
+	if (!service) throw new Error("Database is not configured");
+	const { error } = await service.from("admins").delete().eq("email", email);
+	if (error) {
+		console.error("Remove admin failed", error);
+		redirect("/admin/admins?error=server");
+	}
+	revalidatePath("/admin/admins");
+	redirect("/admin/admins");
 }

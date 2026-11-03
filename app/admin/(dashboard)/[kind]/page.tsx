@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { updateSubmission } from "@/lib/admin/actions";
+import { deleteSubmission, updateSubmission } from "@/lib/admin/actions";
 import { requireAdmin } from "@/lib/admin/auth";
 import { isKindId, kinds, statuses } from "@/lib/admin/kinds";
 import {
@@ -15,6 +15,8 @@ const controlClassName =
 	"type-body-sm rounded-md border border-white/15 bg-vh-navy-950/70 px-3 py-2 text-white focus:border-vh-purple-300 focus:ring-2 focus:ring-vh-purple-300/40 focus:outline-none";
 const buttonClassName =
 	"type-button rounded-full border border-white/15 px-4 py-2 text-vh-muted transition-colors hover:border-vh-purple-300/60 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300";
+const dangerButtonClassName =
+	"type-button rounded-full border border-red-300/40 px-4 py-2 text-red-200 transition-colors hover:border-red-300 hover:text-red-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-300";
 
 const statusStyles: Record<string, string> = {
 	new: "border-vh-purple-300/60 bg-vh-purple-700/30 text-vh-purple-100",
@@ -82,6 +84,7 @@ export default async function SubmissionsPage({
 	if (filters.q) exportParams.set("q", filters.q);
 	if (filters.status) exportParams.set("status", filters.status);
 	const save = updateSubmission.bind(null, kind.id);
+	const remove = deleteSubmission.bind(null, kind.id);
 
 	return (
 		<>
@@ -246,6 +249,34 @@ export default async function SubmissionsPage({
 										Save
 									</button>
 								</form>
+
+								<details className="mt-3">
+									<summary className="type-body-sm w-fit cursor-pointer text-[12px] text-vh-faint hover:text-red-300">
+										Delete…
+									</summary>
+									<form
+										action={remove}
+										className="mt-2 flex flex-wrap items-center gap-3"
+									>
+										<input
+											type="hidden"
+											name="id"
+											value={row.id}
+										/>
+										<p className="type-body-sm text-[12px] text-vh-muted">
+											Permanently delete this{" "}
+											{kind.singular}? Use
+											&ldquo;archived&rdquo; for real
+											submissions; delete is for spam.
+										</p>
+										<button
+											type="submit"
+											className={dangerButtonClassName}
+										>
+											Delete permanently
+										</button>
+									</form>
+								</details>
 							</li>
 						);
 					})}

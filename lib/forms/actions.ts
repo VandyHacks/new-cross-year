@@ -21,17 +21,32 @@ const TURNSTILE_FIELD = "cf-turnstile-response";
 
 type Table = "interest_signups" | "judge_applications" | "sponsor_inquiries";
 
+// The leftmost X-Forwarded-For entry is whatever the client sent, so trusting
+// it would let a bot pick a fresh rate-limit bucket per request. Prefer the
+// header your edge sets and overwrites (CLIENT_IP_HEADER, e.g.
+// `cf-connecting-ip` behind Cloudflare), then platform headers, then the
+// entry appended by the nearest proxy.
 async function clientIp() {
 	const h = await headers();
+	const trusted = process.env.CLIENT_IP_HEADER;
 	return (
-		h.get("x-nf-client-connection-ip") ??
-		h.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-		h.get("x-real-ip") ??
+		(trusted ? h.get(trusted)?.trim() : undefined) ||
+		h.get("x-nf-client-connection-ip") ||
+		h.get("x-real-ip") ||
+		h.get("x-forwarded-for")?.split(",").at(-1)?.trim() ||
 		"unknown"
 	);
 }
 
+let warnedNoSalt = false;
+
 function hashIp(ip: string) {
+	if (!process.env.IP_HASH_SALT && !warnedNoSalt) {
+		warnedNoSalt = true;
+		console.warn(
+			"IP_HASH_SALT is not set: stored IP hashes are unsalted and reversible.",
+		);
+	}
 	return createHash("sha256")
 		.update(`${process.env.IP_HASH_SALT ?? ""}:${ip}`)
 		.digest("hex")

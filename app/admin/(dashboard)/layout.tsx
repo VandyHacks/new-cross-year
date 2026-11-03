@@ -38,6 +38,9 @@ export default async function DashboardLayout({
 							{kinds[id].label}
 						</Link>
 					))}
+					<Link href="/admin/admins" className={navLinkClassName}>
+						Admins
+					</Link>
 				</div>
 				<div className="flex items-center gap-4">
 					<span className="type-body-sm text-vh-faint">

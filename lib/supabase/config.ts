@@ -6,3 +6,11 @@ export const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 export const isAuthConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 export const isDatabaseConfigured = Boolean(supabaseUrl && supabaseServiceKey);
+
+// Session cookies are only ever read on the server (there is no browser
+// Supabase client), so keep them out of reach of page scripts.
+export const sessionCookieOptions = {
+	httpOnly: true,
+	sameSite: "lax",
+	secure: process.env.NODE_ENV === "production",
+} as const;

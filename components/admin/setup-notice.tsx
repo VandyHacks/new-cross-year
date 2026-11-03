@@ -8,11 +8,13 @@ export default function SetupNotice() {
 			</p>
 			<ol className="type-body-sm mt-6 list-decimal space-y-2 pl-5 text-vh-text-soft">
 				<li>
-					Create a Supabase project and run{" "}
+					Create a Supabase project, then{" "}
 					<code className="text-vh-purple-300">
-						supabase/migrations/20261017000000_init.sql
+						npx supabase link
 					</code>{" "}
-					in the SQL editor.
+					and{" "}
+					<code className="text-vh-purple-300">npm run db:push</code>{" "}
+					to apply the migrations.
 				</li>
 				<li>
 					Copy{" "}
