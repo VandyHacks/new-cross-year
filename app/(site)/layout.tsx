@@ -1,10 +1,10 @@
-// Marketing-site chrome (CRT vignette, glow text, scanlines). Kept out of the
-// root layout so a redesign can swap it without touching /admin.
+// Marketing-site chrome. The vinyl redesign drops the CRT treatment for a
+// fine film grain; /admin is unaffected either way.
 export default function SiteLayout({ children }: LayoutProps<"/">) {
 	return (
-		<div className="retro-screen">
+		<div className="vinyl-site">
 			{children}
-			<div className="retro-crt" aria-hidden="true" />
+			<div className="vinyl-grain" aria-hidden="true" />
 		</div>
 	);
 }

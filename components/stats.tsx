@@ -30,7 +30,7 @@ const labelClassName =
 // event's Devpost page: 2,273 registrants, 723 projects, $125,829 in listed
 // prizes. Sponsor count is the Past Sponsors list. See
 // docs/client-feedback-plan.md for the per-edition breakdown.
-const metrics = [
+export const metrics = [
 	{ value: 12, suffix: "", label: "Hackathons hosted since 2015" },
 	{ value: 2000, suffix: "+", label: "Hackers from around the world" },
 	{ value: 720, suffix: "+", label: "Projects built" },

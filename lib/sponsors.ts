@@ -279,3 +279,50 @@ export const sponsors: Sponsor[] = [
 		logo: wordmark("yik-yak.svg"),
 	},
 ];
+
+// Rough company size, used to rank the redesign's sponsor wall: 1 = global
+// giants (Fortune 100-scale), 2 = large and well-known, 3 = everyone else
+// (startups, regional and university partners). Unlisted sponsors are 3.
+// Within a tier, order follows this list.
+const sizeRank: Record<string, 1 | 2> = {
+	Microsoft: 1,
+	"Google Cloud": 1,
+	"AT&T": 1,
+	"The Home Depot": 1,
+	Centene: 1,
+	Salesforce: 1,
+	"Capital One": 1,
+	"Fidelity Investments": 1,
+	Vanguard: 1,
+	"BNY Mellon": 1,
+	GitHub: 2,
+	"Dollar General": 2,
+	"Macy's Tech": 2,
+	"Tractor Supply Co.": 2,
+	L3Harris: 2,
+	Epic: 2,
+	AllianceBernstein: 2,
+	Asurion: 2,
+	"Hudson River Trading": 2,
+	"IMC Trading": 2,
+	MongoDB: 2,
+	Twilio: 2,
+	Ubisoft: 2,
+	UiPath: 2,
+	MicroStrategy: 2,
+	"Red Ventures": 2,
+	"Perplexity AI": 2,
+	DigiKey: 2,
+};
+
+const rankOrder = Object.keys(sizeRank);
+
+export const sponsorTiers = ([1, 2, 3] as const).map((tier) =>
+	sponsors
+		.filter((s) => (sizeRank[s.name] ?? 3) === tier)
+		.sort((a, b) =>
+			tier === 3
+				? a.name.localeCompare(b.name)
+				: rankOrder.indexOf(a.name) - rankOrder.indexOf(b.name),
+		),
+);
