@@ -46,11 +46,25 @@ export async function sendMagicLink(formData: FormData) {
 	}
 
 	if (admin) {
+		// Public sign-ups are off in Supabase Auth (anyone holding the public
+		// key could otherwise create users and send mail through our SMTP), so
+		// the server creates the auth user itself, only for allowlisted emails.
+		const { error: createError } = await service.auth.admin.createUser({
+			email: parsed.data,
+			email_confirm: true,
+		});
+		const alreadyExists =
+			createError?.code === "email_exists" ||
+			createError?.code === "user_already_exists";
+		if (createError && !alreadyExists) {
+			console.error("Admin auth user creation failed", createError);
+			redirect("/admin/login?error=server");
+		}
 		const { error: otpError } = await session.auth.signInWithOtp({
 			email: parsed.data,
 			options: {
 				emailRedirectTo: `${await siteOrigin()}/auth/callback`,
-				shouldCreateUser: true,
+				shouldCreateUser: false,
 			},
 		});
 		if (otpError) {

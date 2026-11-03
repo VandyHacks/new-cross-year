@@ -1,7 +1,12 @@
 import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { isAuthConfigured, supabaseAnonKey, supabaseUrl } from "./config";
+import {
+	isAuthConfigured,
+	sessionCookieOptions,
+	supabaseAnonKey,
+	supabaseUrl,
+} from "./config";
 
 // Cookie-aware client for the signed-in admin's session (Server Components,
 // Server Actions, Route Handlers).
@@ -9,6 +14,7 @@ export async function getSessionClient() {
 	if (!isAuthConfigured) return null;
 	const cookieStore = await cookies();
 	return createServerClient(supabaseUrl!, supabaseAnonKey!, {
+		cookieOptions: sessionCookieOptions,
 		cookies: {
 			getAll: () => cookieStore.getAll(),
 			setAll(cookiesToSet) {

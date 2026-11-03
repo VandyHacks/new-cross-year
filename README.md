@@ -11,6 +11,8 @@ npm run dev   # http://localhost:3000
 The site runs without any environment variables; forms and `/admin` show a
 "not set up yet" state until Supabase is connected. Setup, env vars and the
 Supabase CLI workflow are in [docs/forms-setup.md](docs/forms-setup.md).
+What's left before launch (hosting, Cloudflare domain, Zoho SMTP) is in
+[docs/production-checklist.md](docs/production-checklist.md).
 
 ## Project map
 
@@ -45,9 +47,8 @@ Supabase CLI workflow are in [docs/forms-setup.md](docs/forms-setup.md).
   `app/(site)/layout.tsx`; deleting them doesn't affect `/admin`.
 - **New public pages** go in `app/(site)/<route>/page.tsx` (they inherit the
   site layout) and should be added to `app/sitemap.ts`.
-- Still to do for launch: a social preview image (`app/opengraph-image.png`,
-  1200×630) and `NEXT_PUBLIC_SITE_URL` set in production so metadata and the
-  sitemap use the real domain.
+- Still to do for launch: see
+  [docs/production-checklist.md](docs/production-checklist.md).
 
 ## Scripts
 

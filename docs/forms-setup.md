@@ -81,6 +81,8 @@ Sign-in is a magic link emailed to addresses in the `admins` table. In
 - Redirect URLs: `https://YOUR-DOMAIN/auth/callback` and
   `http://localhost:3000/auth/callback`
 
+Public sign-ups are disabled (`enable_signup = false`); the server creates
+the auth user itself the first time an allowlisted email asks for a link.
 Having a Supabase auth user is not enough to get in: every admin page, action
 and export re-checks the `admins` table on the server. To revoke access,
 delete the row. Supabase's built-in mailer is heavily rate-limited, so for real
