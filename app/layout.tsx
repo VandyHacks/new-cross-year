@@ -3,10 +3,22 @@ import { Michroma, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "cn";
 import { EVENT } from "@/lib/event";
+import { siteUrl } from "@/lib/site";
+
+const description = `Code, collaborate, learn, and build at ${EVENT.name}, Vanderbilt's collegiate hackathon, ${EVENT.dateLabel} in ${EVENT.city}.`;
 
 export const metadata: Metadata = {
-	title: EVENT.name,
-	description: `Code, collaborate, learn, and build at ${EVENT.name}, Vanderbilt's collegiate hackathon, ${EVENT.dateLabel} in ${EVENT.city}.`,
+	metadataBase: new URL(siteUrl),
+	title: { default: EVENT.name, template: `%s · ${EVENT.name}` },
+	description,
+	openGraph: {
+		type: "website",
+		siteName: EVENT.name,
+		title: EVENT.name,
+		description,
+		url: "/",
+	},
+	twitter: { card: "summary_large_image", title: EVENT.name, description },
 };
 const michroma = Michroma({
 	subsets: ["latin"],
@@ -31,9 +43,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 				spaceMono.variable,
 			)}
 		>
-			<body className="retro-screen w-full bg-vh-navy-950 font-sans leading-[normal] bg-[radial-gradient(125%_125%_at_50%_0%,_#080d20_48%,_#171432_100%)] text-vh-text selection:bg-vh-purple-300 selection:text-vh-navy-950">
+			<body className="w-full bg-vh-navy-950 font-sans leading-[normal] bg-[radial-gradient(125%_125%_at_50%_0%,_#080d20_48%,_#171432_100%)] text-vh-text selection:bg-vh-purple-300 selection:text-vh-navy-950">
 				{children}
-				<div className="retro-crt" aria-hidden="true" />
 			</body>
 		</html>
 	);

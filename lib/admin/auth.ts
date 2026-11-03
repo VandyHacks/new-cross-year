@@ -1,5 +1,6 @@
 import "server-only";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { cache } from "react";
 import { isAuthConfigured, isDatabaseConfigured } from "@/lib/supabase/config";
 import { getSessionClient } from "@/lib/supabase/server";
@@ -17,6 +18,9 @@ export type AdminState =
 // Supabase (getUser validates the token server-side) and then checks the
 // email against the `admins` allowlist.
 export const getAdminState = cache(async (): Promise<AdminState> => {
+	// Always decide at request time, so a build without Supabase env vars
+	// doesn't bake the setup notice into a static page.
+	await connection();
 	if (!isAuthConfigured || !isDatabaseConfigured) {
 		return { status: "unconfigured" };
 	}

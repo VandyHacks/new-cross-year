@@ -7,7 +7,12 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "eslint",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"db:link": "supabase link",
+		"db:push": "supabase db push --remote",
+		"db:new": "supabase migration new",
+		"db:status": "supabase migration list --remote",
+		"db:types": "supabase gen types --lang=typescript --remote --schema public > lib/supabase/database.types.ts"
 	},
 	"dependencies": {
 		"@base-ui/react": "^1.8.0",
@@ -41,6 +46,7 @@
 		"@types/three": "^0.186.0",
 		"eslint": "^9",
 		"eslint-config-next": "16.3.5",
+		"supabase": "^3.0.0",
 		"tailwindcss": "^4",
 		"typescript": "^5"
 	}
