@@ -14,7 +14,7 @@ import SectionContainer from "@/components/section-container";
 import SectionTitle from "@/components/section-title";
 import { EVENT } from "@/lib/event";
 
-const missionText = `At VandyHacks, we believe the next big idea can come from anyone. We bring together curious minds, bold thinkers, and passionate builders to turn ideas into reality through hackathons, hands-on workshops, and collaborations with industry leaders. From first-time coders to experienced developers, we create a space where students can experiment with emerging technologies, challenge what's possible, and build connections that last beyond the event. Join us on ${EVENT.dateLabel}, for ${EVENT.name}, the thirteenth edition of Vanderbilt University's annual student-run hackathon, where innovation meets opportunity and ideas come to life.`;
+export const missionText = `At VandyHacks, we believe the next big idea can come from anyone. We bring together curious minds, bold thinkers, and passionate builders to turn ideas into reality through hackathons, hands-on workshops, and collaborations with industry leaders. From first-time coders to experienced developers, we create a space where students can experiment with emerging technologies, challenge what's possible, and build connections that last beyond the event. Join us on ${EVENT.dateLabel}, for ${EVENT.name}, the thirteenth edition of Vanderbilt University's annual student-run hackathon, where innovation meets opportunity and ideas come to life.`;
 
 const BASE_OPACITY = 0.12;
 

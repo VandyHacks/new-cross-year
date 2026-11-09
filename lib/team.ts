@@ -51,3 +51,23 @@ export const team: TeamMember[] = [
 		image: "/team/placeholder-8.svg",
 	},
 ];
+
+// Redesign roster, grouped by role in display order. Every entry is a
+// template until the organizers send names, headshots and LinkedIn URLs.
+// TODO: Fill in real members; add or remove entries per group as needed.
+export type TeamGroup = { id: string; label: string; members: TeamMember[] };
+
+const placeholder = (role: string, count: number, offset: number) =>
+	Array.from({ length: count }, (_, i) => ({
+		name: "TBD",
+		role,
+		image: `/team/placeholder-${((offset + i) % 8) + 1}.svg`,
+	}));
+
+export const teamGroups: TeamGroup[] = [
+	{ id: "technical", label: "Technical", members: placeholder("Technical", 4, 0) },
+	{ id: "design", label: "Design", members: placeholder("Design", 3, 4) },
+	{ id: "marketing", label: "Marketing", members: placeholder("Marketing", 3, 7) },
+	{ id: "vp", label: "Vice President", members: placeholder("Vice President", 2, 2) },
+	{ id: "president", label: "President", members: placeholder("President", 1, 5) },
+];

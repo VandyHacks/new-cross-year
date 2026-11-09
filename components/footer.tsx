@@ -27,7 +27,7 @@ const exploreColumns = [
 	],
 ];
 
-function InstagramIcon() {
+export function InstagramIcon() {
 	return (
 		<svg
 			viewBox="0 0 24 24"
@@ -52,7 +52,7 @@ function InstagramIcon() {
 	);
 }
 
-function DevpostIcon() {
+export function DevpostIcon() {
 	return (
 		<svg
 			viewBox="0 0 24 24"
@@ -72,7 +72,7 @@ function DevpostIcon() {
 	);
 }
 
-function LinkedInIcon() {
+export function LinkedInIcon() {
 	return (
 		<svg
 			viewBox="0 0 24 24"
@@ -85,7 +85,7 @@ function LinkedInIcon() {
 	);
 }
 
-function YouTubeIcon() {
+export function YouTubeIcon() {
 	return (
 		<svg
 			viewBox="0 0 24 24"
@@ -98,7 +98,7 @@ function YouTubeIcon() {
 	);
 }
 
-function GitHubIcon() {
+export function GitHubIcon() {
 	return (
 		<svg
 			viewBox="0 0 24 24"

@@ -11,7 +11,7 @@ export default function SectionContainer({
 	className?: string;
 }) {
 	return (
-		<div className="w-full px-[clamp(20px,5vw,72px)]">
+		<div className="section-container w-full px-[clamp(20px,5vw,72px)]">
 			<div className={`mx-auto w-full max-w-7xl ${className}`}>
 				{children}
 			</div>
