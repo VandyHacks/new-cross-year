@@ -1,13 +1,8 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import Image from "next/image";
 import EventCountdown from "@/components/event-countdown";
 import Skyline from "@/components/vinyl/skyline";
-import {
-	primaryButtonClassName,
-	secondaryButtonClassName,
-} from "@/lib/button-styles";
 import { CTA, EVENT } from "@/lib/event";
 
 const WORD = "VandyHacks";
@@ -34,26 +29,71 @@ export default function VinylHero() {
 				aria-hidden="true"
 			/>
 			<div className="hero-stars pointer-events-none absolute inset-0 -z-10" aria-hidden="true" />
-			<Skyline className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[38svh] w-full" />
+			<div className="hero-twinkle" aria-hidden="true" />
+			<Skyline className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[60svh] w-full overflow-visible" />
 
-			<div className="flex flex-1 flex-col items-center justify-center px-5 pt-24 pb-[24svh] text-center lg:pt-16 lg:pb-[20svh]">
+			{/* Music note graphics*/}
+			{/* Left side */}
+			<svg className="music-note left-[16%] top-[15%] h-8 w-8" style={{ animationDelay: "5s" }} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+				<path d="M9 3v10.55A4 4 0 1 0 11 17V7h8v6.55A4 4 0 1 0 21 17V3H9z" />
+			</svg>
+			<svg className="music-note left-[28%] top-[75%] h-8 w-8" style={{ animationDelay: "1.5s" }} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+				<path d="M9 3v10.55A4 4 0 1 0 11 17V7h8v6.55A4 4 0 1 0 21 17V3H9z" />
+			</svg>
+			<svg className="music-note left-[19%] top-[76%] h-6 w-6" style={{ animationDelay: "4s" }} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+				<path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
+			</svg>
+			<svg className="music-note left-[19%] top-[18%] h-6 w-6" style={{ animationDelay: "0s" }} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+				<path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
+			</svg>
+
+			{/* Right side */}
+			<svg className="music-note left-[90%] top-[25%] h-10 w-10" style={{ animationDelay: "0.8s" }} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+				<path d="M9 3v10.55A4 4 0 1 0 11 17V7h8v6.55A4 4 0 1 0 21 17V3H9z" />
+			</svg>
+			<svg className="music-note left-[82%] top-[55%] h-6 w-6" style={{ animationDelay: "2.3s" }} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+				<path d="M9 3v10.55A4 4 0 1 0 11 17V7h8v6.55A4 4 0 1 0 21 17V3H9z" />
+			</svg>
+			<svg className="music-note left-[93%] top-[70%] h-12 w-12" style={{ animationDelay: "4s" }} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+				<path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
+			</svg>
+			<svg className="music-note left-[75%] top-[60%] h-6 w-6" style={{ animationDelay: "6s" }} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+				<path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
+			</svg>
+			<svg className="music-note left-[88%] top-[70%] h-6 w-6" style={{ animationDelay: "3s" }} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+				<path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
+			</svg>
+			<svg className="music-note left-[68%] top-[75%] h-6 w-6" style={{ animationDelay: "2s" }} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+				<path d="M9 3v10.55A4 4 0 1 0 11 17V7h8v6.55A4 4 0 1 0 21 17V3H9z" />
+			</svg><svg className="music-note left-[67%] top-[42%] h-8 w-8" style={{ animationDelay: "0s" }} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+				<path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
+			</svg>
+
+			{/* Upper middle, above and beside the title */}
+			<svg className="music-note left-[27%] top-[17%] h-6 w-6" style={{ animationDelay: "3s" }} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+				<path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
+			</svg>
+			<svg className="music-note left-[68%] top-[14%] h-8 w-8" style={{ animationDelay: "6s" }} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+				<path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
+			</svg>
+			<svg className="music-note left-[35%] top-[80%] h-6 w-6" style={{ animationDelay: "3s" }} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+				<path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
+			</svg>
+			<svg className="music-note left-[78%] top-[20%] h-6 w-6" style={{ animationDelay: "3s" }} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+				<path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
+			</svg>
+
+
+			<div className="flex flex-1 flex-col items-center justify-center px-5 pt-24 pb-[24svh] text-center lg:pt-28 lg:pb-[20svh]">
 				<motion.div {...rise(0.1)} className="relative mb-4">
 					<div
 						className="absolute inset-0 -z-10 scale-150 rounded-full bg-vh-purple-700/40 blur-3xl"
 						aria-hidden="true"
 					/>
-					<Image
-						src="/logo.png"
-						alt=""
-						width={400}
-						height={400}
-						priority
-						className="h-[clamp(72px,12svh,128px)] w-auto drop-shadow-[0_0_24px_rgb(200_162_255/0.5)]"
-					/>
 				</motion.div>
 				<h1
 					id="event-title"
-					className="font-heading text-[clamp(38px,7.2vw,116px)] leading-none tracking-[-0.03em] text-white"
+					className="font-zen text-[clamp(42px,7.8vw,130px)] leading-none tracking-[-0.03em] text-white"
 				>
 					<span className="sr-only">{EVENT.name}</span>
 					<span aria-hidden="true" className="inline-flex">
@@ -74,33 +114,19 @@ export default function VinylHero() {
 					{...rise(0.8)}
 					className="type-label mt-4 text-vh-purple-300"
 				>
-					{EVENT.edition} · Code. Collaborate. Create.
+					
 				</motion.p>
-				<motion.div {...rise(0.95)} className="mt-6">
-					<EventCountdown />
-				</motion.div>
 				<motion.p
 					{...rise(1.05)}
-					className="type-subheading mt-4 flex flex-wrap justify-center gap-x-3 text-[clamp(13px,1.4vw,18px)] text-vh-text-soft"
-				>
-					<span>until</span>
-					<time className="whitespace-nowrap text-white" dateTime={EVENT.start.toISOString()}>
-						{EVENT.dateLabel}
-					</time>
+					className="type-subheading mt-4 flex flex-wrap justify-center gap-x-3 text-[clamp(13px,1.4vw,18px)] text-vh-text-soft">
 					<span className="text-vh-purple-300" aria-hidden="true">
-						/
 					</span>
 					<span className="whitespace-nowrap">
 						{EVENT.venue}, {EVENT.city}
 					</span>
 				</motion.p>
-				<motion.div {...rise(1.15)} className="mt-7 flex flex-wrap items-center justify-center gap-3">
-					<a className={primaryButtonClassName} href={CTA.interest}>
-						Get notified
-					</a>
-					<a className={secondaryButtonClassName} href={CTA.sponsor}>
-						Sponsor {EVENT.edition}
-					</a>
+				<motion.div {...rise(0.95)} className="mt-10">
+					<EventCountdown />
 				</motion.div>
 			</div>
 
@@ -111,8 +137,8 @@ export default function VinylHero() {
 				transition={{ delay: 1.8 }}
 				aria-hidden="true"
 			>
-				<span className="type-label text-[10px] text-vh-faint">Scroll</span>
-				<span className="scroll-cue block h-8 w-px bg-gradient-to-b from-vh-purple-300 to-transparent" />
+				<span className="type-label text-[15px] text-vh-faint">Scroll</span>
+				<span className="scroll-cue block h-8 w-0.5 bg-gradient-to-b from-vh-purple-300 to-transparent" />
 			</motion.div>
 		</section>
 	);

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Michroma, Space_Mono } from "next/font/google";
+import { Michroma, Space_Mono, Orbitron, Datatype, Zen_Dots } from "next/font/google";
 import "./globals.css";
 import { cn } from "cn";
 import { EVENT } from "@/lib/event";
@@ -32,6 +32,24 @@ const spaceMono = Space_Mono({
 	variable: "--font-space-mono",
 	display: "swap",
 });
+const orbitron = Orbitron({
+	subsets: ["latin"],
+	weight: ["400", "500", "600", "700", "800", "900"],
+	variable: "--font-orbitron",
+	display: "swap",
+});
+const datatype = Datatype({
+	subsets: ["latin"],
+	//weight: ["300", "400", "500", "600", "700", "800"],
+	variable: "--font-datatype",
+	display: "swap",
+});
+const zenDots = Zen_Dots({
+	subsets: ["latin"],
+	weight: "400",
+	variable: "--font-zen-dots",
+	display: "swap",
+});
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
 	return (
@@ -41,6 +59,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 				"dark scheme-dark scroll-smooth scroll-pt-20 motion-reduce:scroll-auto",
 				michroma.variable,
 				spaceMono.variable,
+				orbitron.variable,
+				datatype.variable,
+				zenDots.variable,
 			)}
 		>
 			<body className="w-full bg-vh-navy-950 font-sans leading-[normal] bg-[radial-gradient(125%_125%_at_50%_0%,_#080d20_48%,_#171432_100%)] text-vh-text selection:bg-vh-purple-300 selection:text-vh-navy-950">
@@ -49,3 +70,4 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 		</html>
 	);
 }
+
