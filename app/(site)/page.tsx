@@ -31,7 +31,7 @@ export default function Home() {
 				<Slide slide="sponsors">
 					<SponsorWall />
 				</Slide>
-				<Slide slide="get-involved" className="slide-gutter slide-legacy">
+				<Slide slide="get-involved">
 					<GetInvolved />
 				</Slide>
 				<Slide slide="faq" className="slide-gutter slide-legacy">

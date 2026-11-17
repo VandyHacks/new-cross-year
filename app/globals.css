@@ -497,8 +497,19 @@ html:has(.vinyl-stage) {
 	}
 }
 
+/* Partner rows: bare marks drifting at ~40px/s under a soft edge fade. */
+.marquee-mask {
+	mask-image: linear-gradient(
+		to right,
+		transparent,
+		#000 10%,
+		#000 90%,
+		transparent
+	);
+}
 .marquee-track {
-	animation: marquee 48s linear infinite;
+	animation: marquee 60s linear infinite;
+	will-change: transform;
 }
 .marquee-reverse {
 	animation-direction: reverse;
@@ -545,5 +556,19 @@ html:has(.vinyl-stage) {
 	.marquee-track,
 	.vu-bar-on {
 		animation: none;
+	}
+	/* No drift: show the partner rows as one static, wrapping list. */
+	.marquee-mask {
+		mask-image: none;
+	}
+	.marquee {
+		flex-wrap: wrap;
+	}
+	.marquee-track {
+		flex-shrink: 1;
+		flex-wrap: wrap;
+	}
+	.marquee-track[aria-hidden="true"] {
+		display: none;
 	}
 }

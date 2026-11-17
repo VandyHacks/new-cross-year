@@ -12,14 +12,14 @@ type FormPanelProps = {
 	action: Action;
 	fields: FieldSpec[];
 	submitLabel: string;
-	// Terminal-chrome title, e.g. "vandyhacks://interest".
+	// Shown in the success message, e.g. "vandyhacks://interest".
 	command: string;
 	// False while the tab is hidden (pauses the Turnstile widget).
 	active: boolean;
 };
 
 const controlClassName =
-	"type-body-sm w-full rounded-md border border-white/15 bg-vh-navy-950/70 px-3 py-2.5 text-white placeholder:text-vh-faint transition-colors focus:border-vh-purple-300 focus:ring-2 focus:ring-vh-purple-300/40 focus:outline-none aria-[invalid=true]:border-red-400 disabled:opacity-60";
+	"w-full rounded-md border border-white/12 bg-vh-navy-950/45 px-3 py-2 font-sans text-sm leading-5 text-white placeholder:text-vh-faint transition-colors focus:border-vh-purple-300 focus:ring-2 focus:ring-vh-purple-300/40 focus:outline-none aria-[invalid=true]:border-red-400 disabled:opacity-60";
 
 function Field({
 	spec,
@@ -48,7 +48,7 @@ function Field({
 		<div className={spec.wide ? "sm:col-span-2" : undefined}>
 			<label
 				htmlFor={id}
-				className="type-label mb-1.5 block text-[11px] text-vh-purple-300"
+				className="type-label mb-1 block text-[10px] text-vh-purple-300"
 			>
 				{"> "}
 				{spec.label}
@@ -72,7 +72,7 @@ function Field({
 			) : spec.type === "textarea" ? (
 				<textarea
 					{...shared}
-					rows={4}
+					rows={3}
 					maxLength={spec.maxLength}
 					placeholder={spec.placeholder}
 					defaultValue={defaultValue}
@@ -88,7 +88,7 @@ function Field({
 				/>
 			)}
 			{error && (
-				<p id={errorId} className="type-body-sm mt-1.5 text-red-300">
+				<p id={errorId} className="mt-1 font-sans text-xs leading-4 text-red-300">
 					{error}
 				</p>
 			)}
@@ -111,7 +111,7 @@ function FormInner({
 
 	if (state.status === "success") {
 		return (
-			<div role="status" className="py-8 text-center">
+			<div role="status" className="py-6 text-center">
 				<p className="type-label mb-3 text-vh-purple-300">{`// ${command} — sent`}</p>
 				<p className="type-body mx-auto max-w-md text-white">
 					{state.message}
@@ -144,7 +144,7 @@ function FormInner({
 					/>
 				</label>
 			</div>
-			<div className="grid gap-x-5 gap-y-4 sm:grid-cols-2">
+			<div className="grid gap-x-4 gap-y-3 sm:grid-cols-2">
 				{fields.map((spec) => (
 					<Field
 						key={spec.name}
@@ -155,10 +155,10 @@ function FormInner({
 					/>
 				))}
 			</div>
-			<div className="mt-5">
+			{/* Turnstile and the submit button share a row when there's room,
+			    which keeps the tallest form on one laptop screen. */}
+			<div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-3">
 				<Turnstile active={active} resetSignal={state} />
-			</div>
-			<div className="mt-6 flex flex-wrap items-center gap-4">
 				<button
 					type="submit"
 					disabled={pending}
@@ -172,10 +172,6 @@ function FormInner({
 					</p>
 				)}
 			</div>
-			<p className="type-body-sm mt-5 text-[12px] text-vh-faint">
-				We only use your details to contact you about VandyHacks, and
-				never sell them.
-			</p>
 		</form>
 	);
 }
@@ -184,25 +180,12 @@ export default function FormPanel(props: FormPanelProps) {
 	// Bumping the key remounts the form with fresh state ("Send another").
 	const [instance, setInstance] = useState(0);
 	return (
-		<div className="rounded-2xl border border-white/10 bg-vh-navy-800/60 shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_0_40px_rgb(113_56_199/0.18)] backdrop-blur-md">
-			<div
-				className="flex items-center gap-2 border-b border-white/10 px-4 py-3"
-				aria-hidden="true"
-			>
-				<span className="size-2.5 rounded-full bg-vh-purple-700" />
-				<span className="size-2.5 rounded-full bg-vh-purple-400/70" />
-				<span className="size-2.5 rounded-full bg-vh-purple-300/40" />
-				<span className="type-label ml-3 text-[11px] text-vh-faint">
-					{props.command}
-				</span>
-			</div>
-			<div className="p-[clamp(16px,3vw,32px)]">
-				<FormInner
-					key={instance}
-					{...props}
-					onReset={() => setInstance((value) => value + 1)}
-				/>
-			</div>
+		<div className="p-[clamp(16px,2vw,24px)]">
+			<FormInner
+				key={instance}
+				{...props}
+				onReset={() => setInstance((value) => value + 1)}
+			/>
 		</div>
 	);
 }
