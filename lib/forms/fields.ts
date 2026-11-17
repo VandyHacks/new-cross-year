@@ -122,7 +122,6 @@ export const judgeFields: FieldSpec[] = [
 		label: "Areas of expertise",
 		type: "text",
 		placeholder: "ML, mobile, hardware, design…",
-		wide: true,
 		maxLength: 500,
 	},
 	{
@@ -130,7 +129,6 @@ export const judgeFields: FieldSpec[] = [
 		label: "Availability",
 		type: "text",
 		placeholder: "e.g. all weekend, Saturday only",
-		wide: true,
 		maxLength: 500,
 	},
 ];

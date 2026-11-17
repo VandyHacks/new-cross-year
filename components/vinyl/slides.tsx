@@ -19,12 +19,20 @@ import Arc from "@/components/vinyl/arc";
 export function SlideBody({
 	children,
 	className = "",
+	fit = false,
 }: {
 	children: ReactNode;
 	className?: string;
+	/** Trim the bottom padding for slides whose content should fit a laptop
+	 * screen exactly (Sponsors, Sign Up). */
+	fit?: boolean;
 }) {
 	return (
-		<div className={`slide-gutter slide-frame flex min-h-svh flex-col px-5 pt-24 pb-16 sm:px-8 ${className}`}>
+		<div
+			className={`slide-gutter slide-frame flex min-h-svh flex-col px-5 pt-24 sm:px-8 ${
+				fit ? "pb-8 lg:pb-[clamp(16px,3svh,32px)]" : "pb-16"
+			} ${className}`}
+		>
 			<div className="mx-auto w-full max-w-5xl">{children}</div>
 		</div>
 	);
