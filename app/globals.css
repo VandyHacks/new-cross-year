@@ -582,9 +582,9 @@ html:has(.vinyl-stage) {
 }
 
 .hero-twinkle {
-	position: absolute;
+	position: fixed;
 	inset: 0;
-	z-index: -10;
+	z-index: 1;
 	pointer-events: none;
 	overflow: hidden;
 }
@@ -661,10 +661,36 @@ html:has(.vinyl-stage) {
 	}
 }
 
+.scroll-note {
+	position: fixed;
+	left: 0;
+	z-index: 1;
+	pointer-events: none;
+	color: var(--color-vh-purple-300);
+	text-shadow: 0 0 10px rgb(200 162 255 / 0.8);
+	opacity: 0;
+	animation: scroll-note-fly 2.6s ease-out forwards;
+}
+
+@keyframes scroll-note-fly {
+	0% {
+		opacity: 0;
+		transform: translate(0, 0) rotate(0deg) scale(0.7);
+	}
+	15% {
+		opacity: 0.60;
+	}
+	100% {
+		opacity: 0;
+		transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(1);
+	}
+}
+
 html.is-paused .music-note,
 html.is-paused .hero-stars,
 html.is-paused .hero-twinkle::before,
 html.is-paused .hero-twinkle::after,
-html.is-paused .skyline-twinkle {
+html.is-paused .skyline-twinkle 
+html.is-paused .scroll-note {
 	animation-play-state: paused !important;
 }

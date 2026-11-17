@@ -13,8 +13,8 @@ const DAY = HOUR * 24;
 
 // Progress bar range. The start is not shown on screen; the end is.
 // Months are 0-indexed in JavaScript: 7 = August, 3 = April.
-const BAR_START = new Date(2026, 7, 26).getTime(); // 08/26/26
-const BAR_END = new Date(2027, 3, 2).getTime(); // 04/02/27
+const BAR_START = new Date(2026, 2, 22).getTime(); // 03/22/26 ->last day of last year's Hackathon
+const BAR_END = new Date(2027, 3, 9).getTime(); // 04/02/27 -> this year's Hackathon start date
 const BAR_TOP_LABEL = "Until The Next Hackathon";
 
 function remainingParts(now: number) {
@@ -266,7 +266,7 @@ export default function EventCountdown() {
 				className="mx-auto flex w-[min(92vw,30rem)] flex-col gap-4 rounded-xl border border-white/10 bg-vh-purple-300/40 px-[clamp(16px,3vw,28px)] py-4 shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_0_24px_rgb(113_56_199/0.25)] backdrop-blur-md"
 				aria-hidden="true"
 			>
-				<div className="flex items-start justify-center gap-[clamp(10px,2vw,20px)]">
+				<div className="mt-4 flex items-start justify-center gap-[clamp(10px,2vw,20px)] mb-2">
 					<Unit
 						label="Days"
 						value={parts?.days ?? null}

@@ -19,7 +19,7 @@ export const missionText = `At VandyHacks, we believe the next big idea can come
 const BASE_OPACITY = 0.12;
 
 const missionTextClassName =
-	"text-center font-heading text-[clamp(15px,2.1vw,32px)] leading-[1.35] tracking-[-0.02em] text-vh-text";
+	"text-center text-[clamp(15px,2.1vw,32px)] leading-[1.35] tracking-[-0.02em] text-vh-text";
 
 // Each word fades from low to full opacity over its slice of the section's
 // sticky scroll progress — the same scroll-linked technique Stats uses.

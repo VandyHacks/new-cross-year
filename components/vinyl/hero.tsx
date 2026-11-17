@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "motion/react";
 import EventCountdown from "@/components/event-countdown";
 import Skyline from "@/components/vinyl/skyline";
 import { CTA, EVENT } from "@/lib/event";
+import ScrollNotes from "@/components/vinyl/scroll-notes";
 
 const WORD = "VandyHacks";
 
@@ -29,8 +30,8 @@ export default function VinylHero() {
 				aria-hidden="true"
 			/>
 			<div className="hero-stars pointer-events-none absolute inset-0 -z-10" aria-hidden="true" />
-			<div className="hero-twinkle" aria-hidden="true" />
 			<Skyline className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[60svh] w-full overflow-visible" />
+			
 
 			{/* Music note graphics*/}
 			{/* Left side */}
@@ -84,7 +85,7 @@ export default function VinylHero() {
 			</svg>
 
 
-			<div className="flex flex-1 flex-col items-center justify-center px-5 pt-24 pb-[24svh] text-center lg:pt-28 lg:pb-[20svh]">
+			<div className="flex flex-1 flex-col items-center justify-center px-5 pt-24 pb-[24svh] text-center lg:pt-24 lg:pb-[20svh]">
 				<motion.div {...rise(0.1)} className="relative mb-4">
 					<div
 						className="absolute inset-0 -z-10 scale-150 rounded-full bg-vh-purple-700/40 blur-3xl"
@@ -93,7 +94,7 @@ export default function VinylHero() {
 				</motion.div>
 				<h1
 					id="event-title"
-					className="font-zen text-[clamp(42px,7.8vw,130px)] leading-none tracking-[-0.03em] text-white"
+					className="font-zen text-[clamp(42px,8vw,130px)] leading-none tracking-[-0.03em] text-white"
 				>
 					<span className="sr-only">{EVENT.name}</span>
 					<span aria-hidden="true" className="inline-flex">
@@ -118,14 +119,14 @@ export default function VinylHero() {
 				</motion.p>
 				<motion.p
 					{...rise(1.05)}
-					className="type-subheading mt-4 flex flex-wrap justify-center gap-x-3 text-[clamp(13px,1.4vw,18px)] text-vh-text-soft">
+					className="font-body type-subheading mt-4 mb-2 flex flex-wrap justify-center gap-x-3 text-[clamp(17px,2vw,20px)] text-vh-text-soft">
 					<span className="text-vh-purple-300" aria-hidden="true">
 					</span>
 					<span className="whitespace-nowrap">
 						{EVENT.venue}, {EVENT.city}
 					</span>
 				</motion.p>
-				<motion.div {...rise(0.95)} className="mt-10">
+				<motion.div {...rise(0.95)} className="mt-6">
 					<EventCountdown />
 				</motion.div>
 			</div>
@@ -137,7 +138,7 @@ export default function VinylHero() {
 				transition={{ delay: 1.8 }}
 				aria-hidden="true"
 			>
-				<span className="type-label text-[15px] text-vh-faint">Scroll</span>
+				<span className="type-label text-[13px] text-vh-faint">Scroll</span>
 				<span className="scroll-cue block h-8 w-0.5 bg-gradient-to-b from-vh-purple-300 to-transparent" />
 			</motion.div>
 		</section>
