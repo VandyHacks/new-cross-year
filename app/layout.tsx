@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Michroma, Space_Mono, Orbitron, Datatype, Zen_Dots } from "next/font/google";
+import { Michroma, Space_Mono, Inter, Zen_Dots } from "next/font/google";
 import "./globals.css";
 import { cn } from "cn";
 import { EVENT } from "@/lib/event";
@@ -32,16 +32,9 @@ const spaceMono = Space_Mono({
 	variable: "--font-space-mono",
 	display: "swap",
 });
-const orbitron = Orbitron({
+const inter = Inter({
 	subsets: ["latin"],
-	weight: ["400", "500", "600", "700", "800", "900"],
-	variable: "--font-orbitron",
-	display: "swap",
-});
-const datatype = Datatype({
-	subsets: ["latin"],
-	//weight: ["300", "400", "500", "600", "700", "800"],
-	variable: "--font-datatype",
+	variable: "--font-inter",
 	display: "swap",
 });
 const zenDots = Zen_Dots({
@@ -59,8 +52,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 				"dark scheme-dark scroll-smooth scroll-pt-20 motion-reduce:scroll-auto",
 				michroma.variable,
 				spaceMono.variable,
-				orbitron.variable,
-				datatype.variable,
+				inter.variable,
 				zenDots.variable,
 			)}
 		>

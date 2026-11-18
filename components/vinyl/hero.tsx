@@ -119,7 +119,7 @@ export default function VinylHero() {
 				</motion.p>
 				<motion.p
 					{...rise(1.05)}
-					className="font-body type-subheading mt-4 mb-2 flex flex-wrap justify-center gap-x-3 text-[clamp(17px,2vw,20px)] text-vh-text-soft">
+					className="font-mono mt-4 mb-2 flex flex-wrap justify-center gap-x-3 text-[clamp(15px,1.8vw,18px)] tracking-[0.04em] text-vh-text-soft">
 					<span className="text-vh-purple-300" aria-hidden="true">
 					</span>
 					<span className="whitespace-nowrap">

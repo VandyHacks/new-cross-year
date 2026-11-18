@@ -77,7 +77,7 @@ function Unit({
 					String(value).padStart(digits, "0")
 				)}
 			</span>
-			<span className="type-label font-body mt-1 text-[10px] text-vh-muted">
+			<span className="type-label mt-1 text-[12px] text-vh-text-soft">
 				{label}
 			</span>
 		</div>
@@ -295,7 +295,7 @@ export default function EventCountdown() {
 	
 				{/* Message in between countdown and bar */}
 				<div className="flex justify-center">
-						<span className="type-label font-body text-[13px] text-white">
+						<span className="type-label text-[13px] text-white">
 							{BAR_TOP_LABEL}
 						</span>
 					</div>

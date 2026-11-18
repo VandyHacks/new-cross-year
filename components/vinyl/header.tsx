@@ -129,7 +129,7 @@ export default function VinylHeader() {
 					</nav>
 
 					<a className={`${primaryButtonClassName} hidden sm:inline-flex`} href={CTA.interest}>
-						Apply Now
+						Get Notified
 					</a>
 					<button
 						type="button"

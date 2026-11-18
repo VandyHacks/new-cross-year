@@ -155,7 +155,7 @@ export default function SponsorWall() {
 	return (
 		<section id="sponsors" aria-labelledby="sponsors-title">
 			<SlideBody fit>
-				<SlideHeading id="sponsors-title">Sponsors</SlideHeading>
+				<SlideHeading id="sponsors-title">Past Sponsors</SlideHeading>
 				<Arc>
 					<TierLabel>Global leaders</TierLabel>
 					<TileGrid items={giants} size="lg" className="grid-cols-2 sm:grid-cols-3 md:grid-cols-5" />

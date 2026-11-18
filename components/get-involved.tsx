@@ -91,7 +91,7 @@ export default function GetInvolved() {
 	return (
 		<section id="get-involved" aria-labelledby="get-involved-title">
 			<SlideBody fit>
-				<SlideHeading id="get-involved-title">Apply</SlideHeading>
+				<SlideHeading id="get-involved-title">Get Involved</SlideHeading>
 				<div className="grid items-start gap-6 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.6fr)] xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1.6fr)] lg:gap-[clamp(28px,4vw,56px)]">
 					<Arc>
 						<motion.div
@@ -154,7 +154,7 @@ export default function GetInvolved() {
 													setActiveId(next.id);
 													document.getElementById(`${baseId}-tab-${next.id}`)?.focus();
 												}}
-												className={`group relative flex h-9 min-w-0 flex-auto items-center justify-start rounded-t-lg px-3 text-left font-sans text-[12px] transition-colors duration-150 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-vh-purple-300 sm:max-w-[13rem] sm:text-[13px] lg:px-2.5 xl:px-4 ${
+												className={`group relative flex h-9 min-w-0 flex-auto items-center justify-start rounded-t-lg px-3 text-left font-mono text-[12px] transition-colors duration-150 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-vh-purple-300 sm:max-w-[13rem] sm:text-[13px] lg:px-2.5 xl:px-4 ${
 													selected ? "text-white" : "text-vh-muted hover:text-white"
 												}`}
 											>
