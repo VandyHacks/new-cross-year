@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useId } from "react";
 import { EVENT } from "@/lib/event";
 
-const RING_TEXT = `VANDYHACKS ${EVENT.edition} · NASHVILLE, TN · ${EVENT.dateLabel.toUpperCase()} · SIDE A · `;
+const RING_TEXT = `VANDYHACKS ${EVENT.edition} · NASHVILLE, TN · ${EVENT.dateLabel.toUpperCase()} · `;
 
 // A vinyl record that fills its container. Grooves and the light sheen stay
 // still; the printed ring text, label, and texture turn with `spin` (degrees),

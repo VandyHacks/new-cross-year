@@ -91,7 +91,7 @@ export default function GetInvolved() {
 	return (
 		<section id="get-involved" aria-labelledby="get-involved-title">
 			<SlideBody fit>
-				<SlideHeading id="get-involved-title">Sign Up</SlideHeading>
+				<SlideHeading id="get-involved-title">Apply</SlideHeading>
 				<div className="grid items-start gap-6 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.6fr)] xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1.6fr)] lg:gap-[clamp(28px,4vw,56px)]">
 					<Arc>
 						<motion.div
