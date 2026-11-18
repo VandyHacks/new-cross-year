@@ -253,6 +253,9 @@ export default function VinylStage({ children }: { children: ReactNode }) {
 		};
 
 		measure();
+		// Snap the spring to the initial scroll position so the record doesn't
+		// spin up from 0 when the page loads already scrolled (e.g. on reload).
+		smooth.jump(progress.get());
 		// FAQ answers and form messages change slide heights after load.
 		const observer = new ResizeObserver(measure);
 		for (const s of SLIDES) {
@@ -266,7 +269,7 @@ export default function VinylStage({ children }: { children: ReactNode }) {
 			window.removeEventListener("scroll", update);
 			window.removeEventListener("resize", measure);
 		};
-	}, [progress]);
+	}, [progress, smooth]);
 
 	useScrollDirector(bounds, { desktop, reducedMotion: !!reducedMotion });
 

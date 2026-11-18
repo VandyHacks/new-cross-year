@@ -15,7 +15,7 @@ const DAY = HOUR * 24;
 // Months are 0-indexed in JavaScript: 7 = August, 3 = April.
 const BAR_START = new Date(2026, 2, 22).getTime(); // 03/22/26 ->last day of last year's Hackathon
 const BAR_END = new Date(2027, 3, 9).getTime(); // 04/02/27 -> this year's Hackathon start date
-const BAR_TOP_LABEL = "Until The Next Hackathon";
+const BAR_TOP_LABEL = `${EVENT.name} · ${EVENT.dateLabel}`;
 
 function remainingParts(now: number) {
 	const distance = Math.max(0, BAR_END - now);
@@ -91,9 +91,9 @@ function PlayerIcons({
 	paused: boolean;
 	onToggle: () => void;
 }) {
-	const iconClassName = "h-5 w-5 text-white";
+	const iconClassName = "h-4 w-4 text-white/45";
 	return (
-		<div className="-mt-2 flex items-center justify-center gap-[clamp(28px,6vw,56px)]">
+		<div className="-mt-1 flex items-center justify-center gap-[clamp(22px,5vw,44px)] opacity-80">
 			{/* Skip back */}
 			<svg className={iconClassName} viewBox="0 0 24 24" fill="currentColor">
 				<path d="M3 5h2v14H3z M13 5v14l-8-7z M22 5v14l-14-7z" />
@@ -263,10 +263,10 @@ export default function EventCountdown() {
 				{EVENT.name} takes place {EVENT.dateLabel}.
 			</p>
 			<div
-				className="mx-auto flex w-[min(92vw,30rem)] flex-col gap-4 rounded-xl border border-white/10 bg-vh-purple-300/40 px-[clamp(16px,3vw,28px)] py-4 shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_0_24px_rgb(113_56_199/0.25)] backdrop-blur-md"
+				className="mx-auto flex w-[min(92vw,30rem)] flex-col gap-3 rounded-xl border border-white/10 bg-vh-purple-300/40 px-[clamp(16px,3vw,28px)] py-3.5 shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_0_24px_rgb(113_56_199/0.25)] backdrop-blur-md"
 				aria-hidden="true"
 			>
-				<div className="mt-4 flex items-start justify-center gap-[clamp(10px,2vw,20px)] mb-2">
+				<div className="mt-2 mb-1 flex items-start justify-center gap-[clamp(10px,2vw,20px)]">
 					<Unit
 						label="Days"
 						value={parts?.days ?? null}

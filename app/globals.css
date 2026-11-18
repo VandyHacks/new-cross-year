@@ -490,6 +490,23 @@ html:has(.vinyl-stage) {
 	transform-origin: top;
 }
 
+/* Gentle bob on the hero scroll-to-About arrow. */
+.scroll-arrow {
+	animation: scroll-arrow 1.8s ease-in-out infinite;
+}
+
+@keyframes scroll-arrow {
+	0%,
+	100% {
+		transform: translateY(0);
+		opacity: 0.6;
+	}
+	50% {
+		transform: translateY(4px);
+		opacity: 1;
+	}
+}
+
 @keyframes scroll-cue {
 	0% {
 		transform: scaleY(0);
@@ -559,6 +576,7 @@ html:has(.vinyl-stage) {
 	.hero-stars,
 	.skyline-twinkle,
 	.scroll-cue,
+	.scroll-arrow,
 	.marquee-track,
 	.vu-bar-on {
 		animation: none;
@@ -718,7 +736,8 @@ html.is-paused .music-note,
 html.is-paused .hero-stars,
 html.is-paused .hero-twinkle::before,
 html.is-paused .hero-twinkle::after,
-html.is-paused .skyline-twinkle 
+html.is-paused .skyline-twinkle,
+html.is-paused .scroll-arrow,
 html.is-paused .scroll-note {
 	animation-play-state: paused !important;
 }

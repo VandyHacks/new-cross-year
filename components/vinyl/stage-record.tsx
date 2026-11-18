@@ -1,6 +1,7 @@
 "use client";
 
 import {
+	animate,
 	motion,
 	type MotionValue,
 	useAnimationFrame,
@@ -29,6 +30,11 @@ const STEP = 24;
 const SPIN_PER_SLIDE = 150;
 // Idle playback speed once it's on the turntable (deg/s).
 const PLAY_SPEED = 90;
+// Initial page-load entrance: the record starts this many viewport heights
+// further left (fully off-screen) and glides to its resting spot. Slow and
+// decelerating so the whole slide-in reads as deliberate and complete.
+const ENTRANCE_SLIDE = 0.4;
+const ENTRANCE_DURATION = 2.1;
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 const easeInOut = (t: number) =>
@@ -103,17 +109,18 @@ export default function StageRecord() {
 	const ringOpacity = useMotionValue(1);
 	const idle = useRef(0);
 
-	useEffect(() => {
-		const measure = () => setVh(window.innerHeight);
-		measure();
-		window.addEventListener("resize", measure);
-		return () => window.removeEventListener("resize", measure);
-	}, []);
+	// Entrance progress: 1 = fully off-screen left at load, 0 = resting spot.
+	// Applied as an extra horizontal offset on a wrapper, so it slides the whole
+	// record in without touching the scroll-driven placement in place().
+	const entrance = useMotionValue(1);
+	const entranceStarted = useRef(false);
+	const entranceX = useTransform(entrance, (e) => -ENTRANCE_SLIDE * vh * e);
 
 	const place = () => {
-		if (!vh) return;
+		const v = window.innerHeight;
+		if (!v) return;
 		const p = smooth.get();
-		const d0 = DIAMETER * vh;
+		const d0 = DIAMETER * v;
 		const t = easeInOut(landing(p));
 		// The platter it lands on, read live so it tracks the footer's scroll.
 		if (!platter.current?.isConnected) {
@@ -123,8 +130,8 @@ export default function StageRecord() {
 		// than tall; squashing the disc to that box approximates the tilt, and
 		// the deck's own disc takes over for the last few percent (crossfade).
 		const goal = platter.current?.getBoundingClientRect();
-		const cx0 = CENTER_X * vh;
-		const cy0 = 0.5 * vh + 32;
+		const cx0 = CENTER_X * v;
+		const cy0 = 0.5 * v + 32;
 		const cx1 = goal ? goal.left + goal.width / 2 : cx0;
 		const cy1 = goal ? goal.top + goal.height / 2 : cy0;
 		x.set(cx0 + (cx1 - cx0) * t - d0 / 2);
@@ -136,9 +143,42 @@ export default function StageRecord() {
 		spin.set(-p * SPIN_PER_SLIDE + idle.current);
 	};
 
+	useEffect(() => {
+		// Position the disc BEFORE revealing it: setVh triggers the render that
+		// first mounts the disc, and place() sets x/y/scale on the shared motion
+		// values beforehand, so its first paint is already at the resting spot
+		// off the left edge rather than flashing at the top-left corner.
+		const measure = () => {
+			setVh(window.innerHeight);
+			place();
+		};
+		measure();
+		window.addEventListener("resize", measure);
+		return () => window.removeEventListener("resize", measure);
+		// place reads only refs and stable motion values; safe to run once.
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	useMotionValueEvent(smooth, "change", place);
 	useMotionValueEvent(scrollY, "change", place);
 	useEffect(place);
+
+	// Play the entrance slide once, as soon as the viewport height is known so it
+	// starts in sync with the disc appearing. Reduced-motion users get no slide.
+	useEffect(() => {
+		if (!vh) return;
+		if (reducedMotion) {
+			entrance.set(0);
+			return;
+		}
+		if (entranceStarted.current) return;
+		entranceStarted.current = true;
+		const controls = animate(entrance, 0, {
+			duration: ENTRANCE_DURATION,
+			ease: [0.16, 1, 0.3, 1],
+		});
+		return () => controls.stop();
+	}, [vh, reducedMotion, entrance]);
 
 	// Once it's on the platter, the record keeps playing.
 	useAnimationFrame((_, delta) => {
@@ -155,6 +195,7 @@ export default function StageRecord() {
 			className="pointer-events-none fixed inset-0 z-20 hidden lg:block"
 			aria-hidden="true"
 		>
+			<motion.div className="absolute inset-0" style={{ x: entranceX }}>
 			<motion.div
 				className="absolute top-0 left-0"
 				style={{ x, y, scale, scaleY, opacity, width: d0, height: d0 }}
@@ -184,6 +225,7 @@ export default function StageRecord() {
 						radius={LABEL_RADIUS * vh}
 					/>
 				))}
+			</motion.div>
 			</motion.div>
 		</div>
 	);
