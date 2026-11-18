@@ -15,15 +15,12 @@ import { primaryButtonClassName } from "@/lib/button-styles";
 import { CTA } from "@/lib/event";
 
 // `slide` marks the link that's highlighted while that slide is on screen.
-// Sign Up, Judge and Sponsor Us deep-link to the matching Sign Up tab.
 const links: { label: string; href: string; slide?: string }[] = [
 	{ label: "Home", href: "#home", slide: "home" },
 	{ label: "About", href: "#about", slide: "about" },
 	{ label: "Impact", href: "#impact", slide: "impact" },
-	{ label: "Sponsors", href: "#sponsors", slide: "sponsors" },
+	{ label: "Past Sponsors", href: "#sponsors", slide: "sponsors" },
 	{ label: "Sign Up", href: CTA.interest, slide: "get-involved" },
-	{ label: "Judge", href: CTA.judge },
-	{ label: "Sponsor Us", href: CTA.sponsor },
 	{ label: "FAQ", href: "#faq", slide: "faq" },
 	{ label: "Team", href: "#team", slide: "team" },
 ];
@@ -90,8 +87,13 @@ function MlhBadge() {
 }
 
 export default function VinylHeader() {
-	const { active } = useStage();
+	const { active, smooth } = useStage();
 	const reducedMotion = useReducedMotion();
+	// 0 = landing page (hidden above the screen), 0.3 = fully in place.
+	const headerY = useTransform(smooth, [0, 0.3], [-72, 0], { clamp: true });
+	const headerOpacity = useTransform(smooth, [0, 0.2], [0, 1], { clamp: true });
+	const headerPointer = useTransform(smooth, (p) => (p < 0.05 ? "none" : "auto"));
+
 	const [menuOpen, setMenuOpen] = useState(false);
 	const activeKey: string = SLIDES[active]?.key ?? "home";
 
@@ -110,10 +112,12 @@ export default function VinylHeader() {
 
 	return (
 		<motion.header
-			initial={reducedMotion ? false : { y: -24, opacity: 0 }}
-			animate={{ y: 0, opacity: 1 }}
-			transition={{ duration: 0.6, ease: "easeOut" }}
-			className="fixed inset-x-0 top-0 z-50"
+			style={{
+				y: reducedMotion ? 0 : headerY,
+				opacity: headerOpacity,
+				pointerEvents: headerPointer,
+			}}
+				className="fixed inset-x-0 top-0 z-50"
 		>
 			<div className="relative flex h-16 items-center border-b border-white/10 bg-vh-navy-950/55 pr-[calc(clamp(12px,2vw,32px)+clamp(44px,4.6vw,72px)+32px)] pl-[clamp(12px,2vw,32px)] backdrop-blur-xl">
 				<a href="#home" aria-label="VandyHacks — back to top" className="flex shrink-0 items-center rounded-sm pr-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-vh-purple-300">
