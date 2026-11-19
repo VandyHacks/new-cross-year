@@ -93,7 +93,12 @@ export const teamGroups: TeamGroup[] = [
 				image: "/team/dipayan.jpg",
 				linkedin: "https://www.linkedin.com/in/dipayan-pokharel-35a278398",
 			},
-			{ name: "Eiliyah", role: "Experience", image: "/team/placeholder-4.svg" },
+			{
+				name: "Eiliyah",
+				role: "Experience",
+				image: "/team/eiliyah.jpg",
+				linkedin: "https://www.linkedin.com/in/eiliyah",
+			},
 		],
 	},
 	{

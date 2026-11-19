@@ -423,7 +423,7 @@ html:has(.vinyl-stage) {
 @media (min-width: 1024px) {
 	.deck {
 		--deck-w: min(92vw, 1180px, 120svh);
-		--deck-top-h: calc(var(--deck-w) / 2.3);
+		--deck-top-h: calc(var(--deck-w) / 2.65);
 	}
 }
 .deck-top {

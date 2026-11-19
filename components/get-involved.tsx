@@ -26,7 +26,7 @@ const tabs = [
 	},
 	{
 		id: "judge",
-		label: "Judge or Mentor",
+		label: "Judge/Mentor",
 		heading: "Help shape what's next",
 		blurb: "Interested in judging or mentoring at VandyHacks XIII? Share your information below, and we'll be in touch!",
 		command: "vandyhacks://judge",
