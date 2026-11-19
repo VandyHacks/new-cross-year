@@ -1,6 +1,6 @@
 "use client";
 
-import ScrollNotes from "@/components/vinyl/scroll-notes";
+import BackgroundNotes from "@/components/vinyl/background-notes";
 import {
 	animate,
 	type MotionValue,
@@ -275,8 +275,7 @@ export default function VinylStage({ children }: { children: ReactNode }) {
 
 	return (
 		<StageContext.Provider value={{ progress, smooth, active, desktop, spin }}>
-			<ScrollNotes />
-			<div className="hero-twinkle" aria-hidden="true" />
+			<BackgroundNotes />
 			<div className="vinyl-stage">{children}</div>
 		</StageContext.Provider>
 	);

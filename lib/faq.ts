@@ -35,6 +35,15 @@ export const faqCategories: FaqCategory[] = [
 				answer:
 					"Nope! You can participate with friends or find teammates at the event. We'll help you connect with other hackers.",
 			},
+			{
+				question: "Do I have to submit a project?",
+				answer:
+					"Not at all! While we encourage everyone to build and submit a project, you're welcome to attend workshops, meet other hackers, and enjoy the experience even if you don't submit anything.",
+			},
+			{
+				question: "Can I participate virtually?",
+				answer: `${EVENT.name} is an in-person event at ${EVENT.venue} in Nashville, Tennessee. We encourage you to join us on campus for the full hackathon experience!`,
+			},
 		],
 	},
 	{

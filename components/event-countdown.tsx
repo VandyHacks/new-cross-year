@@ -263,7 +263,7 @@ export default function EventCountdown() {
 				{EVENT.name} takes place {EVENT.dateLabel}.
 			</p>
 			<div
-				className="mx-auto flex w-[min(92vw,30rem)] flex-col gap-3 rounded-xl border border-white/10 bg-vh-purple-300/40 px-[clamp(16px,3vw,28px)] py-3.5 shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_0_24px_rgb(113_56_199/0.25)] backdrop-blur-md"
+				className="mx-auto flex w-[min(82vw,26rem)] flex-col gap-3 rounded-xl border border-white/10 bg-vh-purple-300/30 px-[clamp(16px,3vw,28px)] py-3.5 shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_0_24px_rgb(113_56_199/0.25)] backdrop-blur-md"
 				aria-hidden="true"
 			>
 				<div className="mt-2 mb-1 flex items-start justify-center gap-[clamp(10px,2vw,20px)]">

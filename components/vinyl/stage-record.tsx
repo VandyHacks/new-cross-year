@@ -86,7 +86,7 @@ function RingLabel({
 				href={`#${slideKey}`}
 				tabIndex={-1}
 				style={{ x: radius, y: "-50%", scale, pointerEvents }}
-				className="block origin-left cursor-pointer font-heading text-[clamp(18px,3.1vh,34px)] tracking-[0.18em] whitespace-nowrap text-white uppercase [text-shadow:0_0_24px_rgb(136_83_220/0.7)]"
+				className="block origin-left cursor-pointer font-heading text-[clamp(16px,2.8vh,30px)] tracking-[0.08em] whitespace-nowrap text-white uppercase [text-shadow:0_0_24px_rgb(136_83_220/0.7)]"
 			>
 				{label}
 			</motion.a>
