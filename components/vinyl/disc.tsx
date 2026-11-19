@@ -52,10 +52,17 @@ export default function Disc({
 						<text
 							fill="rgb(200 162 255 / 0.22)"
 							fontSize="15"
-							letterSpacing="5"
 							fontFamily="var(--font-space-mono)"
 						>
-							<textPath href={`#${id}-outer`}>
+							{/* Fit exactly 4 repeats to the ring's circumference
+							    (2π·452 ≈ 2840) so the text tiles seamlessly — the tail
+							    meets the head at the same even spacing as every other
+							    separator, with no overlap and no gap. */}
+							<textPath
+								href={`#${id}-outer`}
+								textLength="2840"
+								lengthAdjust="spacing"
+							>
 								{RING_TEXT.repeat(4)}
 							</textPath>
 						</text>

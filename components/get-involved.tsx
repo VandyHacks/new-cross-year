@@ -18,7 +18,7 @@ const tabs = [
 		id: "interest",
 		label: "Hackers",
 		heading: "Be first to know",
-		blurb: "Applications for VandyHacks XIII aren't open yet. Leave your details and we'll email you the moment they are.",
+		blurb: "Registration for VandyHacks XIII isn't open yet! Leave your information below to be notified when it opens.",
 		command: "vandyhacks://interest",
 		submitLabel: "Notify me",
 		fields: interestFields,
@@ -26,9 +26,9 @@ const tabs = [
 	},
 	{
 		id: "judge",
-		label: "Judge or mentor",
-		heading: "Help hackers ship",
-		blurb: "Industry pros, alumni, and grad students: judge projects or mentor teams over the weekend. Tell us about you and we'll follow up.",
+		label: "Judge or Mentor",
+		heading: "Help shape what's next",
+		blurb: "Interested in judging or mentoring at VandyHacks XIII? Share your information below, and we'll be in touch!",
 		command: "vandyhacks://judge",
 		submitLabel: "Offer to help",
 		fields: judgeFields,
@@ -37,8 +37,8 @@ const tabs = [
 	{
 		id: "sponsor",
 		label: "Sponsor",
-		heading: "Back the next builders",
-		blurb: "Put your company in front of 1,000+ student builders. Tell us a little about your goals and our sponsorship team will reach out.",
+		heading: "Partner with VandyHacks",
+		blurb: "Connect with 200+ hackers at VandyHacks XIII! Leave your information below, and our team will reach out.",
 		command: "vandyhacks://sponsor",
 		submitLabel: "Get in touch",
 		fields: sponsorFields,
@@ -91,102 +91,82 @@ export default function GetInvolved() {
 	return (
 		<section id="get-involved" aria-labelledby="get-involved-title">
 			<SlideBody fit>
-				<SlideHeading id="get-involved-title">Get Involved</SlideHeading>
-				<div className="grid items-start gap-6 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.6fr)] xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1.6fr)] lg:gap-[clamp(28px,4vw,56px)]">
-					<Arc>
-						<motion.div
-							key={active.id}
-							initial={reducedMotion ? false : { opacity: 0, y: 6 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-						>
-							<h3 className="font-heading text-[clamp(20px,1.9vw,26px)] leading-tight tracking-tight text-white">
-								{active.heading}
-							</h3>
-							<p id={blurbId} className="type-body-sm mt-3 text-pretty text-vh-muted">
-								{active.blurb}
-							</p>
-						</motion.div>
-						<p className="type-body-sm mt-5 hidden text-[12px] leading-5 text-vh-faint lg:block">
-							We only use your details to contact you about VandyHacks, and never sell them.
-						</p>
-					</Arc>
+				<SlideHeading id="get-involved-title" wrapperClassName="mb-[clamp(24px,4.5svh,52px)]">
+					Get Involved
+				</SlideHeading>
+				<Arc className="mb-[clamp(14px,2.6svh,28px)]">
+					<motion.p
+						key={active.id}
+						id={blurbId}
+						className="text-pretty text-[clamp(16px,1.4vw,21px)] leading-[1.7] text-vh-text-soft"
+						initial={reducedMotion ? false : { opacity: 0, y: 6 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+					>
+						{active.blurb}
+					</motion.p>
+				</Arc>
 
-					<Arc>
-						{/* A browser window: each form is a tab in the title bar. Glass like
-						    the rest of the page: a see-through, blurred base that reads
-						    darkest in the title bar. The body and the active tab share
-						    one light tint, so the selected tab still flows into its form. */}
-						<div className="overflow-hidden rounded-xl border border-white/10 bg-vh-navy-950/35 shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_20px_50px_rgb(0_0_0/0.3),0_0_40px_rgb(113_56_199/0.14)] backdrop-blur-md">
-							<div className="flex items-end gap-3 bg-black/20 px-2 pt-2 sm:px-3">
-								<div aria-hidden="true" className="mb-3 ml-1 hidden shrink-0 gap-2 sm:flex">
-									<span className="size-3 rounded-full bg-[#ff5f57]" />
-									<span className="size-3 rounded-full bg-[#febc2e]" />
-									<span className="size-3 rounded-full bg-[#28c840]" />
-								</div>
-								<div role="tablist" aria-label="Ways to get involved" className="flex min-w-0 flex-1">
-									{tabs.map((tab, index) => {
-										const selected = tab.id === active.id;
-										const divider =
-											!selected && index < tabs.length - 1 && tabs[index + 1].id !== active.id;
-										return (
-											<button
-												key={tab.id}
-												type="button"
-												role="tab"
-												id={`${baseId}-tab-${tab.id}`}
-												aria-selected={selected}
-												aria-controls={`${baseId}-panel-${tab.id}`}
-												tabIndex={selected ? 0 : -1}
-												onClick={() => setActiveId(tab.id)}
-												onKeyDown={(event) => {
-													const target =
-														event.key === "Home"
-															? 0
-															: event.key === "End"
-																? tabs.length - 1
-																: KEY_STEP[event.key] !== undefined
-																	? (index + KEY_STEP[event.key] + tabs.length) % tabs.length
-																	: -1;
-													if (target < 0) return;
-													event.preventDefault();
-													const next = tabs[target];
-													setActiveId(next.id);
-													document.getElementById(`${baseId}-tab-${next.id}`)?.focus();
-												}}
-												className={`group relative flex h-9 min-w-0 flex-auto items-center justify-start rounded-t-lg px-3 text-left font-mono text-[12px] transition-colors duration-150 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-vh-purple-300 sm:max-w-[13rem] sm:text-[13px] lg:px-2.5 xl:px-4 ${
-													selected ? "text-white" : "text-vh-muted hover:text-white"
-												}`}
-											>
-												{selected ? (
-													<motion.span
-														layoutId={`${baseId}-active-tab`}
-														aria-hidden="true"
-														className="absolute inset-0 rounded-t-lg bg-white/[0.05]"
-														transition={
-															reducedMotion
-																? { duration: 0 }
-																: { type: "spring", stiffness: 520, damping: 40 }
-														}
-													/>
-												) : (
-													<span
-														aria-hidden="true"
-														className="absolute inset-x-1 top-1 bottom-1 rounded-md bg-white/0 transition-colors duration-150 group-hover:bg-white/[0.06]"
-													/>
-												)}
-												<span className="relative truncate">{tab.label}</span>
-												{divider && (
-													<span aria-hidden="true" className="absolute top-1/2 right-0 h-4 w-px -translate-y-1/2 bg-white/12" />
-												)}
-											</button>
-										);
-									})}
-								</div>
+				<Arc className="mr-auto w-full max-w-[920px]">
+					{/* Dark glass form container with a faint purple glow. Modern tab
+					    bar up top with an animated purple underline for the active tab. */}
+					<div className="overflow-hidden rounded-xl border border-white/10 bg-vh-navy-950/35 shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_20px_50px_rgb(0_0_0/0.3),0_0_40px_rgb(113_56_199/0.14)] backdrop-blur-md">
+							<div
+								role="tablist"
+								aria-label="Ways to get involved"
+								className="flex gap-1 border-b border-white/10 px-[clamp(8px,1.5vw,16px)]"
+							>
+								{tabs.map((tab, index) => {
+									const selected = tab.id === active.id;
+									return (
+										<button
+											key={tab.id}
+											type="button"
+											role="tab"
+											id={`${baseId}-tab-${tab.id}`}
+											aria-selected={selected}
+											aria-controls={`${baseId}-panel-${tab.id}`}
+											tabIndex={selected ? 0 : -1}
+											onClick={() => setActiveId(tab.id)}
+											onKeyDown={(event) => {
+												const target =
+													event.key === "Home"
+														? 0
+														: event.key === "End"
+															? tabs.length - 1
+															: KEY_STEP[event.key] !== undefined
+																? (index + KEY_STEP[event.key] + tabs.length) % tabs.length
+																: -1;
+												if (target < 0) return;
+												event.preventDefault();
+												const next = tabs[target];
+												setActiveId(next.id);
+												document.getElementById(`${baseId}-tab-${next.id}`)?.focus();
+											}}
+											className={`relative px-[clamp(10px,1.6vw,18px)] py-3 font-mono text-[12px] tracking-[0.02em] whitespace-nowrap transition-colors duration-150 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-vh-purple-300 sm:text-[13px] ${
+												selected ? "text-white" : "text-vh-muted hover:text-white"
+											}`}
+										>
+											{tab.label}
+											{selected && (
+												<motion.span
+													layoutId={`${baseId}-active-tab`}
+													aria-hidden="true"
+													className="absolute inset-x-[clamp(10px,1.6vw,18px)] -bottom-px h-0.5 rounded-full bg-vh-purple-300 shadow-[0_0_8px_rgb(200_162_255/0.6)]"
+													transition={
+														reducedMotion
+															? { duration: 0 }
+															: { type: "spring", stiffness: 520, damping: 40 }
+													}
+												/>
+											)}
+										</button>
+									);
+								})}
 							</div>
 							{/* All three panels stay mounted (hidden) so half-typed answers
 							    and success messages survive switching tabs. */}
-							<div className="bg-white/[0.05]">
+							<div>
 								{tabs.map((tab) => {
 									const selected = tab.id === active.id;
 									return (
@@ -210,11 +190,11 @@ export default function GetInvolved() {
 								})}
 							</div>
 						</div>
-						<p className="type-body-sm mt-4 text-[12px] leading-5 text-vh-faint lg:hidden">
-							We only use your details to contact you about VandyHacks, and never sell them.
-						</p>
-					</Arc>
-				</div>
+					{/* Privacy note: below the submit button, small and subtle. */}
+					<p className="mt-3 px-1 text-[11px] leading-5 text-vh-faint/80">
+						We only use your details to contact you about VandyHacks, and never sell them.
+					</p>
+				</Arc>
 			</SlideBody>
 		</section>
 	);

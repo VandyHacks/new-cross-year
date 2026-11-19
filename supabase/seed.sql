@@ -13,4 +13,4 @@ insert into judge_applications (name, email, organization, title, role, expertis
 	('Linus Torvalds', 'linus@example.com', 'Linux Foundation', 'Fellow', 'mentor', 'Systems, git', 'All weekend', 'confirmed');
 
 insert into sponsor_inquiries (company, contact_name, email, tier_interest, message, status) values
-	('Example Corp', 'Pat Doe', 'pat@example.com', 'gold', 'Interested in a workshop slot.', 'new');
+	('Example Corp', 'Pat Doe', 'pat@example.com', 'financial', 'Interested in a workshop slot.', 'new');
