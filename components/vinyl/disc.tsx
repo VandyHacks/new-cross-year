@@ -8,12 +8,17 @@ const RING_TEXT = `VANDYHACKS ${EVENT.edition} · NASHVILLE, TN · ${EVENT.dateL
 // A vinyl record that fills its container. Grooves and the light sheen stay
 // still; the printed ring text, label, and texture turn with `spin` (degrees),
 // which is what makes the rotation readable on a mostly-symmetric disc.
+//
+// `minimal` drops the printed ring/label text for the footer's turntable: just
+// the navbar logo and "VANDYHACKS" close to the centre.
 export default function Disc({
 	spin,
 	className = "",
+	minimal = false,
 }: {
 	spin: MotionValue<number> | number;
 	className?: string;
+	minimal?: boolean;
 }) {
 	// Unique ids so two discs on one page don't share <defs>.
 	const id = useId().replace(/:/g, "");
@@ -43,40 +48,60 @@ export default function Disc({
 							strokeWidth={r === 488 ? 3 : 1.5}
 						/>
 					))}
-					<text
-						fill="rgb(200 162 255 / 0.22)"
-						fontSize="15"
-						letterSpacing="5"
-						fontFamily="var(--font-space-mono)"
-					>
-						<textPath href={`#${id}-outer`}>
-							{RING_TEXT.repeat(4)}
-						</textPath>
-					</text>
+					{!minimal && (
+						<text
+							fill="rgb(200 162 255 / 0.22)"
+							fontSize="15"
+							letterSpacing="5"
+							fontFamily="var(--font-space-mono)"
+						>
+							<textPath href={`#${id}-outer`}>
+								{RING_TEXT.repeat(4)}
+							</textPath>
+						</text>
+					)}
 					<circle cx="500" cy="500" r="190" fill={`url(#${id}-label)`} />
 					<radialGradient id={`${id}-label`}>
 						<stop offset="0%" stopColor="#a77ae9" />
 						<stop offset="70%" stopColor="#7138c7" />
 						<stop offset="100%" stopColor="#3b1d73" />
 					</radialGradient>
-					<text
-						fill="rgb(255 255 255 / 0.75)"
-						fontSize="17"
-						letterSpacing="4"
-						fontFamily="var(--font-michroma)"
-					>
-						<textPath href={`#${id}-inner`} startOffset="2%">
-							{`VANDYHACKS · ${EVENT.edition} · CODE · COLLABORATE · CREATE · 33⅓ RPM`}
-						</textPath>
-					</text>
+					{minimal ? (
+						<text
+							x="500"
+							y="630"
+							textAnchor="middle"
+							fill="rgb(255 255 255 / 0.9)"
+							fontSize="33"
+							letterSpacing="3"
+							fontFamily="var(--font-michroma)"
+						>
+							VANDYHACKS
+						</text>
+					) : (
+						<text
+							fill="rgb(255 255 255 / 0.75)"
+							fontSize="17"
+							letterSpacing="4"
+							fontFamily="var(--font-michroma)"
+						>
+							<textPath href={`#${id}-inner`} startOffset="2%">
+								{`VANDYHACKS · ${EVENT.edition} · CODE · COLLABORATE · CREATE · 33⅓ RPM`}
+							</textPath>
+						</text>
+					)}
 					<circle cx="500" cy="500" r="14" fill="#05060f" />
 				</svg>
 				<Image
-					src="/logo.png"
+					src={minimal ? "/logo-trimmed.png" : "/logo.png"}
 					alt=""
 					width={400}
 					height={400}
-					className="absolute top-1/2 left-1/2 w-[26%] -translate-x-1/2 -translate-y-[58%] opacity-90"
+					className={
+						minimal
+							? "absolute top-1/2 left-1/2 w-[19%] -translate-x-1/2 -translate-y-[62%] opacity-95"
+							: "absolute top-1/2 left-1/2 w-[26%] -translate-x-1/2 -translate-y-[58%] opacity-90"
+					}
 				/>
 			</motion.div>
 			<div className="vinyl-sheen" />
