@@ -8,6 +8,7 @@ import {
 	useReducedMotion,
 } from "motion/react";
 import { type ReactNode, useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
 import { missionText } from "@/components/about";
 import Counter from "@/components/counter";
 import { metrics } from "@/components/stats";
@@ -38,13 +39,26 @@ export function SlideBody({
 	);
 }
 
-export function SlideHeading({ id, children }: { id: string; children: ReactNode }) {
+export function SlideHeading({
+	id,
+	children,
+	className,
+	wrapperClassName = "mb-[clamp(24px,4.5svh,48px)]",
+}: {
+	id: string;
+	children: ReactNode;
+	className?: string;
+	wrapperClassName?: string;
+}) {
 	const reducedMotion = useReducedMotion();
 	return (
-		<Arc className="mb-[clamp(24px,4.5svh,48px)]">
+		<Arc className={wrapperClassName}>
 			<motion.h2
 				id={id}
-				className="font-heading text-[clamp(30px,4.4vw,64px)] leading-[1.05] tracking-[0.12em] text-white uppercase"
+				className={cn(
+					"font-heading text-[clamp(30px,4.4vw,64px)] leading-[1.05] tracking-[0.12em] text-white uppercase",
+					className,
+				)}
 				initial={reducedMotion ? false : { opacity: 0, x: -48, filter: "blur(10px)" }}
 				whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
 				viewport={{ once: true, amount: 0.6 }}

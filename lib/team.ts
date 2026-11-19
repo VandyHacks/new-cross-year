@@ -65,9 +65,9 @@ const placeholder = (role: string, count: number, offset: number) =>
 	}));
 
 export const teamGroups: TeamGroup[] = [
-	{ id: "technical", label: "Technical", members: placeholder("Technical", 4, 0) },
-	{ id: "design", label: "Design", members: placeholder("Design", 3, 4) },
+	{ id: "technology", label: "Technology", members: placeholder("Technology", 3, 0) },
+	{ id: "experience", label: "Experience", members: placeholder("Experience", 4, 3) },
 	{ id: "marketing", label: "Marketing", members: placeholder("Marketing", 3, 7) },
-	{ id: "vp", label: "Vice President", members: placeholder("Vice President", 2, 2) },
-	{ id: "president", label: "President", members: placeholder("President", 1, 5) },
+	{ id: "partnerships", label: "Partnerships", members: placeholder("Partnerships", 3, 2) },
+	{ id: "leadership", label: "Leadership", members: placeholder("Leadership", 2, 5) },
 ];
