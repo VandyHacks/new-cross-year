@@ -17,10 +17,11 @@ export type FieldSpec = {
 
 const gradYears = [
 	{ value: "", label: "Select…" },
-	...Array.from({ length: 7 }, (_, index) => {
-		const year = String(new Date().getFullYear() + index);
-		return { value: year, label: year };
-	}),
+	{ value: "2027", label: "2027" },
+	{ value: "2028", label: "2028" },
+	{ value: "2029", label: "2029" },
+	{ value: "2030", label: "2030" },
+	{ value: "grad", label: "Graduate Student" },
 ];
 
 export const interestFields: FieldSpec[] = [
@@ -100,13 +101,13 @@ export const judgeFields: FieldSpec[] = [
 	},
 	{
 		name: "role",
-		label: "I'd like to",
+		label: "How would you like to participate?",
 		type: "select",
 		required: true,
 		options: [
 			{ value: "", label: "Select…" },
-			{ value: "judge", label: "Judge projects" },
-			{ value: "mentor", label: "Mentor hackers" },
+			{ value: "judge", label: "Judge" },
+			{ value: "mentor", label: "Mentor" },
 			{ value: "both", label: "Both" },
 		],
 	},
@@ -167,7 +168,7 @@ export const sponsorFields: FieldSpec[] = [
 	},
 	{
 		name: "tier_interest",
-		label: "Interested in",
+		label: "Type of Sponsorship",
 		type: "select",
 		options: sponsorTiers,
 		wide: true,

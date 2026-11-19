@@ -1,6 +1,6 @@
 "use client";
 
-import ScrollNotes from "@/components/vinyl/scroll-notes";
+import BackgroundNotes from "@/components/vinyl/background-notes";
 import {
 	animate,
 	type MotionValue,
@@ -27,9 +27,9 @@ export const SLIDES = [
 	{ key: "about", label: "About" },
 	{ key: "impact", label: "Impact" },
 	{ key: "sponsors", label: "Sponsors" },
-	{ key: "get-involved", label: "Sign Up" },
-	{ key: "faq", label: "FAQ" },
 	{ key: "team", label: "Team" },
+	{ key: "faq", label: "FAQ" },
+	{ key: "get-involved", label: "Get Involved" },
 	{ key: "footer" },
 ] as const;
 
@@ -253,6 +253,9 @@ export default function VinylStage({ children }: { children: ReactNode }) {
 		};
 
 		measure();
+		// Snap the spring to the initial scroll position so the record doesn't
+		// spin up from 0 when the page loads already scrolled (e.g. on reload).
+		smooth.jump(progress.get());
 		// FAQ answers and form messages change slide heights after load.
 		const observer = new ResizeObserver(measure);
 		for (const s of SLIDES) {
@@ -266,14 +269,13 @@ export default function VinylStage({ children }: { children: ReactNode }) {
 			window.removeEventListener("scroll", update);
 			window.removeEventListener("resize", measure);
 		};
-	}, [progress]);
+	}, [progress, smooth]);
 
 	useScrollDirector(bounds, { desktop, reducedMotion: !!reducedMotion });
 
 	return (
 		<StageContext.Provider value={{ progress, smooth, active, desktop, spin }}>
-			<ScrollNotes />
-			<div className="hero-twinkle" aria-hidden="true" />
+			<BackgroundNotes />
 			<div className="vinyl-stage">{children}</div>
 		</StageContext.Provider>
 	);

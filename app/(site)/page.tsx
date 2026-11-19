@@ -31,14 +31,14 @@ export default function Home() {
 				<Slide slide="sponsors">
 					<SponsorWall />
 				</Slide>
-				<Slide slide="get-involved">
-					<GetInvolved />
+				<Slide slide="team">
+					<TeamRoster />
 				</Slide>
 				<Slide slide="faq" className="slide-gutter slide-legacy">
 					<FAQ />
 				</Slide>
-				<Slide slide="team">
-					<TeamRoster />
+				<Slide slide="get-involved">
+					<GetInvolved />
 				</Slide>
 			</main>
 			<Slide slide="footer">

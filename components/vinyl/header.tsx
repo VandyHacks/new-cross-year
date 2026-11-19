@@ -16,13 +16,11 @@ import { CTA } from "@/lib/event";
 
 // `slide` marks the link that's highlighted while that slide is on screen.
 const links: { label: string; href: string; slide?: string }[] = [
-	{ label: "Home", href: "#home", slide: "home" },
 	{ label: "About", href: "#about", slide: "about" },
 	{ label: "Impact", href: "#impact", slide: "impact" },
-	{ label: "Past Sponsors", href: "#sponsors", slide: "sponsors" },
-	{ label: "Sign Up", href: CTA.interest, slide: "get-involved" },
-	{ label: "FAQ", href: "#faq", slide: "faq" },
+	{ label: "Sponsors", href: "#sponsors", slide: "sponsors" },
 	{ label: "Team", href: "#team", slide: "team" },
+	{ label: "FAQ", href: "#faq", slide: "faq" },
 ];
 
 const labelled = SLIDES.flatMap((slide, index) =>
@@ -64,28 +62,6 @@ function MiniRecord() {
 	);
 }
 
-function MlhBadge() {
-	return (
-		<a
-			id="mlh-trust-badge"
-			className="absolute top-0 right-[clamp(12px,2vw,32px)] z-10 block w-[clamp(44px,4.6vw,72px)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300"
-			href="https://mlh.io/seasons/2027/events/"
-			target="_blank"
-			rel="noreferrer"
-			aria-label="Major League Hacking 2027 season events (opens in a new tab)"
-		>
-			<Image
-				unoptimized
-				src="https://s3.amazonaws.com/logged-assets/trust-badge/2027/mlh-trust-badge-2027-white.svg"
-				alt="Major League Hacking 2027 hackathon season"
-				width={79}
-				height={138}
-				className="h-auto w-full"
-			/>
-		</a>
-	);
-}
-
 export default function VinylHeader() {
 	const { active, smooth } = useStage();
 	const reducedMotion = useReducedMotion();
@@ -119,44 +95,42 @@ export default function VinylHeader() {
 			}}
 				className="fixed inset-x-0 top-0 z-50"
 		>
-			<div className="relative flex h-16 items-center border-b border-white/10 bg-vh-navy-950/55 pr-[calc(clamp(12px,2vw,32px)+clamp(44px,4.6vw,72px)+32px)] pl-[clamp(12px,2vw,32px)] backdrop-blur-xl">
+			<div className="relative flex h-[60px] items-center border-b border-white/10 bg-vh-navy-950/55 px-[clamp(12px,2vw,32px)] backdrop-blur-xl">
 				<a href="#home" aria-label="VandyHacks — back to top" className="flex shrink-0 items-center rounded-sm pr-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-vh-purple-300">
 					<Image src="/logo-trimmed.png" alt="VandyHacks" width={261} height={231} priority className="h-8 w-auto" />
 				</a>
-				<span className="mr-4 h-8 w-px bg-white/20" aria-hidden="true" />
+				<span className="mr-4 h-8 w-px bg-white/20 lg:hidden" aria-hidden="true" />
 				<MiniRecord />
 
-				<nav aria-label="Main navigation" className="hidden items-center gap-0.5 lg:flex xl:gap-1">
-					{links.map((link) => {
-						const isActive = activeKey === link.slide;
-						return (
-							<a
-								key={link.href}
-								href={link.href}
-								aria-current={isActive ? "true" : undefined}
-								className={`type-nav relative rounded-md px-2 py-2 whitespace-nowrap [word-spacing:-0.4em] transition-colors xl:px-3 duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300 ${
-									isActive ? "text-white" : "text-vh-muted hover:text-vh-purple-300"
-								}`}
-							>
-								{link.label}
-								{isActive && (
-									<motion.span
-										layoutId="vinyl-nav-pill"
-										className="absolute inset-0 -z-10 rounded-md bg-white/8 shadow-[inset_0_-2px_0_#c8a2ff]"
-										transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 30 }}
-									/>
-								)}
-							</a>
-						);
-					})}
-				</nav>
+				<div className="ml-auto flex items-center gap-2 xl:gap-3">
+					<nav aria-label="Main navigation" className="hidden items-center gap-0.5 lg:flex xl:gap-1">
+						{links.map((link) => {
+							const isActive = activeKey === link.slide;
+							return (
+								<a
+									key={link.href}
+									href={link.href}
+									aria-current={isActive ? "true" : undefined}
+									className={`type-nav relative rounded-md px-2 py-2 whitespace-nowrap [word-spacing:-0.4em] transition-colors xl:px-3 duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300 ${
+										isActive ? "text-white" : "text-vh-muted hover:text-vh-purple-300"
+									}`}
+								>
+									{link.label}
+									{isActive && (
+										<motion.span
+											layoutId="vinyl-nav-pill"
+											className="absolute inset-0 -z-10 rounded-md bg-white/8 shadow-[inset_0_-2px_0_#c8a2ff]"
+											transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 30 }}
+										/>
+									)}
+								</a>
+							);
+						})}
+					</nav>
 
-				<div className="ml-auto flex items-center gap-2">
-					<span className="hidden sm:block">
-						<a className={primaryButtonClassName} href={CTA.interest}>
-							Get notified
-						</a>
-					</span>
+					<a className={`${primaryButtonClassName} hidden sm:inline-flex`} href={CTA.interest}>
+						Get Notified
+					</a>
 					<button
 						type="button"
 						onClick={() => setMenuOpen((v) => !v)}
@@ -176,7 +150,6 @@ export default function VinylHeader() {
 						</svg>
 					</button>
 				</div>
-				<MlhBadge />
 			</div>
 
 			<AnimatePresence>
@@ -188,7 +161,7 @@ export default function VinylHeader() {
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: reducedMotion ? 0 : -8 }}
 						transition={{ duration: 0.2, ease: "easeOut" }}
-						className="h-[calc(100svh-4rem)] overflow-y-auto border-b border-white/10 bg-vh-navy-950/95 backdrop-blur-xl lg:hidden"
+						className="h-[calc(100svh-60px)] overflow-y-auto border-b border-white/10 bg-vh-navy-950/95 backdrop-blur-xl lg:hidden"
 					>
 						<ul className="flex flex-col gap-1 px-5 py-6">
 							{links.map((link, i) => (
@@ -212,7 +185,7 @@ export default function VinylHeader() {
 							))}
 							<li className="mt-4 px-3">
 								<a className={primaryButtonClassName} href={CTA.interest} onClick={() => setMenuOpen(false)}>
-									Get notified
+									Apply Now
 								</a>
 							</li>
 						</ul>

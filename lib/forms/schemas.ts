@@ -39,7 +39,11 @@ export const interestSchema = z.object({
 	grad_year: z
 		.string()
 		.trim()
-		.transform((value) => (value === "" ? null : Number(value)))
+		// "grad" (Graduate Student) and "" both store as null — the column only
+		// holds a class year (smallint 2024–2040).
+		.transform((value) =>
+			value === "" || value === "grad" ? null : Number(value),
+		)
 		.refine(
 			(value) =>
 				value === null ||
@@ -63,12 +67,8 @@ export const judgeSchema = z.object({
 });
 
 export const sponsorTiers = [
-	{ value: "not_sure", label: "Not sure yet" },
-	{ value: "title", label: "Title sponsor" },
-	{ value: "gold", label: "Gold" },
-	{ value: "silver", label: "Silver" },
-	{ value: "partner", label: "Partner" },
-	{ value: "in_kind", label: "In-kind (swag, food, hardware)" },
+	{ value: "financial", label: "Financial Sponsorship" },
+	{ value: "in_kind", label: "In-Kind Sponsorship" },
 ] as const;
 
 export const sponsorSchema = z.object({

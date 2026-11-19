@@ -11,18 +11,17 @@ const [giants, large, partners] = sponsorTiers;
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-// Hairline cells and a quiet hover (no lift, no glow), the way Linear and
-// Vercel present customer logos: the marks carry the wall, not the tiles.
+// No tiles — the marks sit directly on the dark wall. Each cell just centres its
+// logo and dims it slightly, brightening on hover/focus (no borders, no glow).
 const tileClassName =
-	"group relative flex items-center justify-center overflow-hidden rounded-lg border border-white/[0.07] bg-white/[0.025] transition-[border-color,background-color] duration-200 ease-out hover:border-vh-purple-300/50 hover:bg-white/[0.06] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300";
+	"group relative flex items-center justify-center rounded-md opacity-75 transition-opacity duration-200 ease-out hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300";
 
-// Logos sit at ~70% opacity and come up to full on hover.
-const mono =
-	"brightness-0 invert opacity-70 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100";
+// Mono marks render as flat white; overall dim/brighten is handled by the cell.
+const mono = "brightness-0 invert";
 
 function Mark({ sponsor, size }: { sponsor: Sponsor; size: "lg" | "md" | "sm" }) {
 	const { logo, name } = sponsor;
-	const nameClassName = `font-heading leading-tight text-vh-text/70 transition-colors duration-200 group-hover:text-white group-focus-visible:text-white ${
+	const nameClassName = `font-heading leading-tight text-vh-text transition-colors duration-200 group-hover:text-white group-focus-visible:text-white ${
 		size === "lg" ? "text-[13px]" : size === "md" ? "text-[10px]" : "text-[11px]"
 	}`;
 	if (!logo) return <span className={`${nameClassName} px-2 text-center`}>{name}</span>;
@@ -52,7 +51,7 @@ function Mark({ sponsor, size }: { sponsor: Sponsor; size: "lg" | "md" | "sm" })
 
 	return (
 		<span
-			className={`relative block ${size === "lg" ? "h-[44%] w-[70%]" : "h-[44%] w-[72%]"} ${
+			className={`relative block ${size === "lg" ? "h-[50%] w-[78%]" : "h-[50%] w-[80%]"} ${
 				logo.plate ? "rounded bg-vh-text" : ""
 			}`}
 		>
@@ -76,7 +75,7 @@ function TileGrid({ items, size, className }: { items: Sponsor[]; size: "lg" | "
 	const reducedMotion = useReducedMotion();
 	return (
 		<motion.ul
-			className={`grid gap-2 ${className}`}
+			className={`grid gap-x-6 gap-y-4 ${className}`}
 			variants={reducedMotion ? undefined : gridVariants}
 			initial={reducedMotion ? false : "hidden"}
 			whileInView="shown"
@@ -103,9 +102,9 @@ function TileGrid({ items, size, className }: { items: Sponsor[]; size: "lg" | "
 
 function TierLabel({ children }: { children: string }) {
 	return (
-		<p className="type-label mb-2.5 flex items-center gap-3 text-[10px] text-vh-subtle">
+		<p className="type-label mb-2.5 flex items-center gap-3 text-[10px] tracking-[0.14em] text-vh-faint/80">
 			{children}
-			<span className="h-px flex-1 bg-gradient-to-r from-white/12 to-transparent" />
+			<span className="h-px flex-1 bg-gradient-to-r from-white/8 to-transparent" />
 		</p>
 	);
 }
@@ -135,7 +134,7 @@ function PartnerMarquee() {
 										rel="noopener noreferrer"
 										tabIndex={copy === 1 ? -1 : undefined}
 										aria-label={`${sponsor.name} (opens in a new tab)`}
-										className="group flex h-8 items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300"
+										className="group flex h-8 items-center rounded-md opacity-75 transition-opacity duration-200 hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300"
 									>
 										<Mark sponsor={sponsor} size="sm" />
 									</a>
@@ -168,16 +167,15 @@ export default function SponsorWall() {
 					<TierLabel>Startups &amp; community</TierLabel>
 					<PartnerMarquee />
 				</Arc>
-				<Arc className="mt-[clamp(14px,2.4svh,28px)]">
-					<p className="type-body-sm flex flex-wrap items-center gap-x-4 gap-y-2 text-vh-muted">
-						Want your team in front of 1,000+ student builders?
+				<Arc className="mt-[22px]">
+					<div className="flex justify-end">
 						<a
-							className="type-button inline-flex items-center gap-1.5 rounded-sm text-vh-purple-100 underline decoration-vh-purple-300/40 underline-offset-4 transition-colors hover:text-white hover:decoration-vh-purple-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300"
+							className="type-button inline-flex items-center gap-1.5 rounded-lg border border-vh-purple-300/50 px-4 py-2 text-[13px] text-vh-purple-100 transition-colors duration-200 hover:border-vh-purple-300 hover:bg-vh-purple-700/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300"
 							href={CTA.sponsor}
 						>
 							Become a sponsor <span aria-hidden="true">→</span>
 						</a>
-					</p>
+					</div>
 				</Arc>
 			</SlideBody>
 		</section>

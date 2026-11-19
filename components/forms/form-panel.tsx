@@ -19,7 +19,7 @@ type FormPanelProps = {
 };
 
 const controlClassName =
-	"w-full rounded-md border border-white/12 bg-vh-navy-950/45 px-3 py-2 font-sans text-sm leading-5 text-white placeholder:text-vh-faint transition-colors focus:border-vh-purple-300 focus:ring-2 focus:ring-vh-purple-300/40 focus:outline-none aria-[invalid=true]:border-red-400 disabled:opacity-60";
+	"w-full rounded-lg border border-white/12 bg-vh-navy-950/45 px-3.5 py-2 font-sans text-[15px] leading-5 text-white placeholder:text-vh-faint transition-colors focus:border-vh-purple-300 focus:ring-2 focus:ring-vh-purple-300/40 focus:outline-none aria-[invalid=true]:border-red-400 disabled:opacity-60";
 
 function Field({
 	spec,
@@ -72,7 +72,7 @@ function Field({
 			) : spec.type === "textarea" ? (
 				<textarea
 					{...shared}
-					rows={3}
+					rows={2}
 					maxLength={spec.maxLength}
 					placeholder={spec.placeholder}
 					defaultValue={defaultValue}
@@ -144,7 +144,7 @@ function FormInner({
 					/>
 				</label>
 			</div>
-			<div className="grid gap-x-4 gap-y-3 sm:grid-cols-2">
+			<div className="grid gap-x-5 gap-y-3 sm:grid-cols-2">
 				{fields.map((spec) => (
 					<Field
 						key={spec.name}
@@ -180,7 +180,7 @@ export default function FormPanel(props: FormPanelProps) {
 	// Bumping the key remounts the form with fresh state ("Send another").
 	const [instance, setInstance] = useState(0);
 	return (
-		<div className="p-[clamp(16px,2vw,24px)]">
+		<div className="p-[clamp(18px,2.2vw,30px)]">
 			<FormInner
 				key={instance}
 				{...props}

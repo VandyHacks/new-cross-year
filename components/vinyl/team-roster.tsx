@@ -3,21 +3,29 @@
 import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import Arc from "@/components/vinyl/arc";
-import { SlideHeading } from "@/components/vinyl/slides";
-import { type TeamMember, teamGroups } from "@/lib/team";
+import { SlideBody, SlideHeading } from "@/components/vinyl/slides";
+import { type TeamGroup, type TeamMember, teamGroups } from "@/lib/team";
 
-// Each member is an album sleeve with a record that slides out on hover.
-function Sleeve({ member, index }: { member: TeamMember; index: number }) {
+// Row 1: Technology (3) + Experience (4) = 7 cards.
+// Row 2: Marketing (3) + Partnerships (3) + Leadership (2) = 8 cards.
+const row1 = teamGroups.slice(0, 2);
+const row2 = teamGroups.slice(2);
+
+// A portrait card. On hover a small decorative record slides out from behind to
+// the right (capped at ~28% of its diameter), while the card tilts and gains a
+// subtle purple highlight.
+function Sleeve({ member, team, index }: { member: TeamMember; team: string; index: number }) {
 	const reducedMotion = useReducedMotion();
 	const body = (
 		<>
-			<span className="sleeve-disc absolute inset-[4%] rounded-full transition-transform duration-500 ease-out group-hover:translate-x-[34%] group-focus-visible:translate-x-[34%] motion-reduce:transition-none" aria-hidden="true">
-				<span className="absolute inset-[34%] rounded-full bg-[radial-gradient(circle,#c8a2ff,#7138c7_70%)]" />
+			{/* Decorative record: grooves (from .sleeve-disc) + purple centre. */}
+			<span className="sleeve-disc absolute left-[4%] top-1/2 aspect-square w-[92%] -translate-y-1/2 rounded-full transition-transform duration-500 ease-out group-hover:translate-x-[28%] group-focus-visible:translate-x-[28%] motion-reduce:transition-none" aria-hidden="true">
+				<span className="absolute inset-[38%] rounded-full bg-[radial-gradient(circle,#c8a2ff,#7138c7_70%)]" />
 			</span>
-			<span className="relative block aspect-square overflow-hidden rounded-lg border border-white/10 bg-vh-navy-800 shadow-[0_18px_40px_rgb(0_0_0/0.45)] transition-transform duration-500 ease-out group-hover:-translate-x-[6%] group-hover:-rotate-2">
-				<Image src={member.image} alt="" fill sizes="(max-width: 640px) 45vw, 220px" className="object-cover grayscale transition duration-500 group-hover:grayscale-0" />
-				<span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-vh-navy-950/95 via-vh-navy-950/60 to-transparent p-3 pt-10">
-					<span className="type-subheading block text-[13px] text-white">{member.name}</span>
+			<span className="relative block aspect-[4/5] overflow-hidden rounded-lg border border-white/10 bg-vh-navy-800 shadow-[0_14px_32px_rgb(0_0_0/0.45)] transition-[transform,border-color,box-shadow] duration-500 ease-out group-hover:-translate-x-[6%] group-hover:-rotate-2 group-hover:border-vh-purple-300/40 group-hover:shadow-[0_16px_34px_rgb(113_56_199/0.28)]">
+				<Image src={member.image} alt="" fill sizes="(max-width: 640px) 44vw, (max-width: 1024px) 20vw, 140px" className="object-cover transition duration-500 group-hover:scale-[1.03]" />
+				<span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-vh-navy-950/95 via-vh-navy-950/45 to-transparent p-2 pt-9">
+					<span className="type-subheading block text-center text-[13px] leading-tight text-white">{member.name}</span>
 				</span>
 			</span>
 		</>
@@ -25,50 +33,84 @@ function Sleeve({ member, index }: { member: TeamMember; index: number }) {
 
 	return (
 		<motion.li
-			initial={reducedMotion ? false : { opacity: 0, y: 40, rotate: index % 2 ? 3 : -3 }}
-			whileInView={{ opacity: 1, y: 0, rotate: 0 }}
-			viewport={{ once: true, amount: 0.3 }}
-			transition={{ duration: 0.7, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
+			className="relative w-[96px] shrink-0 transition-[transform] duration-300 hover:z-10 focus-within:z-10 sm:w-[108px] lg:w-[120px]"
+			initial={reducedMotion ? false : { opacity: 0, y: 26 }}
+			whileInView={{ opacity: 1, y: 0 }}
+			viewport={{ once: true, amount: 0.4 }}
+			transition={{ duration: 0.6, delay: index * 0.03, ease: [0.22, 1, 0.36, 1] }}
 		>
 			{member.linkedin ? (
-				<a href={member.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${member.name}, ${member.role} — LinkedIn (opens in a new tab)`} className="group relative block rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-vh-purple-300">
+				<a
+					href={member.linkedin}
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label={`${member.name}, ${team} — LinkedIn (opens in a new tab)`}
+					className="group relative block rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-vh-purple-300"
+				>
 					{body}
 				</a>
 			) : (
-				<div className="group relative">{body}</div>
+				<div className="group relative block rounded-lg">{body}</div>
 			)}
 		</motion.li>
 	);
 }
 
-export default function TeamRoster() {
+function TeamGroupCluster({ group, startIndex }: { group: TeamGroup; startIndex: number }) {
 	return (
-		<section id="team" aria-labelledby="team-title" className="slide-gutter slide-frame relative px-5 pt-24 pb-24 sm:px-8">
-			<div className="mx-auto max-w-5xl">
-				<SlideHeading id="team-title">
-					The Team
-				</SlideHeading>
-				<div className="flex flex-col gap-14">
-					{teamGroups.map((group) => (
-						<Arc key={group.id} className="grid gap-5 md:grid-cols-[180px_1fr] md:gap-10">
-							<motion.h3
-								className="md:sticky md:top-24 md:self-start"
-								initial={{ opacity: 0, x: -24 }}
-								whileInView={{ opacity: 1, x: 0 }}
-								viewport={{ once: true, amount: 0.6 }}
-								transition={{ duration: 0.6 }}
-							>
-								<span className="block font-heading text-xl tracking-[0.08em] text-white uppercase">{group.label}</span>
-							</motion.h3>
-							<ul className="grid grid-cols-2 gap-x-[clamp(20px,3vw,44px)] gap-y-8 pr-[12%] sm:grid-cols-3 lg:grid-cols-4">
-								{group.members.map((member, i) => (
-									<Sleeve key={i} member={member} index={i} />
-								))}
-							</ul>
-						</Arc>
-					))}
+		<div className="flex flex-col items-center gap-2.5">
+			<ul className="relative flex gap-1">
+				{group.members.map((member, i) => (
+					<Sleeve key={i} member={member} team={group.label} index={startIndex + i} />
+				))}
+			</ul>
+			{/* Simple display-font team label, centred under the group. */}
+			<motion.span
+				className="font-heading text-[clamp(10px,0.95vw,13px)] tracking-[0.16em] text-vh-purple-300 uppercase"
+				initial={{ opacity: 0, y: 8 }}
+				whileInView={{ opacity: 1, y: 0 }}
+				viewport={{ once: true, amount: 0.6 }}
+				transition={{ duration: 0.5, delay: 0.1 }}
+			>
+				{group.label}
+			</motion.span>
+		</div>
+	);
+}
+
+function withIndex(groups: TeamGroup[], base: number) {
+	let n = base;
+	return groups.map((group) => {
+		const startIndex = n;
+		n += group.members.length;
+		return { group, startIndex };
+	});
+}
+
+export default function TeamRoster() {
+	const r1 = withIndex(row1, 0);
+	const r2 = withIndex(row2, 7);
+	return (
+		<section id="team" aria-labelledby="team-title">
+			<SlideBody fit>
+				<SlideHeading id="team-title">The Team</SlideHeading>
+				<div className="flex flex-col gap-[clamp(22px,3.4svh,40px)]">
+					<Arc>
+						<div className="flex flex-wrap justify-center gap-4 sm:gap-5 lg:gap-5">
+							{r1.map(({ group, startIndex }) => (
+								<TeamGroupCluster key={group.id} group={group} startIndex={startIndex} />
+							))}
+						</div>
+					</Arc>
+					<Arc>
+						<div className="flex flex-wrap justify-center gap-4 sm:gap-5 lg:gap-5">
+							{r2.map(({ group, startIndex }) => (
+								<TeamGroupCluster key={group.id} group={group} startIndex={startIndex} />
+							))}
+						</div>
+					</Arc>
 				</div>
-			</div>
+			</SlideBody>
 		</section>
 	);
 }

@@ -92,55 +92,62 @@ export default function VinylHero() {
 						aria-hidden="true"
 					/>
 				</motion.div>
-				<h1
-					id="event-title"
-					className="font-zen text-[clamp(42px,8vw,130px)] leading-none tracking-[-0.03em] text-white"
-				>
-					<span className="sr-only">{EVENT.name}</span>
-					<span aria-hidden="true" className="inline-flex">
-						{WORD.split("").map((letter, i) => (
-							<motion.span
-								key={i}
-								className="hero-wordmark inline-block pb-[0.18em] -mb-[0.18em]"
-								initial={reducedMotion ? false : { opacity: 0, y: "0.4em", rotateX: -70 }}
-								animate={{ opacity: 1, y: 0, rotateX: 0 }}
-								transition={{ duration: 0.7, delay: 0.25 + i * 0.05, ease: [0.22, 1, 0.36, 1] }}
-							>
-								{letter}
-							</motion.span>
-						))}
-					</span>
-				</h1>
-				<motion.p
-					{...rise(0.8)}
-					className="type-label mt-4 text-vh-purple-300"
-				>
-					
-				</motion.p>
-				<motion.p
-					{...rise(1.05)}
-					className="font-body type-subheading mt-4 mb-2 flex flex-wrap justify-center gap-x-3 text-[clamp(17px,2vw,20px)] text-vh-text-soft">
-					<span className="text-vh-purple-300" aria-hidden="true">
-					</span>
-					<span className="whitespace-nowrap">
-						{EVENT.venue}, {EVENT.city}
-					</span>
-				</motion.p>
-				<motion.div {...rise(0.95)} className="mt-6">
+				{/* Title + tagline share a width-fit column so the tagline's right
+				    edge lines up with the wordmark's right edge (under "Hacks"). */}
+				<div className="flex w-fit max-w-full flex-col">
+					<h1
+						id="event-title"
+						className="font-zen text-[clamp(42px,8vw,130px)] leading-none tracking-[-0.03em] text-white"
+					>
+						<span className="sr-only">{EVENT.name}</span>
+						<span aria-hidden="true" className="inline-flex">
+							{WORD.split("").map((letter, i) => (
+								<motion.span
+									key={i}
+									className="hero-wordmark inline-block pb-[0.18em] -mb-[0.18em]"
+									initial={reducedMotion ? false : { opacity: 0, y: "0.4em", rotateX: -70 }}
+									animate={{ opacity: 1, y: 0, rotateX: 0 }}
+									transition={{ duration: 0.7, delay: 0.25 + i * 0.05, ease: [0.22, 1, 0.36, 1] }}
+								>
+									{letter}
+								</motion.span>
+							))}
+						</span>
+					</h1>
+					<motion.p
+						{...rise(0.35)}
+						className="mt-2.5 w-full text-right font-mono text-[clamp(11px,1.45vw,17px)] tracking-[0.02em] text-vh-text-soft"
+					>
+						{"South's Largest Collegiate Hackathon"}
+					</motion.p>
+				</div>
+				<motion.div {...rise(0.95)} className="mt-10">
 					<EventCountdown />
 				</motion.div>
 			</div>
 
-			<motion.div
-				className="pointer-events-none absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 lg:flex"
+			<motion.a
+				href="#about"
+				aria-label="Scroll to the About section"
+				className="absolute bottom-6 left-1/2 flex -translate-x-1/2 flex-col items-center gap-1.5 rounded-md px-3 py-1 text-vh-faint transition-colors hover:text-vh-purple-300 focus-visible:text-vh-purple-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-vh-purple-300"
 				initial={reducedMotion ? false : { opacity: 0 }}
 				animate={{ opacity: 1 }}
 				transition={{ delay: 1.8 }}
-				aria-hidden="true"
 			>
-				<span className="type-label text-[13px] text-vh-faint">Scroll</span>
-				<span className="scroll-cue block h-8 w-0.5 bg-gradient-to-b from-vh-purple-300 to-transparent" />
-			</motion.div>
+				<span className="type-label text-[13px]">Scroll</span>
+				<svg
+					className="scroll-arrow h-4 w-4"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					strokeWidth="2"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+					aria-hidden="true"
+				>
+					<path d="M6 9l6 6 6-6" />
+				</svg>
+			</motion.a>
 		</section>
 	);
 }
