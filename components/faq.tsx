@@ -115,7 +115,7 @@ export default function FAQ() {
 												+
 											</span>
 										</summary>
-										<p className="type-body max-w-3xl pt-4 pr-8 text-vh-muted">
+										<p className="type-body w-full pt-4 pr-8 text-vh-muted">
 											{answer}
 										</p>
 										{link && (

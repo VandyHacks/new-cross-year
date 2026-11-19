@@ -1,6 +1,4 @@
-// FAQ content, grouped by category. Answers adapted from the VandyHacks XII
-// site and earlier editions. Items marked CONFIRM are policy guesses the
-// organizers still need to verify before launch.
+// FAQ content, grouped by category.
 import { CTA, EVENT } from "@/lib/event";
 
 export type FaqItem = {
@@ -19,139 +17,88 @@ export const faqCategories: FaqCategory[] = [
 		items: [
 			{
 				question: "What is VandyHacks?",
-				answer: "VandyHacks is Vanderbilt's student-run collegiate hackathon: a weekend for students to build projects, learn new skills, meet other hackers, and share what they create. Founded in 2015, it was the first collegiate hackathon to call Nashville home.",
+				answer:
+					"VandyHacks is Vanderbilt University's student-run hackathon organization, bringing students together to build projects, learn new skills, and connect with a community of innovators.",
 			},
 			{
 				question: "What is a hackathon?",
-				answer: "A hackathon is an event where you collaborate with others to build a project from scratch in a short amount of time. It's less about the final product and more about the teamwork, creativity, and learning along the way.",
+				answer:
+					"A hackathon is an event where students collaborate to turn ideas into real projects in a limited amount of time. From websites and apps to AI tools and hardware, there's no limit to what you can create!",
 			},
 			{
-				question: `When and where is ${EVENT.name}?`,
-				answer: `${EVENT.name} takes place ${EVENT.dateLabel} at ${EVENT.venue} in Nashville, Tennessee. We'll share the building, check-in, parking, and arrival details before the event.`,
-			},
-			{
-				question: "How much does it cost?",
-				// CONFIRM
-				answer: "Nothing. VandyHacks is free to attend for accepted hackers.",
-			},
-			{
-				question: "Is it in person?",
-				answer: `${EVENT.name} is planned as a fully in-person event, so there is no virtual participation.`,
-			},
-			{
-				question: "What is the code of conduct?",
-				answer: "VandyHacks follows the MLH Code of Conduct. Everyone at the event, including hackers, mentors, sponsors, and organizers, is expected to follow it.",
-				link: {
-					label: "Read the MLH Code of Conduct",
-					href: "https://mlh.io/code-of-conduct",
-				},
-			},
-		],
-	},
-	{
-		id: "applying",
-		label: "Applying",
-		items: [
-			{
-				question: "Who can apply?",
-				answer: "Anyone who is 18 or older by the day of the event and is currently enrolled in a college or university with a valid student ID. Students from any school and any major are welcome.",
-			},
-			{
-				question: "Do I need hackathon experience?",
-				answer: "No. VandyHacks welcomes first-time hackers as well as returning participants. You'll get a hacker guide a few days before the event, and VandyHacks staff, mentors, and other hackers will be around to help.",
-			},
-			{
-				question: "What if I don't know how to code?",
-				answer: "Even more reason to come! We host beginner workshops, and you can contribute through design, ideas, pitching, and more. Mentors are on hand to help you get started.",
-			},
-			{
-				question: "When do applications open?",
-				answer: "We'll announce the application timeline as soon as it's confirmed. Leave your email and we'll let you know the moment applications open.",
-				link: { label: "Get notified", href: CTA.interest },
+				question: "Do I need coding experience to participate?",
+				answer:
+					"Not at all! Whether you're writing your first line of code or have years of experience, VandyHacks welcomes hackers of all skill levels.",
 			},
 			{
 				question: "Do I need a team?",
-				answer: "No. Teams can have up to four people, and you're welcome to work solo. You don't need a team to apply.",
-			},
-			{
-				question: "How are teams formed?",
-				answer: "Bring friends, or meet people before the event on our Discord. We also run a team-matching event right after the opening ceremony.",
+				answer:
+					"Nope! You can participate with friends or find teammates at the event. We'll help you connect with other hackers.",
 			},
 		],
 	},
 	{
-		id: "event",
-		label: "At the event",
+		id: "xiii",
+		label: EVENT.name,
 		items: [
 			{
-				question: "What should I bring?",
-				answer: "A device you can code or design on, a charger, and anything you'd need for an overnight stay if you're traveling from outside Vanderbilt: toiletries, a change of clothes, and a sleeping bag if you plan to rest at the venue.",
+				question: `When and where is ${EVENT.name}?`,
+				answer: `${EVENT.name} will take place ${EVENT.dateLabel}, at ${EVENT.venue} in Nashville, Tennessee.`,
 			},
 			{
-				question: "Will food be provided?",
-				// CONFIRM
-				answer: "Yes. We provide meals and snacks throughout the weekend. Let us know about any dietary restrictions when you apply.",
+				question: "Who can participate?",
+				answer:
+					"VandyHacks welcomes both undergraduate and graduate students from Vanderbilt and other universities. Whether you're a first-time hacker or an experienced builder, we'd love to have you join us!",
 			},
 			{
-				question: "Will there be other activities?",
-				answer: "Absolutely: workshops, sponsor career fairs, social events, panels, and more. You need to be registered to take part in most of them, even if you don't plan to submit a project.",
+				question: "Is VandyHacks free?",
+				answer: "Yes! VandyHacks is completely free to attend.",
 			},
 			{
-				question: "What can I build?",
-				answer: "Anything. You can make a project on any platform, in any language, or in any format to show our judges: software, hardware, a design, or even a storyboard or idea.",
+				question: "Does VandyHacks provide travel reimbursement?",
+				answer:
+					"We aim to make VandyHacks accessible to students traveling from other universities. Information about travel assistance, eligibility, and reimbursement will be announced soon.",
 			},
 			{
-				question: "Can I work on an older project?",
-				answer: `No. Submissions must be projects that were started, built, and presented during ${EVENT.name}. Projects with a noticeable amount of previously made material are disqualified from all prizes.`,
-			},
-			{
-				question: "Am I eligible for prizes?",
-				answer: "Any team of up to four people that submits a project is eligible. To receive a prize, team members must hold unrestricted work authorization in the United States.",
-			},
-			{
-				question: "Is parking available?",
-				answer: "Yes, parking is available near the venue. We'll share specific garages and directions with accepted hackers before the event.",
-			},
-			{
-				question: "Does VandyHacks reimburse travel?",
-				// CONFIRM
-				answer: "No, we don't. If you can, contact your school's hackathon or CS organization about travel support.",
-			},
-			{
-				question: "I need an accessibility accommodation.",
-				answer: `Email ${EVENT.email} and tell us what you need. We'll work with you before the event to make it work.`,
-				link: {
-					label: `Email ${EVENT.email}`,
-					href: `mailto:${EVENT.email}`,
-				},
+				question: "When does registration open?",
+				answer: `Registration details will be announced soon! Sign up for updates to be notified when registration opens and stay informed about ${EVENT.name}.`,
+				link: { label: "Sign up for updates", href: CTA.interest },
 			},
 		],
 	},
 	{
 		id: "involved",
-		label: "Get involved",
+		label: "Get Involved",
 		items: [
 			{
 				question: "How can my company sponsor VandyHacks?",
-				answer: "We'd love to hear from you. Reach out and the team will walk you through sponsorship opportunities and how to reach 1,000+ student builders.",
-				link: { label: "Become a sponsor", href: CTA.sponsor },
+				answer:
+					"We're always excited to partner with companies that support student innovation and technology. Reach out to our team to explore sponsorship opportunities.",
+				link: {
+					label: EVENT.email,
+					href: `mailto:${EVENT.email}`,
+				},
 			},
 			{
-				question: "How can I judge or mentor?",
-				answer: "Industry professionals, alumni, and grad students are welcome. Tell us a bit about yourself and we'll follow up with next steps.",
-				link: { label: "Judge or mentor", href: CTA.judge },
+				question: "How can I become a mentor or judge?",
+				answer:
+					"We welcome industry professionals, alumni, and others who want to support student innovation. Fill out the form if you're interested in becoming a mentor or judge!",
+				link: { label: "Become a mentor or judge", href: CTA.judge },
 			},
 			{
-				question: "Can I volunteer?",
-				answer: `Yes. Email ${EVENT.email} and let us know you're interested in helping run the event.`,
-			},
-			{
-				question: "Where can I find updates or ask another question?",
-				answer: `Follow @vandyhacks on Instagram for updates, or email ${EVENT.email} with questions.`,
+				question: "How can I join the VandyHacks organizing team?",
+				answer:
+					"Our team works on everything from technology and design to marketing, partnerships, and event planning. We recruit new members through applications, so follow our social media for upcoming opportunities!",
 				link: {
 					label: "@vandyhacks on Instagram",
 					href: "https://www.instagram.com/vandyhacks",
 				},
+			},
+			{
+				question: "How can I register for the next VandyHacks?",
+				answer:
+					"Fill out our interest form to stay updated on upcoming events, registration openings, and announcements!",
+				link: { label: "Fill out the interest form", href: CTA.interest },
 			},
 		],
 	},
