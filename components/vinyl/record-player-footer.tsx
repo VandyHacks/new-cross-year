@@ -61,15 +61,22 @@ function Tonearm({ angle }: { angle: MotionValue<number> }) {
 	);
 }
 
-// The deck's top face: the platter and tonearm, laid out in cqh units.
-function DeckTop() {
-	const { progress, desktop, spin: stageSpin } = useStage();
+// The deck's top face (platter + record) lives inside a 3D perspective/transform
+// context, which is its own stacking context. The pinned record, though, is a
+// `fixed` overlay that paints above the whole deck — so a tonearm drawn inside
+// that context can never sit on top of the record. The fix: draw the tonearm in
+// a SECOND deck that shares a grid cell with the real one (identical geometry →
+// pixel-aligned) but lives OUTSIDE the perspective context and is raised above
+// the record's stacking level (z-25 > the record's z-20). Everything else about
+// the deck and record is unchanged.
+function Deck({ year }: { year: number }) {
+	const { progress, desktop } = useStage();
 	const reducedMotion = useReducedMotion();
 	const ref = useRef<HTMLDivElement>(null);
 	const inView = useInView(ref, { amount: 0.4 });
 	const ownSpin = useMotionValue(0);
 
-	// Scroll-locked `progress` (matching stage-record.tsx) so the two discs cross-fade in lockstep.
+	// 0→1 as the pinned record finishes landing; drops the tonearm on desktop.
 	const landed = useTransform(progress, (p) => handover(landing(p)));
 	const target = useMotionValue(ARM_PARKED);
 	const angle = useSpring(target, { stiffness: 60, damping: 14 });
@@ -85,16 +92,98 @@ function DeckTop() {
 	});
 
 	return (
-		<div ref={ref} className="deck-top turntable">
-			<div aria-hidden="true" className="absolute inset-0 rounded-t-[3cqh] border border-b-0 border-white/12 bg-[linear-gradient(180deg,#0e1430_0%,#18214a_70%,#1d2756_100%)] shadow-[inset_0_2px_0_rgb(255_255_255/0.06)]" />
-			{/* Platter: the metal ring with strobe dots that the record sits on. */}
-			<div aria-hidden="true" className="platter absolute top-[4cqh] left-1/2 size-[92cqh] -translate-x-1/2 rounded-full" />
-			<div aria-hidden="true" data-platter className="absolute top-[6cqh] left-1/2 size-[88cqh] -translate-x-1/2 rounded-full">
-				<motion.div className="size-full" style={{ opacity: desktop ? landed : 1 }}>
-					<Disc spin={desktop ? stageSpin : ownSpin} className="size-full" />
-				</motion.div>
+		<div className="mx-auto grid">
+			{/* Real deck: tilted top face with platter + record, then the front panel
+			    and feet. No tonearm here — it would be trapped under the record. */}
+			<div className="deck relative col-start-1 row-start-1">
+				<div ref={ref} className="deck-top turntable">
+					<div aria-hidden="true" className="absolute inset-0 rounded-t-[3cqh] border border-b-0 border-white/12 bg-[linear-gradient(180deg,#0e1430_0%,#18214a_70%,#1d2756_100%)] shadow-[inset_0_2px_0_rgb(255_255_255/0.06)]" />
+					{/* Platter: the metal ring with strobe dots that the record sits on. */}
+					<div aria-hidden="true" className="platter absolute top-[4cqh] left-1/2 size-[92cqh] -translate-x-1/2 rounded-full" />
+					{/* data-platter stays mounted so the pinned record can measure it. The
+					    disc inside is mobile-only; on desktop the pinned record lands here. */}
+					<div aria-hidden="true" data-platter className="absolute top-[6cqh] left-1/2 size-[88cqh] -translate-x-1/2 rounded-full">
+						<div className="size-full lg:hidden">
+							<Disc spin={ownSpin} className="size-full" />
+						</div>
+					</div>
+				</div>
+				<div className="relative rounded-b-[20px] border border-t-0 border-white/12 bg-[linear-gradient(180deg,#1b2552_0%,#121a3c_18%,#0c1230_100%)] px-[clamp(20px,3vw,44px)] pt-[clamp(36px,4svh,54px)] pb-4 shadow-[inset_0_1px_0_rgb(200_162_255/0.35),0_30px_60px_rgb(0_0_0/0.6)]">
+					<Screw className="top-3 left-3" />
+					<Screw className="top-3 right-3" />
+					<div className="grid grid-cols-2 gap-x-8 gap-y-4 lg:grid-cols-[1.2fr_1.6fr_1.2fr]">
+						<div className="col-span-2 flex items-center gap-4 lg:col-span-1">
+							<Image src="/logo-trimmed.png" alt="VandyHacks" width={261} height={231} className="h-12 w-auto" />
+							<p className="type-body-sm text-vh-subtle">
+								VandyHacks,
+								<br />
+								{EVENT.venue}
+							</p>
+						</div>
+						<nav aria-label="Footer">
+							<h2 className={labelClassName}>Explore</h2>
+							<ul className="grid grid-cols-3 gap-x-6 gap-y-1.5">
+								{explore.map((link) => (
+									<li key={link.href}>
+										<a className={linkClassName} href={link.href}>
+											{link.label}
+										</a>
+									</li>
+								))}
+							</ul>
+						</nav>
+						<div className="col-span-2 lg:col-span-1">
+							<h2 className={labelClassName}>Contact</h2>
+							<a className={linkClassName} href={`mailto:${EVENT.email}`}>
+								{EVENT.email}
+							</a>
+							<ul className="mt-3 flex gap-2">
+								{socials.map(({ label, href, Icon }) => (
+									<li key={label}>
+										<a
+											className={iconLinkClassName}
+											href={href}
+											target="_blank"
+											rel="noopener noreferrer"
+											aria-label={`VandyHacks on ${label} (opens in a new tab)`}
+										>
+											<Icon />
+										</a>
+									</li>
+								))}
+							</ul>
+						</div>
+					</div>
+					<div className="mt-4 flex flex-col gap-2 border-t border-white/10 pt-3 text-[12px] text-vh-faint sm:flex-row sm:items-center sm:justify-between">
+						<p>© {year} VandyHacks</p>
+						<a
+							className="rounded-sm underline-offset-4 hover:underline"
+							href="https://mlh.io/code-of-conduct"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							MLH Code of Conduct
+							<span className="sr-only"> (opens in a new tab)</span>
+						</a>
+						<a className="rounded-sm underline-offset-4 hover:underline" href="#home">
+							Back to top ↑
+						</a>
+					</div>
+				</div>
+				{/* Feet. */}
+				<div className="flex justify-between px-[8%]" aria-hidden="true">
+					<span className="h-2.5 w-14 rounded-b-md bg-[#05081a]" />
+					<span className="h-2.5 w-14 rounded-b-md bg-[#05081a]" />
+				</div>
 			</div>
-			<Tonearm angle={angle} />
+			{/* Tonearm overlay: a second, identical deck in the same grid cell so it
+			    lines up exactly, but outside the real deck's perspective context and
+			    above the pinned record, so the arm + stylus rest on top of the vinyl. */}
+			<div aria-hidden="true" className="deck relative col-start-1 row-start-1 pointer-events-none z-[25]">
+				<div className="deck-top turntable">
+					<Tonearm angle={angle} />
+				</div>
+			</div>
 		</div>
 	);
 }
@@ -171,76 +260,7 @@ export default function RecordPlayerFooter() {
 					))}
 				</ul>
 			</div>
-			<div className="deck relative mx-auto">
-				<DeckTop />
-				<div className="relative rounded-b-[20px] border border-t-0 border-white/12 bg-[linear-gradient(180deg,#1b2552_0%,#121a3c_18%,#0c1230_100%)] px-[clamp(20px,3vw,44px)] pt-[clamp(36px,4svh,54px)] pb-4 shadow-[inset_0_1px_0_rgb(200_162_255/0.35),0_30px_60px_rgb(0_0_0/0.6)]">
-					<Screw className="top-3 left-3" />
-					<Screw className="top-3 right-3" />
-					<div className="grid grid-cols-2 gap-x-8 gap-y-4 lg:grid-cols-[1.2fr_1.6fr_1.2fr]">
-						<div className="col-span-2 flex items-center gap-4 lg:col-span-1">
-							<Image src="/logo-trimmed.png" alt="VandyHacks" width={261} height={231} className="h-12 w-auto" />
-							<p className="type-body-sm text-vh-subtle">
-								VandyHacks,
-								<br />
-								{EVENT.venue}
-							</p>
-						</div>
-						<nav aria-label="Footer">
-							<h2 className={labelClassName}>Explore</h2>
-							<ul className="grid grid-cols-3 gap-x-6 gap-y-1.5">
-								{explore.map((link) => (
-									<li key={link.href}>
-										<a className={linkClassName} href={link.href}>
-											{link.label}
-										</a>
-									</li>
-								))}
-							</ul>
-						</nav>
-						<div className="col-span-2 lg:col-span-1">
-							<h2 className={labelClassName}>Contact</h2>
-							<a className={linkClassName} href={`mailto:${EVENT.email}`}>
-								{EVENT.email}
-							</a>
-							<ul className="mt-3 flex gap-2">
-								{socials.map(({ label, href, Icon }) => (
-									<li key={label}>
-										<a
-											className={iconLinkClassName}
-											href={href}
-											target="_blank"
-											rel="noopener noreferrer"
-											aria-label={`VandyHacks on ${label} (opens in a new tab)`}
-										>
-											<Icon />
-										</a>
-									</li>
-								))}
-							</ul>
-						</div>
-					</div>
-					<div className="mt-4 flex flex-col gap-2 border-t border-white/10 pt-3 text-[12px] text-vh-faint sm:flex-row sm:items-center sm:justify-between">
-						<p>© {year} VandyHacks</p>
-						<a
-							className="rounded-sm underline-offset-4 hover:underline"
-							href="https://mlh.io/code-of-conduct"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							MLH Code of Conduct
-							<span className="sr-only"> (opens in a new tab)</span>
-						</a>
-						<a className="rounded-sm underline-offset-4 hover:underline" href="#home">
-							Back to top ↑
-						</a>
-					</div>
-				</div>
-				{/* Feet. */}
-				<div className="flex justify-between px-[8%]" aria-hidden="true">
-					<span className="h-2.5 w-14 rounded-b-md bg-[#05081a]" />
-					<span className="h-2.5 w-14 rounded-b-md bg-[#05081a]" />
-				</div>
-			</div>
+			<Deck year={year} />
 		</footer>
 	);
 }

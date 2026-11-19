@@ -104,7 +104,6 @@ export default function StageRecord() {
 	const y = useMotionValue(0);
 	const scale = useMotionValue(1);
 	const scaleY = useMotionValue(1);
-	const opacity = useMotionValue(1);
 	const ringOpacity = useMotionValue(1);
 	const idle = useRef(0);
 
@@ -125,7 +124,7 @@ export default function StageRecord() {
 		if (!platter.current?.isConnected) {
 			platter.current = document.querySelector("[data-platter]");
 		}
-		// Squash to the platter's tilted box; the deck's disc takes over at the end.
+		// Squash to the platter's tilted box; this single record sits on it.
 		const goal = platter.current?.getBoundingClientRect();
 		const cx0 = CENTER_X * v;
 		const cy0 = 0.5 * v + 32;
@@ -135,7 +134,6 @@ export default function StageRecord() {
 		y.set(cy0 + (cy1 - cy0) * t - d0 / 2);
 		scale.set(1 + ((goal?.width || d0) / d0 - 1) * t);
 		scaleY.set(1 + ((goal ? goal.height / goal.width : 1) - 1) * t);
-		opacity.set(1 - handover(land));
 		ringOpacity.set(1 - clamp01(land * 2.5));
 	};
 
@@ -196,7 +194,7 @@ export default function StageRecord() {
 			<motion.div className="absolute inset-0" style={{ x: entranceX }}>
 			<motion.div
 				className="absolute top-0 left-0"
-				style={{ x, y, scale, scaleY, opacity, width: d0, height: d0 }}
+				style={{ x, y, scale, scaleY, width: d0, height: d0 }}
 			>
 				<Disc spin={spin} className="size-full" />
 			</motion.div>
