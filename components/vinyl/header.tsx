@@ -119,7 +119,7 @@ export default function VinylHeader() {
 			}}
 				className="fixed inset-x-0 top-0 z-50"
 		>
-			<div className="grain relative flex h-16 items-center border-b border-white/10 bg-vh-navy-950/55 shadow-[inset_0_1px_0_rgb(255_255_255/0.08),0_1px_2px_rgb(0_0_0/0.35),0_8px_16px_-4px_rgb(0_0_0/0.4),0_20px_40px_-12px_rgb(0_0_0/0.5),0_12px_32px_-16px_rgb(113_56_199/0.35)] pr-[calc(clamp(12px,2vw,32px)+clamp(44px,4.6vw,72px)+32px)] pl-[clamp(12px,2vw,32px)] backdrop-blur-xl">
+			<div className="relative flex h-16 items-center border-b border-white/10 bg-vh-navy-950/55 pr-[calc(clamp(12px,2vw,32px)+clamp(44px,4.6vw,72px)+32px)] pl-[clamp(12px,2vw,32px)] backdrop-blur-xl">
 				<a href="#home" aria-label="VandyHacks — back to top" className="flex shrink-0 items-center rounded-sm pr-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-vh-purple-300">
 					<Image src="/logo-trimmed.png" alt="VandyHacks" width={261} height={231} priority className="h-8 w-auto" />
 				</a>

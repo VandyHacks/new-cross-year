@@ -103,7 +103,7 @@ function DeckTop() {
 
 	return (
 		<div ref={ref} className="deck-top turntable" aria-hidden="true">
-			<div className="grain absolute inset-0 rounded-t-[3cqh] border border-b-0 border-white/12 bg-[linear-gradient(180deg,#0e1430_0%,#18214a_70%,#1d2756_100%)] shadow-elev-2" />
+			<div className="absolute inset-0 rounded-t-[3cqh] border border-b-0 border-white/12 bg-[linear-gradient(180deg,#0e1430_0%,#18214a_70%,#1d2756_100%)] shadow-[inset_0_2px_0_rgb(255_255_255/0.06)]" />
 			{/* Platter: the metal ring with strobe dots that the record sits on. */}
 			<div className="platter absolute top-[4cqh] left-[4cqh] size-[92cqh] rounded-full" />
 			<div data-platter className="absolute top-[6cqh] left-[6cqh] size-[88cqh] rounded-full">
@@ -197,7 +197,7 @@ export default function RecordPlayerFooter() {
 			</div>
 			<div className="deck relative mx-auto">
 				<DeckTop />
-				<div className="relative rounded-b-[20px] border border-t-0 border-white/12 bg-[linear-gradient(180deg,#1b2552_0%,#121a3c_18%,#0c1230_100%)] px-[clamp(20px,3vw,44px)] pt-[clamp(20px,3svh,36px)] pb-5 shadow-elev-3">
+				<div className="relative rounded-b-[20px] border border-t-0 border-white/12 bg-[linear-gradient(180deg,#1b2552_0%,#121a3c_18%,#0c1230_100%)] px-[clamp(20px,3vw,44px)] pt-[clamp(20px,3svh,36px)] pb-5 shadow-[inset_0_1px_0_rgb(200_162_255/0.35),0_30px_60px_rgb(0_0_0/0.6)]">
 					<Screw className="top-3 left-3" />
 					<Screw className="top-3 right-3" />
 					<div className="grid grid-cols-2 gap-x-8 gap-y-6 lg:grid-cols-[1.1fr_1.3fr_1fr_1.2fr]">

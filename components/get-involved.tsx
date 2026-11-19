@@ -117,7 +117,7 @@ export default function GetInvolved() {
 						    the rest of the page: a see-through, blurred base that reads
 						    darkest in the title bar. The body and the active tab share
 						    one light tint, so the selected tab still flows into its form. */}
-						<div className="overflow-hidden rounded-xl border border-white/10 bg-vh-navy-950/35 shadow-elev-2 backdrop-blur-md">
+						<div className="overflow-hidden rounded-xl border border-white/10 bg-vh-navy-950/35 shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_20px_50px_rgb(0_0_0/0.3),0_0_40px_rgb(113_56_199/0.14)] backdrop-blur-md">
 							<div className="flex items-end gap-3 bg-black/20 px-2 pt-2 sm:px-3">
 								<div aria-hidden="true" className="mb-3 ml-1 hidden shrink-0 gap-2 sm:flex">
 									<span className="size-3 rounded-full bg-[#ff5f57]" />

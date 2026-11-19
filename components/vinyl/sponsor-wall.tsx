@@ -14,7 +14,7 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 // Hairline cells and a quiet hover (no lift, no glow), the way Linear and
 // Vercel present customer logos: the marks carry the wall, not the tiles.
 const tileClassName =
-	"group relative flex items-center justify-center overflow-hidden rounded-lg border border-white/[0.07] shadow-elev-1 bg-white/[0.025] transition-[border-color,background-color] duration-200 ease-out hover:border-vh-purple-300/50 hover:bg-white/[0.06] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300";
+	"group relative flex items-center justify-center overflow-hidden rounded-lg border border-white/[0.07] bg-white/[0.025] transition-[border-color,background-color] duration-200 ease-out hover:border-vh-purple-300/50 hover:bg-white/[0.06] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300";
 
 // Logos sit at ~70% opacity and come up to full on hover.
 const mono =
