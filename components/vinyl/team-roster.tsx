@@ -23,10 +23,9 @@ function Sleeve({ member, team, index }: { member: TeamMember; team: string; ind
 				<span className="absolute inset-[38%] rounded-full bg-[radial-gradient(circle,#c8a2ff,#7138c7_70%)]" />
 			</span>
 			<span className="relative block aspect-[4/5] overflow-hidden rounded-lg border border-white/10 bg-vh-navy-800 shadow-[0_14px_32px_rgb(0_0_0/0.45)] transition-[transform,border-color,box-shadow] duration-500 ease-out group-hover:-translate-x-[6%] group-hover:-rotate-2 group-hover:border-vh-purple-300/40 group-hover:shadow-[0_16px_34px_rgb(113_56_199/0.28)]">
-				<Image src={member.image} alt="" fill sizes="(max-width: 640px) 44vw, (max-width: 1024px) 20vw, 140px" className="object-cover grayscale transition duration-500 group-hover:grayscale-0" />
-				<span className="absolute inset-0 bg-vh-purple-700/25 opacity-0 mix-blend-color transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100" aria-hidden="true" />
+				<Image src={member.image} alt="" fill sizes="(max-width: 640px) 44vw, (max-width: 1024px) 20vw, 140px" className="object-cover transition duration-500 group-hover:scale-[1.03]" />
 				<span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-vh-navy-950/95 via-vh-navy-950/45 to-transparent p-2 pt-9">
-					<span className="type-subheading block text-[13px] leading-tight text-white">{member.name}</span>
+					<span className="type-subheading block text-center text-[13px] leading-tight text-white">{member.name}</span>
 				</span>
 			</span>
 		</>

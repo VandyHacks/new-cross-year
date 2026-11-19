@@ -52,22 +52,94 @@ export const team: TeamMember[] = [
 	},
 ];
 
-// Redesign roster, grouped by role in display order. Every entry is a
-// template until the organizers send names, headshots and LinkedIn URLs.
-// TODO: Fill in real members; add or remove entries per group as needed.
+// Roster grouped by team, in display order. Members with a headshot also carry
+// their LinkedIn URL; those still awaiting a photo use a placeholder.
 export type TeamGroup = { id: string; label: string; members: TeamMember[] };
 
-const placeholder = (role: string, count: number, offset: number) =>
-	Array.from({ length: count }, (_, i) => ({
-		name: "TBD",
-		role,
-		image: `/team/placeholder-${((offset + i) % 8) + 1}.svg`,
-	}));
-
 export const teamGroups: TeamGroup[] = [
-	{ id: "technology", label: "Technology", members: placeholder("Technology", 3, 0) },
-	{ id: "experience", label: "Experience", members: placeholder("Experience", 4, 3) },
-	{ id: "marketing", label: "Marketing", members: placeholder("Marketing", 3, 7) },
-	{ id: "partnerships", label: "Partnerships", members: placeholder("Partnerships", 3, 2) },
-	{ id: "leadership", label: "Leadership", members: placeholder("Leadership", 2, 5) },
+	{
+		id: "technology",
+		label: "Technology",
+		members: [
+			{
+				name: "Kevin",
+				role: "Technology",
+				image: "/team/kevin.jpg",
+				linkedin: "https://www.linkedin.com/in/kevin-luo-ece",
+			},
+			{
+				name: "Yan",
+				role: "Technology",
+				image: "/team/yan.jpg",
+				linkedin: "https://www.linkedin.com/in/c-qing-yan/",
+			},
+			{ name: "Shaheer", role: "Technology", image: "/team/placeholder-2.svg" },
+		],
+	},
+	{
+		id: "experience",
+		label: "Experience",
+		members: [
+			{ name: "Ji", role: "Experience", image: "/team/placeholder-3.svg" },
+			{
+				name: "Hanan",
+				role: "Experience",
+				image: "/team/hanan.jpg",
+				linkedin: "https://www.linkedin.com/in/hanan-abdelbagi-36341828a",
+			},
+			{
+				name: "Dipayan",
+				role: "Experience",
+				image: "/team/dipayan.jpg",
+				linkedin: "https://www.linkedin.com/in/dipayan-pokharel-35a278398",
+			},
+			{ name: "Eiliyah", role: "Experience", image: "/team/placeholder-4.svg" },
+		],
+	},
+	{
+		id: "marketing",
+		label: "Marketing",
+		members: [
+			{ name: "Jacob", role: "Marketing", image: "/team/placeholder-5.svg" },
+			{
+				name: "Olive",
+				role: "Marketing",
+				image: "/team/olive.jpg",
+				linkedin: "https://www.linkedin.com/in/olive-m-whitley",
+			},
+			{ name: "Geo", role: "Marketing", image: "/team/placeholder-6.svg" },
+		],
+	},
+	{
+		id: "partnerships",
+		label: "Partnerships",
+		members: [
+			{
+				name: "David",
+				role: "Partnerships",
+				image: "/team/david.jpg",
+				linkedin: "https://www.linkedin.com/in/david-boakye-agyemang/",
+			},
+			{ name: "Maya", role: "Partnerships", image: "/team/placeholder-7.svg" },
+			{ name: "Jessica", role: "Partnerships", image: "/team/placeholder-8.svg" },
+		],
+	},
+	{
+		id: "leadership",
+		label: "Leadership",
+		members: [
+			{
+				name: "Shravya",
+				role: "Leadership",
+				image: "/team/shravya.jpg",
+				linkedin: "https://www.linkedin.com/in/shravyaeyunni/",
+			},
+			{
+				name: "Filiz",
+				role: "Leadership",
+				image: "/team/filiz.jpg",
+				linkedin: "https://www.linkedin.com/in/filizkarabulut",
+			},
+		],
+	},
 ];
