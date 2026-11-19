@@ -24,28 +24,12 @@ import { useStage } from "@/components/vinyl/stage";
 import { handover, landing } from "@/components/vinyl/stage-record";
 import { CTA, EVENT } from "@/lib/event";
 
-// Tonearm angles (deg). The arm is drawn hanging straight down from its pivot,
-// and `rotate` (about the pivot) swings the stylus onto the record. Geometry is
-// worked out in the deck-top's local space, where the record is a true circle:
-// centre at (50cqw, 50cqh), radius 44cqh, outer grooves ~38–43cqh out. The pivot
-// is pinned at the top-right corner — 58cqh right of centre (just off the disc)
-// and 7cqh down — and the arm is ~40.6cqh long. Parked (0°): the stylus hangs
-// straight down, clear of the record's right edge. Playing (+31°): it swings in
-// to ~0.82× the radius on the record's right side (~2:30 o'clock), resting on the
-// black grooves. Because the arm and record share the deck's 3D tilt, a landing
-// that is correct in this local space is correct on screen at any size (verified
-// by rendering at 1440- and 1280-wide: stylus lands at the same fractional
-// radius). Positive angle swings the stylus left/inward onto the disc.
+// Tonearm angles (deg): parked clear of the disc, swung onto the grooves to play.
 const ARM_PARKED = 0;
 const ARM_PLAYING = 31;
 
 function Tonearm({ angle }: { angle: MotionValue<number> }) {
-	// Drawn in a 100×300 box (uniform scale: w/100 = h/300) whose pivot is the
-	// transform-origin at (50, 40) — i.e. 50% across, 13.33% down. Placed so the
-	// pivot lands at local (50cqw + 58cqh, 7cqh): with scale s = 48.68/300 ≈
-	// 0.1623 cqh/unit, the pivot sits (8.11cqh, 6.49cqh) in from the box's
-	// top-left, so left = 50cqw + 58 − 8.11 = 50cqw + 49.89cqh, top = 7 − 6.49 =
-	// 0.51cqh. The stylus is drawn at (50, 290), 250 units ≈ 40.6cqh below.
+	// Drawn in a 100×300 box; pivot (transform-origin) at (50, 40), stylus at (50, 290).
 	return (
 		<motion.svg
 			viewBox="0 0 100 300"
@@ -54,10 +38,7 @@ function Tonearm({ angle }: { angle: MotionValue<number> }) {
 			aria-hidden="true"
 		>
 			<defs>
-				{/* userSpaceOnUse (not the default objectBoundingBox): the arm tube is
-				    near-vertical, so a bounding-box gradient would collapse on its
-				    zero-width box and the stroke would vanish. Fixed x-coords keep the
-				    silver shading reliable across the tube's width at any rotation. */}
+				{/* userSpaceOnUse: fixed x-coords so the near-vertical tube's gradient doesn't collapse. */}
 				<linearGradient id="arm-metal" gradientUnits="userSpaceOnUse" x1="38" y1="0" x2="62" y2="0">
 					<stop offset="0%" stopColor="#8b93ad" />
 					<stop offset="50%" stopColor="#f1f0f3" />
@@ -69,14 +50,9 @@ function Tonearm({ angle }: { angle: MotionValue<number> }) {
 			{/* Pivot (the transform-origin). */}
 			<circle cx="50" cy="40" r="17" fill="#151e3d" stroke="#c8a2ff" strokeOpacity="0.5" strokeWidth="2" />
 			<circle cx="50" cy="40" r="7" fill="url(#arm-metal)" />
-			{/* Arm tube: straight down from the pivot, then a subtle bend down-left
-			    that ends inside the cartridge's rear edge (≈43,257) so the two read
-			    as one piece. The cartridge below is rotated −12° about the stylus
-			    contact (50,290) — the same line the tube bends onto — giving a
-			    realistic headshell offset while the contact itself stays fixed. */}
+			{/* Arm tube, bending into the cartridge so they read as one piece. */}
 			<path d="M50 40 L50 214 L45 261" fill="none" stroke="url(#arm-metal)" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" />
-			{/* Cartridge + stylus as one unit; its rear-edge centre sits at the tube
-			    end and the needle tip stays at (50,290). */}
+			{/* Cartridge + stylus, tilted −12° about the needle tip at (50,290). */}
 			<g transform="rotate(-12 50 290)">
 				<rect x="40" y="256" width="20" height="31" rx="4" fill="#d5d9e8" stroke="#aab0c2" strokeWidth="0.75" />
 				<rect x="46.5" y="281" width="7" height="9" rx="1" fill="#c8a2ff" />
@@ -85,21 +61,16 @@ function Tonearm({ angle }: { angle: MotionValue<number> }) {
 	);
 }
 
-// The deck's top face: the platter and tonearm, centred and laid out in cqh
-// units (percent of the face's height) so it scales as one piece.
+// The deck's top face: the platter and tonearm, laid out in cqh units.
 function DeckTop() {
-	const { smooth, desktop, spin: stageSpin } = useStage();
+	const { progress, desktop, spin: stageSpin } = useStage();
 	const reducedMotion = useReducedMotion();
 	const ref = useRef<HTMLDivElement>(null);
 	const inView = useInView(ref, { amount: 0.4 });
 	const ownSpin = useMotionValue(0);
 
-	// The arm drops onto the record once the deck is in view; on desktop the
-	// pinned record also flies in and this disc fades in under it (`landed`), so
-	// we additionally play the moment it has landed. Using `inView` as the
-	// primary trigger keeps the drop reliable regardless of how far the
-	// scroll-progress spring settles.
-	const landed = useTransform(smooth, (p) => handover(landing(p)));
+	// Scroll-locked `progress` (matching stage-record.tsx) so the two discs cross-fade in lockstep.
+	const landed = useTransform(progress, (p) => handover(landing(p)));
 	const target = useMotionValue(ARM_PARKED);
 	const angle = useSpring(target, { stiffness: 60, damping: 14 });
 	useEffect(() => {
@@ -116,12 +87,11 @@ function DeckTop() {
 	return (
 		<div ref={ref} className="deck-top turntable">
 			<div aria-hidden="true" className="absolute inset-0 rounded-t-[3cqh] border border-b-0 border-white/12 bg-[linear-gradient(180deg,#0e1430_0%,#18214a_70%,#1d2756_100%)] shadow-[inset_0_2px_0_rgb(255_255_255/0.06)]" />
-			{/* Platter: the metal ring with strobe dots that the record sits on.
-			    Centred horizontally so the vinyl is the deck's focal point. */}
+			{/* Platter: the metal ring with strobe dots that the record sits on. */}
 			<div aria-hidden="true" className="platter absolute top-[4cqh] left-1/2 size-[92cqh] -translate-x-1/2 rounded-full" />
 			<div aria-hidden="true" data-platter className="absolute top-[6cqh] left-1/2 size-[88cqh] -translate-x-1/2 rounded-full">
 				<motion.div className="size-full" style={{ opacity: desktop ? landed : 1 }}>
-					<Disc spin={desktop ? stageSpin : ownSpin} className="size-full" minimal />
+					<Disc spin={desktop ? stageSpin : ownSpin} className="size-full" />
 				</motion.div>
 			</div>
 			<Tonearm angle={angle} />
@@ -132,9 +102,7 @@ function DeckTop() {
 const linkClassName =
 	"type-body-sm inline-block rounded-sm text-vh-text-soft underline-offset-4 transition-colors hover:text-white hover:underline hover:decoration-vh-purple-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300";
 const labelClassName = "type-label mb-3 text-[10px] text-vh-purple-300";
-// The three Get Involved CTAs, shown as a centred row of pill buttons above the
-// turntable. Subtle purple border + tint matching the site, with a soft glow on
-// hover/focus. Sized to stay consistent and wrap gracefully on narrow screens.
+// Get Involved CTA pill buttons above the turntable.
 const ctaButtonClassName =
 	"type-button inline-flex min-w-[8rem] items-center justify-center rounded-lg border border-vh-purple-300/50 bg-vh-purple-700/10 px-4 py-2 text-[clamp(12px,1.2vw,14px)] text-vh-purple-100 transition-[color,background-color,border-color,box-shadow] duration-200 hover:border-vh-purple-300 hover:bg-vh-purple-700/25 hover:text-white hover:shadow-[0_0_18px_rgba(200,162,255,0.35)] focus-visible:border-vh-purple-300 focus-visible:text-white focus-visible:shadow-[0_0_18px_rgba(200,162,255,0.35)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300";
 const iconLinkClassName =
@@ -173,8 +141,7 @@ function Screw({ className }: { className: string }) {
 	);
 }
 
-// The page ends on a record player seen from slightly above: the tilted deck
-// is where the record lands, and the footer is the player's front panel.
+// The page ends on a record player: the tilted deck is where the record lands.
 export default function RecordPlayerFooter() {
 	const year = new Date().getFullYear();
 
