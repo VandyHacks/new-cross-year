@@ -29,7 +29,7 @@ export const SLIDES = [
 	{ key: "sponsors", label: "Sponsors" },
 	{ key: "team", label: "Team" },
 	{ key: "faq", label: "FAQ" },
-	{ key: "get-involved", label: "Apply" },
+	{ key: "get-involved", label: "Get Involved" },
 	{ key: "footer" },
 ] as const;
 

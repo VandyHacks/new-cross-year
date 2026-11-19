@@ -86,9 +86,15 @@ function RingLabel({
 				href={`#${slideKey}`}
 				tabIndex={-1}
 				style={{ x: radius, y: "-50%", scale, pointerEvents }}
-				className="block origin-left cursor-pointer font-heading text-[clamp(16px,2.8vh,30px)] tracking-[0.08em] whitespace-nowrap text-white uppercase [text-shadow:0_0_24px_rgb(136_83_220/0.7)]"
+				className="block origin-left cursor-pointer font-heading text-[clamp(16px,2.8vh,30px)] leading-[1.05] tracking-[0.08em] whitespace-nowrap text-white uppercase [text-shadow:0_0_24px_rgb(136_83_220/0.7)]"
 			>
-				{label}
+				{/* Multi-word labels (e.g. "Get Involved") stack so each line stays
+				    within the groove and the font can stay large. */}
+				{label.split(" ").map((word, i) => (
+					<span key={i} className="block">
+						{word}
+					</span>
+				))}
 			</motion.a>
 		</motion.div>
 	);
