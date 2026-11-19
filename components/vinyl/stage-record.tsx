@@ -156,7 +156,7 @@ export default function StageRecord() {
 			aria-hidden="true"
 		>
 			<motion.div
-				className="absolute top-0 left-0"
+				className="absolute top-0 left-0 rounded-full shadow-elev-3"
 				style={{ x, y, scale, scaleY, opacity, width: d0, height: d0 }}
 			>
 				<Disc spin={spin} className="size-full" />

@@ -58,6 +58,10 @@ html {
 }
 
 @theme {
+	/* Layered elevation: top-edge highlight + stacked soft shadows + purple ambient. */
+	--shadow-elev-1: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 1px 2px rgb(0 0 0 / 0.3), 0 4px 8px -2px rgb(0 0 0 / 0.35), 0 10px 20px -8px rgb(0 0 0 / 0.4), 0 8px 20px -12px rgb(113 56 199 / 0.3);
+	--shadow-elev-2: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 1px 2px rgb(0 0 0 / 0.35), 0 8px 16px -4px rgb(0 0 0 / 0.4), 0 20px 40px -12px rgb(0 0 0 / 0.5), 0 12px 32px -16px rgb(113 56 199 / 0.35);
+	--shadow-elev-3: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 2px 4px rgb(0 0 0 / 0.4), 0 12px 24px -6px rgb(0 0 0 / 0.45), 0 30px 60px -16px rgb(0 0 0 / 0.6), 0 24px 64px -20px rgb(113 56 199 / 0.45);
 	/* Brand palette — dark navy + dark purple. Use these (bg-vh-navy-950,
 	   text-vh-purple-300, …) instead of hard-coded hex values. */
 	--color-vh-navy-950: #080d20;
@@ -341,14 +345,22 @@ html:has(.vinyl-stage) {
 		repeating-radial-gradient(
 			circle at center,
 			#07070d 0,
-			#07070d 1.5px,
-			#15141f 2.2px,
-			#07070d 3px
+			#07070d 0.9px,
+			#23222f 1.3px,
+			#07070d 1.8px
+		),
+		repeating-radial-gradient(
+			circle at center,
+			transparent 0,
+			transparent 11px,
+			rgb(255 255 255 / 0.06) 11.5px,
+			transparent 12.5px
 		),
 		#07070d;
 	box-shadow:
 		0 0 0 1px rgb(200 162 255 / 0.18),
-		0 30px 80px rgb(0 0 0 / 0.6),
+		0 18px 30px -8px rgb(0 0 0 / 0.55),
+		0 40px 90px rgb(0 0 0 / 0.55),
 		0 0 120px rgb(113 56 199 / 0.3);
 }
 
@@ -386,7 +398,15 @@ html:has(.vinyl-stage) {
 		rgb(200 162 255 / 0.12) 202deg,
 		transparent 230deg
 	);
+	/* Fade the highlight off the label so it reads as light on the grooves. */
+	mask-image: radial-gradient(circle, transparent 36%, black 48%, black 96%, transparent 100%);
 	mix-blend-mode: screen;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.vinyl-sheen {
+		opacity: 0.6;
+	}
 }
 
 .platter {
@@ -718,4 +738,20 @@ html.is-paused .hero-twinkle::after,
 html.is-paused .skyline-twinkle 
 html.is-paused .scroll-note {
 	animation-play-state: paused !important;
+}
+
+/* Matte grain overlay. Host must be positioned (relative/absolute). */
+.grain {
+	isolation: isolate;
+}
+.grain::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	pointer-events: none;
+	opacity: 0.09;
+	mix-blend-mode: overlay;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+	background-size: 160px 160px;
 }
