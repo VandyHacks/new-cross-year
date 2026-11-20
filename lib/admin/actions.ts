@@ -67,7 +67,11 @@ export async function sendMagicLink(formData: FormData) {
 				shouldCreateUser: false,
 			},
 		});
-		if (otpError) {
+		// Supabase allows one link per email per minute. A repeat request inside
+		// that window means a link was just sent and still works, so show the
+		// normal "sent" screen rather than an error (which would also reveal
+		// that the email is an admin).
+		if (otpError && otpError.code !== "over_email_send_rate_limit") {
 			console.error("Magic link failed", otpError);
 			redirect("/admin/login?error=server");
 		}

@@ -39,17 +39,17 @@ export const interestSchema = z.object({
 	grad_year: z
 		.string()
 		.trim()
-		// "grad" (Graduate Student) and "" both store as null — the column only
-		// holds a class year (smallint 2024–2040).
-		.transform((value) =>
-			value === "" || value === "grad" ? null : Number(value),
-		)
+		// A class year (2024–2040) or "grad" (Graduate Student); "" is no answer.
 		.refine(
 			(value) =>
-				value === null ||
-				(Number.isInteger(value) && value >= 2024 && value <= 2040),
-			{ message: "Enter a graduation year between 2024 and 2040." },
-		),
+				value === "" ||
+				value === "grad" ||
+				(/^\d{4}$/.test(value) &&
+					Number(value) >= 2024 &&
+					Number(value) <= 2040),
+			{ message: "Choose a graduation year." },
+		)
+		.transform((value) => (value === "" ? null : value)),
 	first_hackathon: z
 		.enum(["yes", "no", ""])
 		.transform((value) => (value === "" ? null : value === "yes")),

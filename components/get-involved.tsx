@@ -19,7 +19,6 @@ const tabs = [
 		label: "Hackers",
 		heading: "Be first to know",
 		blurb: "Registration for VandyHacks XIII isn't open yet! Leave your information below to be notified when it opens.",
-		command: "vandyhacks://interest",
 		submitLabel: "Notify me",
 		fields: interestFields,
 		action: submitInterest,
@@ -29,7 +28,6 @@ const tabs = [
 		label: "Judge/Mentor",
 		heading: "Help shape what's next",
 		blurb: "Interested in judging or mentoring at VandyHacks XIII? Share your information below, and we'll be in touch!",
-		command: "vandyhacks://judge",
 		submitLabel: "Offer to help",
 		fields: judgeFields,
 		action: submitJudge,
@@ -39,7 +37,6 @@ const tabs = [
 		label: "Sponsor",
 		heading: "Partner with VandyHacks",
 		blurb: "Connect with 200+ hackers at VandyHacks XIII! Leave your information below, and our team will reach out.",
-		command: "vandyhacks://sponsor",
 		submitLabel: "Get in touch",
 		fields: sponsorFields,
 		action: submitSponsor,
@@ -182,7 +179,6 @@ export default function GetInvolved() {
 												action={tab.action}
 												fields={[...tab.fields]}
 												submitLabel={tab.submitLabel}
-												command={tab.command}
 												active={selected}
 											/>
 										</div>
