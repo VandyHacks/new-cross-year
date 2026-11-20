@@ -1,6 +1,6 @@
 // Field definitions for the three Get Involved forms. The server-side rules
 // live in lib/forms/schemas.ts; keep names in sync with those schemas.
-import { sponsorTiers } from "@/lib/forms/schemas";
+import { gradYearValues, sponsorTiers } from "@/lib/forms/schemas";
 
 export type FieldSpec = {
 	name: string;
@@ -15,13 +15,13 @@ export type FieldSpec = {
 	maxLength?: number;
 };
 
+// Same values the server accepts (lib/forms/schemas.ts).
 const gradYears = [
 	{ value: "", label: "Select…" },
-	{ value: "2027", label: "2027" },
-	{ value: "2028", label: "2028" },
-	{ value: "2029", label: "2029" },
-	{ value: "2030", label: "2030" },
-	{ value: "grad", label: "Graduate Student" },
+	...gradYearValues.map((value) => ({
+		value,
+		label: value === "grad" ? "Graduate Student" : value,
+	})),
 ];
 
 export const interestFields: FieldSpec[] = [
