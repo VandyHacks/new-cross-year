@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { deleteSubmission, updateSubmission } from "@/lib/admin/actions";
 import { requireAdmin } from "@/lib/admin/auth";
 import { isKindId, kinds, statuses } from "@/lib/admin/kinds";
+import { sponsorTiers } from "@/lib/forms/schemas";
 import {
 	fetchPage,
 	type Filters,
@@ -36,6 +37,20 @@ const formatDate = (value: string) =>
 function displayValue(key: string, value: Row[string]) {
 	if (value === null || value === "") return null;
 	if (key === "first_hackathon") return value ? "Yes" : "No";
+	if (key === "grad_year" && value === "grad") return "Graduate Student";
+	if (key === "role")
+		return value === "both"
+			? "Judge & Mentor"
+			: value === "judge"
+				? "Judge"
+				: value === "mentor"
+					? "Mentor"
+					: String(value);
+	if (key === "tier_interest")
+		return (
+			sponsorTiers.find((tier) => tier.value === value)?.label ??
+			String(value)
+		);
 	return String(value);
 }
 
@@ -95,7 +110,9 @@ export default async function SubmissionsPage({
 						{total}{" "}
 						{total === 1 ? kind.singular : `${kind.singular}s`}
 						{filters.q || filters.status
-							? " match your filters"
+							? total === 1
+								? " matches your filters"
+								: " match your filters"
 							: ""}
 					</p>
 				</div>

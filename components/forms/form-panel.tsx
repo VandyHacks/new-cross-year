@@ -12,8 +12,6 @@ type FormPanelProps = {
 	action: Action;
 	fields: FieldSpec[];
 	submitLabel: string;
-	// Shown in the success message, e.g. "vandyhacks://interest".
-	command: string;
 	// False while the tab is hidden (pauses the Turnstile widget).
 	active: boolean;
 };
@@ -80,7 +78,10 @@ function Field({
 			) : (
 				<input
 					{...shared}
-					type={spec.type}
+					// URL fields accept "linkedin.com/in/you" (the server adds
+					// https://), which a native type="url" input would block.
+					type={spec.type === "url" ? "text" : spec.type}
+					inputMode={spec.type === "url" ? "url" : undefined}
 					maxLength={spec.maxLength}
 					autoComplete={spec.autoComplete}
 					placeholder={spec.placeholder}
@@ -100,7 +101,6 @@ function FormInner({
 	action,
 	fields,
 	submitLabel,
-	command,
 	active,
 	onReset,
 }: FormPanelProps & { onReset: () => void }) {
@@ -112,7 +112,6 @@ function FormInner({
 	if (state.status === "success") {
 		return (
 			<div role="status" className="py-6 text-center">
-				<p className="type-label mb-3 text-vh-purple-300">{`// ${command} — sent`}</p>
 				<p className="type-body mx-auto max-w-md text-white">
 					{state.message}
 				</p>
