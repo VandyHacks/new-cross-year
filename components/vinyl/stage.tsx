@@ -19,9 +19,7 @@ import {
 	useState,
 } from "react";
 
-// Slides in page order. The ones with a `label` sit on the vinyl record's
-// label ring; the footer is the record player the record lands on at the end
-// of the page, so it has no label.
+// Slides in page order; labelled ones sit on the record's ring, the footer has none.
 export const SLIDES = [
 	{ key: "home", label: "Home" },
 	{ key: "about", label: "About" },
@@ -74,9 +72,8 @@ export function useMediaQuery(query: string) {
 	return matches;
 }
 
-// Slides taller than the viewport (FAQ, Get Involved) hold their index while
-// they scroll, then hand over to the next slide during the final viewport of
-// travel, so the record only turns while a new slide is coming into view.
+// Slides taller than the viewport hold their index, handing over only as the next
+// slide comes into view, so the record turns only during that transition.
 function progressAt(y: number, vh: number, tops: number[], heights: number[]) {
 	for (let i = 0; i < tops.length - 1; i++) {
 		if (y < tops[i + 1]) {
@@ -103,14 +100,8 @@ function slideForHash(hash: string): SlideKey | null {
 	return SLIDES.find((s) => s.key === id)?.key ?? null;
 }
 
-// One owner for every programmatic scroll, so nothing competes:
-// - In-page links (#about, #get-involved/judge, …) glide to the exact top of
-//   their slide. A click mid-glide retargets from wherever the page is, so
-//   rapid clicking always ends on the last section clicked.
-// - Wheel, touch and keys stay fully native (the way Apple's product pages
-//   work) and instantly cancel any glide.
-// - On desktop, once native scrolling fully stops just past a slide edge, the
-//   page settles onto it.
+// One owner for programmatic scroll: in-page links glide to a slide top, native
+// wheel/touch/keys cancel any glide, and desktop settles onto the nearest edge.
 function useScrollDirector(
 	bounds: RefObject<{ tops: number[]; heights: number[] }>,
 	{ desktop, reducedMotion }: { desktop: boolean; reducedMotion: boolean },

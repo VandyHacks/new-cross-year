@@ -312,10 +312,21 @@ html:has(.vinyl-stage) {
 .slide-legacy > section {
 	padding-top: 6rem;
 }
+/* Legacy slides fill the viewport and column-flow so the body centres below the pinned heading. */
+.slide-legacy > section,
+.slide-legacy .section-container,
+.slide-legacy .section-container > div {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+}
+.slide-legacy > section {
+	min-height: 100svh;
+}
 @media (min-width: 1024px) {
 	.slide-frame,
 	.slide-legacy > section {
-		padding-top: max(7rem, 15svh);
+		padding-top: max(6rem, 8svh);
 		padding-right: clamp(32px, 5vw, 96px);
 	}
 	.slide-legacy .section-container {

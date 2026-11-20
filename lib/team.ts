@@ -110,7 +110,12 @@ export const teamGroups: TeamGroup[] = [
 		id: "marketing",
 		label: "Marketing",
 		members: [
-			{ name: "Jacob", role: "Marketing", image: "/team/placeholder-5.svg" },
+			{
+				name: "Jacob",
+				role: "Marketing",
+				image: "/team/jacob.jpg",
+				linkedin: "https://www.linkedin.com/in/jacob--kaiser",
+			},
 			{
 				name: "Olive",
 				role: "Marketing",

@@ -176,10 +176,10 @@ export default function StageRecord() {
 		return () => controls.stop();
 	}, [vh, reducedMotion, entrance]);
 
-	// Once it's on the platter, the record keeps playing.
+	// Once it's on the platter, the record keeps playing (reversed direction).
 	useAnimationFrame((_, delta) => {
 		if (reducedMotion || landing(smooth.get()) < 0.98) return;
-		idle.current += (PLAY_SPEED * delta) / 1000;
+		idle.current -= (PLAY_SPEED * delta) / 1000;
 		spin.set(-smooth.get() * SPIN_PER_SLIDE + idle.current);
 	});
 

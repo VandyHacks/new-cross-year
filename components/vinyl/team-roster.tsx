@@ -6,14 +6,12 @@ import Arc from "@/components/vinyl/arc";
 import { SlideBody, SlideHeading } from "@/components/vinyl/slides";
 import { type TeamGroup, type TeamMember, teamGroups } from "@/lib/team";
 
-// Row 1: Technology (3) + Experience (4) = 7 cards.
-// Row 2: Marketing (3) + Partnerships (3) + Leadership (2) = 8 cards.
-const row1 = teamGroups.slice(0, 2);
-const row2 = teamGroups.slice(2);
+// Two independently-centred rows: Leadership/Technology/Marketing, then Experience/Partnerships.
+const byId = (id: string) => teamGroups.find((g) => g.id === id)!;
+const row1 = ["leadership", "technology", "marketing"].map(byId);
+const row2 = ["experience", "partnerships"].map(byId);
 
-// A portrait card. On hover a small decorative record slides out from behind to
-// the right (capped at ~28% of its diameter), while the card tilts and gains a
-// subtle purple highlight.
+// A portrait card; on hover a decorative record slides out behind it and the card tilts.
 function Sleeve({ member, team, index }: { member: TeamMember; team: string; index: number }) {
 	const reducedMotion = useReducedMotion();
 	const body = (
@@ -89,7 +87,7 @@ function withIndex(groups: TeamGroup[], base: number) {
 
 export default function TeamRoster() {
 	const r1 = withIndex(row1, 0);
-	const r2 = withIndex(row2, 7);
+	const r2 = withIndex(row2, 8);
 	return (
 		<section id="team" aria-labelledby="team-title">
 			<SlideBody fit>

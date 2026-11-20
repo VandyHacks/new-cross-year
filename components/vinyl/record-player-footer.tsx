@@ -61,14 +61,8 @@ function Tonearm({ angle }: { angle: MotionValue<number> }) {
 	);
 }
 
-// The deck's top face (platter + record) lives inside a 3D perspective/transform
-// context, which is its own stacking context. The pinned record, though, is a
-// `fixed` overlay that paints above the whole deck — so a tonearm drawn inside
-// that context can never sit on top of the record. The fix: draw the tonearm in
-// a SECOND deck that shares a grid cell with the real one (identical geometry →
-// pixel-aligned) but lives OUTSIDE the perspective context and is raised above
-// the record's stacking level (z-25 > the record's z-20). Everything else about
-// the deck and record is unchanged.
+// The tonearm is drawn in a second deck sharing the same grid cell but outside the
+// real deck's perspective context, so it can sit above the pinned record (z-25 > z-20).
 function Deck({ year }: { year: number }) {
 	const { progress, desktop } = useStage();
 	const reducedMotion = useReducedMotion();
@@ -88,20 +82,18 @@ function Deck({ year }: { year: number }) {
 	}, [inView, landed, target]);
 
 	useAnimationFrame((_, delta) => {
-		if (!desktop && inView && !reducedMotion) ownSpin.set(ownSpin.get() + delta * 0.09);
+		if (!desktop && inView && !reducedMotion) ownSpin.set(ownSpin.get() - delta * 0.09);
 	});
 
 	return (
 		<div className="mx-auto grid">
-			{/* Real deck: tilted top face with platter + record, then the front panel
-			    and feet. No tonearm here — it would be trapped under the record. */}
+			{/* Real deck; the tonearm lives in the overlay below, not here. */}
 			<div className="deck relative col-start-1 row-start-1">
 				<div ref={ref} className="deck-top turntable">
 					<div aria-hidden="true" className="absolute inset-0 rounded-t-[3cqh] border border-b-0 border-white/12 bg-[linear-gradient(180deg,#0e1430_0%,#18214a_70%,#1d2756_100%)] shadow-[inset_0_2px_0_rgb(255_255_255/0.06)]" />
-					{/* Platter: the metal ring with strobe dots that the record sits on. */}
+					{/* Platter ring the record sits on. */}
 					<div aria-hidden="true" className="platter absolute top-[4cqh] left-1/2 size-[92cqh] -translate-x-1/2 rounded-full" />
-					{/* data-platter stays mounted so the pinned record can measure it. The
-					    disc inside is mobile-only; on desktop the pinned record lands here. */}
+					{/* data-platter stays mounted for the pinned record to measure; disc inside is mobile-only. */}
 					<div aria-hidden="true" data-platter className="absolute top-[6cqh] left-1/2 size-[88cqh] -translate-x-1/2 rounded-full">
 						<div className="size-full lg:hidden">
 							<Disc spin={ownSpin} className="size-full" />
@@ -176,9 +168,7 @@ function Deck({ year }: { year: number }) {
 					<span className="h-2.5 w-14 rounded-b-md bg-[#05081a]" />
 				</div>
 			</div>
-			{/* Tonearm overlay: a second, identical deck in the same grid cell so it
-			    lines up exactly, but outside the real deck's perspective context and
-			    above the pinned record, so the arm + stylus rest on top of the vinyl. */}
+			{/* Tonearm overlay: aligned deck above the record so the arm rests on top. */}
 			<div aria-hidden="true" className="deck relative col-start-1 row-start-1 pointer-events-none z-[25]">
 				<div className="deck-top turntable">
 					<Tonearm angle={angle} />

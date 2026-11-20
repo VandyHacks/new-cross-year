@@ -87,8 +87,8 @@ export default function GetInvolved() {
 
 	return (
 		<section id="get-involved" aria-labelledby="get-involved-title">
-			<SlideBody fit>
-				<SlideHeading id="get-involved-title" wrapperClassName="mb-[clamp(24px,4.5svh,52px)]">
+			<SlideBody fit anchorTop>
+				<SlideHeading id="get-involved-title">
 					Get Involved
 				</SlideHeading>
 				<Arc className="mb-[clamp(14px,2.6svh,28px)]">
