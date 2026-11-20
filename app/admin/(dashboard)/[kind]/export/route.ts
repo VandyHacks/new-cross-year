@@ -5,12 +5,15 @@ import { fetchAll, parseFilters, type Row } from "@/lib/admin/queries";
 // Excel needs a BOM to read UTF-8 CSVs correctly.
 const BOM = "\uFEFF";
 
-// Spreadsheet apps run cells starting with these as formulas; prefix a quote
-// so a malicious submission can't execute when an admin opens the export.
+// Spreadsheet apps run cells starting with these as formulas (also after
+// leading spaces, and in the full-width forms some locales accept); prefix a
+// quote so a malicious submission can't execute when an admin opens the export.
+const FORMULA_START = /^[\t\r\n]|^\s*[=+\-@＝＋－＠]/;
+
 function csvCell(value: Row[string]) {
 	if (value === null || value === undefined) return "";
 	let text = String(value);
-	if (/^[=+\-@\t\r]/.test(text)) text = `'${text}`;
+	if (FORMULA_START.test(text)) text = `'${text}`;
 	return /[",\r\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
 }
 
