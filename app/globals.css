@@ -741,3 +741,394 @@ html.is-paused .scroll-arrow,
 html.is-paused .scroll-note {
 	animation-play-state: paused !important;
 }
+
+/* Impact: native vertical scrolling carries a short history rail sideways. */
+.impact-runway {
+	position: relative;
+}
+.impact-runway-pinned .impact-sticky {
+	position: sticky;
+	top: 0;
+	height: 100svh;
+}
+.impact-slide {
+	padding-top: clamp(82px, 11svh, 110px);
+	padding-bottom: 18px;
+}
+.impact-runway-pinned .impact-slide {
+	height: 100svh;
+}
+.impact-slide #impact-title {
+	font-size: clamp(30px, 5svh, 52px);
+}
+.impact-history {
+	min-width: 0;
+	color: var(--color-vh-text);
+}
+.impact-intro {
+	margin: 0 0 10px;
+	font-size: clamp(22px, 3svh, 30px);
+	line-height: 1.4;
+	text-wrap: balance;
+}
+.impact-intro span {
+	color: var(--color-vh-purple-300);
+}
+.impact-community {
+	margin: 0 0 clamp(16px, 3svh, 28px);
+	font-size: 13px;
+	line-height: 1.8;
+	color: var(--color-vh-muted);
+}
+.impact-community strong {
+	color: var(--color-vh-purple-100);
+	font-weight: 600;
+}
+.impact-scroll-toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	font-family: var(--font-space-mono), monospace;
+	font-size: 10px;
+	color: var(--color-vh-subtle);
+}
+.impact-scroll-toolbar p,
+.impact-scroll-toolbar a {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+}
+.impact-scroll-toolbar a {
+	flex-shrink: 0;
+	min-height: 28px;
+	color: var(--color-vh-purple-300);
+}
+.impact-history a:hover {
+	color: white;
+}
+.impact-history :is(button, a, [tabindex]):focus-visible {
+	outline: 2px solid var(--color-vh-purple-300);
+	outline-offset: 3px;
+}
+.impact-scroll-viewport {
+	position: relative;
+	margin-top: clamp(12px, 2svh, 18px);
+	overflow-x: auto;
+	overscroll-behavior-x: contain;
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-vh-purple-600) transparent;
+}
+.impact-runway-pinned .impact-scroll-viewport {
+	overflow: clip;
+}
+.impact-scroll-rail {
+	display: flex;
+	width: max-content;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.impact-scroll-chapter {
+	width: clamp(300px, 33vw, 440px);
+	flex-shrink: 0;
+}
+.impact-chapter-year {
+	padding-right: 36px;
+	font-family: var(--font-space-mono), monospace;
+	font-size: clamp(36px, 5.5svh, 54px);
+	line-height: 1.1;
+	letter-spacing: -0.04em;
+	color: var(--color-vh-purple-300);
+}
+.impact-chapter-rule {
+	position: relative;
+	height: 1px;
+	margin: 20px 0 24px;
+	background: rgb(200 162 255 / 30%);
+}
+.impact-chapter-rule > span {
+	position: absolute;
+	top: -4px;
+	left: 0;
+	width: 9px;
+	height: 9px;
+	border: 1px solid var(--color-vh-purple-400);
+	border-radius: 50%;
+	background: var(--color-vh-navy-950);
+	transition:
+		background-color 180ms,
+		box-shadow 180ms;
+}
+.impact-scroll-chapter.is-current .impact-chapter-rule > span {
+	background: var(--color-vh-purple-300);
+	box-shadow: 0 0 0 5px rgb(200 162 255 / 14%);
+}
+.impact-scroll-chapter:last-child .impact-chapter-rule {
+	width: 24px;
+}
+.impact-scroll-chapter article {
+	padding-right: 44px;
+}
+.impact-chapter-label {
+	margin: 0 0 12px;
+	font-family: var(--font-space-mono), monospace;
+	font-size: 10px;
+	line-height: 1.6;
+	color: var(--color-vh-purple-300);
+}
+.impact-chapter-label span {
+	color: var(--color-vh-subtle);
+}
+.impact-scroll-chapter h3 {
+	max-width: 23ch;
+	margin: 0 0 12px;
+	font-family: var(--font-inter), sans-serif;
+	font-size: clamp(22px, 2.2vw, 28px);
+	font-weight: 500;
+	line-height: 1.35;
+	text-wrap: balance;
+}
+.impact-chapter-story {
+	max-width: 42ch;
+	margin: 0;
+	font-size: 13px;
+	line-height: 1.85;
+	color: var(--color-vh-text-soft);
+	text-wrap: pretty;
+}
+.impact-growth-chart {
+	max-width: 310px;
+	margin: 18px 0 0;
+}
+.impact-growth-row {
+	display: grid;
+	grid-template-columns: 34px minmax(0, 1fr) 26px;
+	align-items: center;
+	gap: 10px;
+	margin: 10px 0;
+	font-family: var(--font-space-mono), monospace;
+	font-size: 10px;
+	color: var(--color-vh-muted);
+}
+.impact-growth-row > div {
+	height: 9px;
+}
+.impact-growth-row > div > span {
+	display: block;
+	height: 100%;
+	border-radius: 2px;
+	background: var(--color-vh-purple-700);
+}
+.impact-growth-row strong {
+	text-align: right;
+	font-size: 14px;
+	font-weight: 400;
+}
+.impact-growth-peak > div > span {
+	background: var(--color-vh-purple-300);
+}
+.impact-growth-peak strong {
+	color: var(--color-vh-purple-100);
+}
+.impact-growth-chart figcaption {
+	margin-top: 10px;
+	font-size: 10px;
+	line-height: 1.5;
+	color: var(--color-vh-subtle);
+}
+.impact-project-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	min-height: 36px;
+	margin-top: 10px;
+	font-family: var(--font-space-mono), monospace;
+	font-size: 10px;
+	color: var(--color-vh-purple-300);
+}
+.impact-project-link:hover {
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+.impact-scroll-footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+	margin-top: clamp(10px, 1.5svh, 18px);
+}
+.impact-chapter-navigation,
+.impact-chapter-dots {
+	display: flex;
+	align-items: center;
+}
+.impact-chapter-navigation {
+	gap: 12px;
+}
+.impact-chapter-navigation button {
+	display: grid;
+	width: 36px;
+	height: 36px;
+	place-items: center;
+	border-radius: 6px;
+	color: var(--color-vh-purple-100);
+	cursor: pointer;
+}
+.impact-chapter-navigation button:hover:not(:disabled) {
+	background: rgb(200 162 255 / 12%);
+}
+.impact-chapter-navigation button:disabled {
+	cursor: default;
+	opacity: 0.3;
+}
+.impact-chapter-dots {
+	gap: 1px;
+}
+.impact-chapter-dots button {
+	width: 28px;
+}
+.impact-chapter-dots button > span {
+	width: 5px;
+	height: 5px;
+	border-radius: 50%;
+	background: var(--color-vh-faint);
+}
+.impact-chapter-dots button[aria-current="step"] > span {
+	width: 18px;
+	height: 4px;
+	border-radius: 2px;
+	background: var(--color-vh-purple-300);
+}
+.impact-chapter-position {
+	font-family: var(--font-space-mono), monospace;
+	font-size: 11px;
+	color: var(--color-vh-muted);
+}
+.impact-scroll-progress {
+	height: 2px;
+	margin-top: 6px;
+	background: rgb(200 162 255 / 15%);
+}
+.impact-scroll-progress > div {
+	width: 100%;
+	height: 100%;
+	transform-origin: left;
+	background: var(--color-vh-purple-300);
+}
+.impact-history-end {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px 18px;
+	margin-top: 14px;
+	font-size: 11px;
+	line-height: 1.6;
+}
+.impact-history-end > p {
+	margin: 0;
+	font-size: 10px;
+	color: var(--color-vh-subtle);
+}
+.impact-history-end > a {
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+	min-height: 32px;
+	color: var(--color-vh-text-soft);
+}
+.impact-history-end > a > span {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	color: var(--color-vh-purple-300);
+}
+@media (max-width: 767px) {
+	.impact-slide {
+		padding-top: 80px;
+	}
+	.impact-slide #impact-title {
+		font-size: 32px;
+	}
+	.impact-scroll-chapter {
+		width: calc(100vw - 64px);
+		min-width: 250px;
+		max-width: 390px;
+	}
+	.impact-scroll-chapter article {
+		padding-right: 30px;
+	}
+	.impact-intro {
+		max-width: 28ch;
+		font-size: 24px;
+	}
+	.impact-community {
+		max-width: 34ch;
+		margin-bottom: 16px;
+		font-size: 12px;
+	}
+	.impact-scroll-toolbar {
+		font-size: 9px;
+		gap: 8px;
+	}
+	.impact-scroll-toolbar p {
+		max-width: 24ch;
+		line-height: 1.7;
+	}
+	.impact-chapter-year {
+		font-size: 40px;
+	}
+	.impact-chapter-rule {
+		margin: 16px 0 20px;
+	}
+	.impact-scroll-chapter h3 {
+		font-size: 22px;
+	}
+	.impact-chapter-navigation {
+		gap: 2px;
+	}
+	.impact-chapter-dots button {
+		width: 26px;
+	}
+	.impact-history-end {
+		margin-top: 10px;
+	}
+}
+@media (max-height: 780px) and (min-width: 768px) {
+	.impact-slide {
+		padding-top: 78px;
+	}
+	.impact-intro {
+		font-size: 24px;
+	}
+	.impact-community {
+		margin-bottom: 12px;
+	}
+	.impact-scroll-viewport {
+		margin-top: 12px;
+	}
+	.impact-chapter-rule {
+		margin: 16px 0 18px;
+	}
+	.impact-scroll-chapter h3 {
+		font-size: 23px;
+	}
+	.impact-growth-chart {
+		margin-top: 12px;
+	}
+	.impact-scroll-footer {
+		margin-top: 10px;
+	}
+	.impact-history-end {
+		margin-top: 8px;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.impact-history *,
+	.impact-history *::before {
+		transition: none;
+	}
+}
