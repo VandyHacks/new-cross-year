@@ -73,7 +73,12 @@ export const teamGroups: TeamGroup[] = [
 				image: "/team/yan.jpg",
 				linkedin: "https://www.linkedin.com/in/c-qing-yan/",
 			},
-			{ name: "Shaheer", role: "Technology", image: "/team/placeholder-2.svg" },
+			{
+				name: "Shaheer",
+				role: "Technology",
+				image: "/team/shaheer.jpg",
+				linkedin: "https://www.linkedin.com/in/shheer-khn",
+			},
 		],
 	},
 	{
@@ -105,14 +110,24 @@ export const teamGroups: TeamGroup[] = [
 		id: "marketing",
 		label: "Marketing",
 		members: [
-			{ name: "Jacob", role: "Marketing", image: "/team/placeholder-5.svg" },
+			{
+				name: "Jacob",
+				role: "Marketing",
+				image: "/team/jacob.jpg",
+				linkedin: "https://www.linkedin.com/in/jacob--kaiser",
+			},
 			{
 				name: "Olive",
 				role: "Marketing",
 				image: "/team/olive.jpg",
 				linkedin: "https://www.linkedin.com/in/olive-m-whitley",
 			},
-			{ name: "Geo", role: "Marketing", image: "/team/placeholder-6.svg" },
+			{
+				name: "Geo",
+				role: "Marketing",
+				image: "/team/geo.jpg",
+				linkedin: "https://www.linkedin.com/in/geovanny-marcos",
+			},
 		],
 	},
 	{
@@ -125,7 +140,12 @@ export const teamGroups: TeamGroup[] = [
 				image: "/team/david.jpg",
 				linkedin: "https://www.linkedin.com/in/david-boakye-agyemang/",
 			},
-			{ name: "Maya", role: "Partnerships", image: "/team/placeholder-7.svg" },
+			{
+				name: "Maya",
+				role: "Partnerships",
+				image: "/team/maya.jpg",
+				linkedin: "https://www.linkedin.com/in/maya-poghosyan",
+			},
 			{ name: "Jessica", role: "Partnerships", image: "/team/placeholder-8.svg" },
 		],
 	},

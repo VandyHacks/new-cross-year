@@ -18,6 +18,14 @@ import { getServiceClient } from "@/lib/supabase/service";
 const RATE_LIMIT = { max: 5, windowMs: 60 * 60 * 1000 };
 const HONEYPOT_FIELD = "website";
 const TURNSTILE_FIELD = "cf-turnstile-response";
+// Cloudflare documents tokens as at most 2048 characters.
+const TURNSTILE_MAX = 2048;
+// Values echoed back to the form on error are capped so a bloated request
+// isn't reflected in full.
+const ECHO_MAX = 4000;
+// The sponsor form has no unique email, so cap how often one address gets a
+// confirmation email; otherwise it could be used to mail-bomb a stranger.
+const CONFIRMATION_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 type Table = "interest_signups" | "judge_applications" | "sponsor_inquiries";
 
@@ -53,15 +61,26 @@ function hashIp(ip: string) {
 		.slice(0, 32);
 }
 
+let warnedNoTurnstile = false;
+
 async function passesTurnstile(token: string, ip: string) {
 	const secret = process.env.TURNSTILE_SECRET_KEY;
-	if (!secret) return true; // Turnstile not configured
-	if (!token) return false;
+	if (!secret) {
+		if (process.env.NODE_ENV === "production" && !warnedNoTurnstile) {
+			warnedNoTurnstile = true;
+			console.warn(
+				"TURNSTILE_SECRET_KEY is not set: forms rely on the honeypot and rate limit only.",
+			);
+		}
+		return true;
+	}
+	if (!token || token.length > TURNSTILE_MAX) return false;
 	try {
 		const response = await fetch(
 			"https://challenges.cloudflare.com/turnstile/v0/siteverify",
 			{
 				method: "POST",
+				signal: AbortSignal.timeout(8000),
 				body: new URLSearchParams({
 					secret,
 					response: token,
@@ -77,7 +96,7 @@ async function passesTurnstile(token: string, ip: string) {
 	}
 }
 
-type Submission<S extends z.ZodType> = {
+type Submission<S extends z.ZodObject> = {
 	table: Table;
 	schema: S;
 	formData: FormData;
@@ -85,23 +104,31 @@ type Submission<S extends z.ZodType> = {
 	afterInsert?: (data: z.output<S>) => Promise<void>;
 };
 
-async function submit<S extends z.ZodType>({
+async function submit<S extends z.ZodObject>({
 	table,
 	schema,
 	formData,
 	successMessage,
 	afterInsert,
 }: Submission<S>): Promise<FormState> {
+	// Read only the fields this form defines. Unknown keys (and File parts)
+	// are ignored, so extra columns like `status` or `ip_hash` can never be
+	// smuggled into the insert or echoed back.
 	const raw: Record<string, string> = {};
-	for (const [key, value] of formData.entries()) {
-		if (typeof value === "string" && !key.startsWith("$ACTION_")) {
-			raw[key] = value;
-		}
+	for (const key of Object.keys(schema.shape)) {
+		const value = formData.get(key);
+		if (typeof value === "string") raw[key] = value;
 	}
-	const honeypot = raw[HONEYPOT_FIELD];
-	const turnstileToken = raw[TURNSTILE_FIELD] ?? "";
-	delete raw[HONEYPOT_FIELD];
-	delete raw[TURNSTILE_FIELD];
+	const echo = Object.fromEntries(
+		Object.entries(raw).map(([key, value]) => [
+			key,
+			value.slice(0, ECHO_MAX),
+		]),
+	);
+	const honeypotValue = formData.get(HONEYPOT_FIELD);
+	const honeypot = typeof honeypotValue === "string" && honeypotValue.trim();
+	const tokenValue = formData.get(TURNSTILE_FIELD);
+	const turnstileToken = typeof tokenValue === "string" ? tokenValue : "";
 
 	// Bots fill the hidden field; pretend it worked so they don't adapt.
 	if (honeypot) return { status: "success", message: successMessage };
@@ -111,7 +138,7 @@ async function submit<S extends z.ZodType>({
 		return {
 			status: "error",
 			message: "We couldn't verify you're human. Please try again.",
-			values: raw,
+			values: echo,
 		};
 	}
 
@@ -124,7 +151,7 @@ async function submit<S extends z.ZodType>({
 				string,
 				string[] | undefined
 			>,
-			values: raw,
+			values: echo,
 		};
 	}
 
@@ -136,7 +163,7 @@ async function submit<S extends z.ZodType>({
 		return {
 			status: "error",
 			message: `Sign-ups aren't open just yet. Email ${EVENT.email} and we'll get you set up.`,
-			values: raw,
+			values: echo,
 		};
 	}
 
@@ -152,7 +179,7 @@ async function submit<S extends z.ZodType>({
 		return {
 			status: "error",
 			message: "Something went wrong. Please try again in a moment.",
-			values: raw,
+			values: echo,
 		};
 	}
 	if ((count ?? 0) >= RATE_LIMIT.max) {
@@ -160,7 +187,7 @@ async function submit<S extends z.ZodType>({
 			status: "error",
 			message:
 				"Too many submissions from your network. Please try again later.",
-			values: raw,
+			values: echo,
 		};
 	}
 
@@ -175,12 +202,12 @@ async function submit<S extends z.ZodType>({
 		return {
 			status: "error",
 			message: "Something went wrong. Please try again in a moment.",
-			values: raw,
+			values: echo,
 		};
 	}
 
 	if (!error && afterInsert) {
-		after(() => afterInsert(parsed.data));
+		after(() => afterInsert(parsed.data as z.output<S>));
 	}
 	return { status: "success", message: successMessage };
 }
@@ -270,17 +297,32 @@ export async function submitSponsor(
 		successMessage:
 			"Thanks for reaching out! Our sponsorship team will be in touch soon.",
 		afterInsert: async (data) => {
+			// Only the first inquiry from an address in a day gets a
+			// confirmation; the team notification always goes out.
+			const db = getServiceClient();
+			const since = new Date(
+				Date.now() - CONFIRMATION_WINDOW_MS,
+			).toISOString();
+			const { count } = db
+				? await db
+						.from("sponsor_inquiries")
+						.select("id", { count: "exact", head: true })
+						.eq("email", data.email)
+						.gte("created_at", since)
+				: { count: null };
+			const confirm = (count ?? 0) <= 1;
 			const tier =
 				sponsorTiers.find((item) => item.value === data.tier_interest)
 					?.label ?? data.tier_interest;
 			await Promise.all([
-				sendEmail({
-					to: data.email,
-					subject: `Thanks for your interest in sponsoring ${EVENT.name}`,
-					html: emailShell(
-						`<p>Hi ${escapeHtml(data.contact_name)},</p><p>Thanks for your interest in sponsoring ${escapeHtml(EVENT.name)}. Our team will be in touch soon.</p>`,
-					),
-				}),
+				confirm &&
+					sendEmail({
+						to: data.email,
+						subject: `Thanks for your interest in sponsoring ${EVENT.name}`,
+						html: emailShell(
+							`<p>Hi ${escapeHtml(data.contact_name)},</p><p>Thanks for your interest in sponsoring ${escapeHtml(EVENT.name)}. Our team will be in touch soon.</p>`,
+						),
+					}),
 				sendEmail({
 					to: notifyTo,
 					replyTo: data.email,

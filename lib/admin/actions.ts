@@ -8,6 +8,7 @@ import { isKindId, kinds, statuses } from "@/lib/admin/kinds";
 import { requireAdmin } from "@/lib/admin/auth";
 import { getSessionClient } from "@/lib/supabase/server";
 import { getServiceClient } from "@/lib/supabase/service";
+import { cleanMultiline } from "@/lib/forms/schemas";
 
 async function siteOrigin() {
 	const configured = process.env.NEXT_PUBLIC_SITE_URL;
@@ -67,7 +68,11 @@ export async function sendMagicLink(formData: FormData) {
 				shouldCreateUser: false,
 			},
 		});
-		if (otpError) {
+		// Supabase allows one link per email per minute. A repeat request inside
+		// that window means a link was just sent and still works, so show the
+		// normal "sent" screen rather than an error (which would also reveal
+		// that the email is an admin).
+		if (otpError && otpError.code !== "over_email_send_rate_limit") {
 			console.error("Magic link failed", otpError);
 			redirect("/admin/login?error=server");
 		}
@@ -94,7 +99,9 @@ export async function updateSubmission(kindId: string, formData: FormData) {
 	const parsed = updateSchema.safeParse({
 		id: formData.get("id"),
 		status: formData.get("status"),
-		notes: String(formData.get("notes") ?? "").trim(),
+		notes: cleanMultiline(
+			String(formData.get("notes") ?? "").slice(0, 10000),
+		),
 	});
 	if (!parsed.success) throw new Error("Invalid update");
 
@@ -157,9 +164,15 @@ export async function addAdmin(formData: FormData) {
 
 export async function removeAdmin(formData: FormData) {
 	const { email: self } = await requireAdmin();
-	const email = String(formData.get("email") ?? "").toLowerCase();
+	const parsed = z.email().safeParse(
+		String(formData.get("email") ?? "")
+			.trim()
+			.toLowerCase(),
+	);
+	if (!parsed.success) redirect("/admin/admins?error=email");
+	const email = parsed.data;
 	// Removing yourself would lock you out mid-session; ask another admin.
-	if (!email || email === self) redirect("/admin/admins?error=self");
+	if (email === self) redirect("/admin/admins?error=self");
 
 	const service = getServiceClient();
 	if (!service) throw new Error("Database is not configured");

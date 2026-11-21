@@ -2,31 +2,43 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
-import { type ReactNode } from "react";
+import { Children, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import Arc from "@/components/vinyl/arc";
 
-// Shared frame for a content slide: clears the header, leaves the record's
-// gutter on desktop, and anchors the heading at the same height on every
-// slide so the eye doesn't hunt for it as slides change.
+// Heading (first child) pinned at a shared offset; body centred below, or pinned just
+// under it when `anchorTop` (so tab-switchable content grows downward without shifting).
 export function SlideBody({
 	children,
 	className = "",
 	fit = false,
+	anchorTop = false,
 }: {
 	children: ReactNode;
 	className?: string;
-	/** Trim the bottom padding for slides whose content should fit a laptop
-	 * screen exactly (Sponsors, Sign Up). */
+	/** Trim the bottom padding for slides whose content should fit a laptop screen. */
 	fit?: boolean;
+	anchorTop?: boolean;
 }) {
+	const [heading, ...body] = Children.toArray(children);
 	return (
 		<div
 			className={`slide-gutter slide-frame flex min-h-svh flex-col px-5 pt-24 sm:px-8 ${
-				fit ? "pb-8 lg:pb-[clamp(16px,3svh,32px)]" : "pb-16"
+				fit ? "pb-8 lg:pb-[clamp(16px,3svh,32px)]" : "pb-12"
 			} ${className}`}
 		>
-			<div className="mx-auto w-full max-w-5xl">{children}</div>
+			<div
+				className={`mx-auto flex w-full max-w-5xl flex-1 flex-col ${
+					anchorTop ? "gap-[clamp(16px,3svh,32px)]" : ""
+				}`}
+			>
+				{heading}
+				<div
+					className={`flex flex-1 flex-col ${anchorTop ? "justify-start" : "justify-center"}`}
+				>
+					{body}
+				</div>
+			</div>
 		</div>
 	);
 }
@@ -35,7 +47,7 @@ export function SlideHeading({
 	id,
 	children,
 	className,
-	wrapperClassName = "mb-[clamp(24px,4.5svh,48px)]",
+	wrapperClassName = "",
 }: {
 	id: string;
 	children: ReactNode;
@@ -81,9 +93,7 @@ const GUITAR = {
 	position: "center",
 };
 
-// One photo: natural colours, rounded, a hairline edge and a soft shadow for
-// depth. Position + size + rotation come from the caller so the collage can
-// overlap and tilt the frames. Hover lifts the frame above its neighbours.
+// One collage photo; position, size and rotation come from the caller.
 function PhotoCard({
 	src,
 	alt,
@@ -126,8 +136,7 @@ function FadeUp({ children, delay, className = "" }: { children: ReactNode; dela
 	);
 }
 
-// Large "Who We Are" title, then two centred columns: the intro paragraph on the
-// left, a clean photo grid of past events on the right.
+// "Who We Are": intro paragraph beside a photo collage.
 export function AboutSlide() {
 	return (
 		<section id="about" aria-labelledby="about-title">

@@ -19,20 +19,14 @@ import {
 	useStage,
 } from "@/components/vinyl/stage";
 
-// Record geometry, in viewport heights: a disc 1.3vh across whose center sits
-// off the left edge, so only its right-hand rim shows (the sketch's "wheel").
+// Record geometry, in viewport heights.
 const DIAMETER = 1.3;
 const CENTER_X = -0.3;
 const LABEL_RADIUS = 0.36;
-// Degrees between neighbouring labels on the ring.
-const STEP = 24;
-// Degrees the disc turns per slide scrolled.
-const SPIN_PER_SLIDE = 150;
-// Idle playback speed once it's on the turntable (deg/s).
-const PLAY_SPEED = 90;
-// Initial page-load entrance: the record starts this many viewport heights
-// further left (fully off-screen) and glides to its resting spot. Slow and
-// decelerating so the whole slide-in reads as deliberate and complete.
+const STEP = 24; // degrees between neighbouring labels
+const SPIN_PER_SLIDE = 150; // degrees turned per slide scrolled
+const PLAY_SPEED = 90; // idle playback speed on the turntable (deg/s)
+// Page-load entrance: slide in from this far off-screen left.
 const ENTRANCE_SLIDE = 0.4;
 const ENTRANCE_DURATION = 2.1;
 
@@ -72,7 +66,7 @@ function RingLabel({
 	// Current: solid. Neighbours: faded. Further out: gone.
 	const opacity = useTransform(distance, [0, 1, 1.8], [1, 0.28, 0]);
 	const scale = useTransform(distance, [0, 1], [1, 0.82]);
-	// Neighbouring labels are shortcuts to the previous/next slide.
+	// Neighbours double as shortcuts to the prev/next slide.
 	const pointerEvents = useTransform(distance, (d) =>
 		d > 0.5 && d < 1.5 ? "auto" : "none",
 	);
@@ -88,8 +82,7 @@ function RingLabel({
 				style={{ x: radius, y: "-50%", scale, pointerEvents }}
 				className="block origin-left cursor-pointer font-heading text-[clamp(16px,2.8vh,30px)] leading-[1.05] tracking-[0.08em] whitespace-nowrap text-white uppercase [text-shadow:0_0_24px_rgb(136_83_220/0.7)]"
 			>
-				{/* Multi-word labels (e.g. "Get Involved") stack so each line stays
-				    within the groove and the font can stay large. */}
+				{/* Multi-word labels stack so each line fits the groove. */}
 				{label.split(" ").map((word, i) => (
 					<span key={i} className="block">
 						{word}
@@ -101,7 +94,7 @@ function RingLabel({
 }
 
 export default function StageRecord() {
-	const { smooth, spin } = useStage();
+	const { progress, smooth, spin } = useStage();
 	const reducedMotion = useReducedMotion();
 	const { scrollY } = useScroll();
 	const [vh, setVh] = useState(0);
@@ -111,30 +104,27 @@ export default function StageRecord() {
 	const y = useMotionValue(0);
 	const scale = useMotionValue(1);
 	const scaleY = useMotionValue(1);
-	const opacity = useMotionValue(1);
 	const ringOpacity = useMotionValue(1);
 	const idle = useRef(0);
 
-	// Entrance progress: 1 = fully off-screen left at load, 0 = resting spot.
-	// Applied as an extra horizontal offset on a wrapper, so it slides the whole
-	// record in without touching the scroll-driven placement in place().
+	// Entrance progress: 1 = off-screen left at load, 0 = resting spot.
 	const entrance = useMotionValue(1);
 	const entranceStarted = useRef(false);
 	const entranceX = useTransform(entrance, (e) => -ENTRANCE_SLIDE * vh * e);
 
+	// Driven by scroll-locked `progress` (not the laggy spring) so the record and
+	// the live platter it lerps toward move on one clock — no jumping on reverse.
 	const place = () => {
 		const v = window.innerHeight;
 		if (!v) return;
-		const p = smooth.get();
+		const land = landing(progress.get());
 		const d0 = DIAMETER * v;
-		const t = easeInOut(landing(p));
+		const t = easeInOut(land);
 		// The platter it lands on, read live so it tracks the footer's scroll.
 		if (!platter.current?.isConnected) {
 			platter.current = document.querySelector("[data-platter]");
 		}
-		// The platter lies on the tilted 3D deck, so its on-screen box is wider
-		// than tall; squashing the disc to that box approximates the tilt, and
-		// the deck's own disc takes over for the last few percent (crossfade).
+		// Squash to the platter's tilted box; this single record sits on it.
 		const goal = platter.current?.getBoundingClientRect();
 		const cx0 = CENTER_X * v;
 		const cy0 = 0.5 * v + 32;
@@ -144,33 +134,33 @@ export default function StageRecord() {
 		y.set(cy0 + (cy1 - cy0) * t - d0 / 2);
 		scale.set(1 + ((goal?.width || d0) / d0 - 1) * t);
 		scaleY.set(1 + ((goal ? goal.height / goal.width : 1) - 1) * t);
-		opacity.set(1 - handover(landing(p)));
-		ringOpacity.set(1 - clamp01(landing(p) * 2.5));
-		spin.set(-p * SPIN_PER_SLIDE + idle.current);
+		ringOpacity.set(1 - clamp01(land * 2.5));
 	};
 
 	useEffect(() => {
-		// Position the disc BEFORE revealing it: setVh triggers the render that
-		// first mounts the disc, and place() sets x/y/scale on the shared motion
-		// values beforehand, so its first paint is already at the resting spot
-		// off the left edge rather than flashing at the top-left corner.
+		// Place the disc before its first paint so it never flashes at top-left.
 		const measure = () => {
 			setVh(window.innerHeight);
 			place();
+			spin.set(-smooth.get() * SPIN_PER_SLIDE + idle.current);
 		};
 		measure();
 		window.addEventListener("resize", measure);
 		return () => window.removeEventListener("resize", measure);
-		// place reads only refs and stable motion values; safe to run once.
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	useMotionValueEvent(smooth, "change", place);
+	// Geometry on scroll; also every frame so a landed record tracks the footer.
+	useMotionValueEvent(progress, "change", place);
 	useMotionValueEvent(scrollY, "change", place);
 	useEffect(place);
 
-	// Play the entrance slide once, as soon as the viewport height is known so it
-	// starts in sync with the disc appearing. Reduced-motion users get no slide.
+	// Rotation rides the smoothed spring, kept separate so it never nudges position.
+	useMotionValueEvent(smooth, "change", (p) =>
+		spin.set(-p * SPIN_PER_SLIDE + idle.current),
+	);
+
+	// Play the entrance slide once the viewport height is known.
 	useEffect(() => {
 		if (!vh) return;
 		if (reducedMotion) {
@@ -186,10 +176,10 @@ export default function StageRecord() {
 		return () => controls.stop();
 	}, [vh, reducedMotion, entrance]);
 
-	// Once it's on the platter, the record keeps playing.
+	// Once it's on the platter, the record keeps playing (reversed direction).
 	useAnimationFrame((_, delta) => {
 		if (reducedMotion || landing(smooth.get()) < 0.98) return;
-		idle.current += (PLAY_SPEED * delta) / 1000;
+		idle.current -= (PLAY_SPEED * delta) / 1000;
 		spin.set(-smooth.get() * SPIN_PER_SLIDE + idle.current);
 	});
 
@@ -204,7 +194,7 @@ export default function StageRecord() {
 			<motion.div className="absolute inset-0" style={{ x: entranceX }}>
 			<motion.div
 				className="absolute top-0 left-0"
-				style={{ x, y, scale, scaleY, opacity, width: d0, height: d0 }}
+				style={{ x, y, scale, scaleY, width: d0, height: d0 }}
 			>
 				<Disc spin={spin} className="size-full" />
 			</motion.div>

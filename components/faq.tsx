@@ -21,13 +21,14 @@ export default function FAQ() {
 	return (
 		<section
 			id="faq"
-			className="relative z-10 pt-[clamp(48px,7vw,88px)] pb-[clamp(64px,9vw,112px)]"
+			className="relative z-10 pt-[clamp(48px,7vw,88px)] pb-[clamp(40px,5vw,64px)]"
 			aria-labelledby="faq-title"
 		>
 			<SectionContainer>
 				<Arc>
 					<SectionTitle id="faq-title">FAQ</SectionTitle>
 				</Arc>
+				<div className="flex flex-1 flex-col justify-start">
 				<Arc className="mb-8">
 					<div
 						role="tablist"
@@ -139,6 +140,7 @@ export default function FAQ() {
 							))}
 						</motion.div>
 					</AnimatePresence>
+				</div>
 				</div>
 			</SectionContainer>
 		</section>
