@@ -9,7 +9,7 @@ import { CTA } from "@/lib/event";
 const navigationLinks = [
 	{ label: "Home", href: "#home", id: "home" },
 	{ label: "About", href: "#about", id: "about" },
-	{ label: "Impact", href: "#impact", id: "impact" },
+	{ label: "History", href: "#history", id: "history" },
 	{ label: "Sponsors", href: "#sponsors", id: "sponsors" },
 	{ label: "Team", href: "#team", id: "team" },
 	{ label: "FAQ", href: "#faq", id: "faq" },

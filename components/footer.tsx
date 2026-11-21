@@ -18,7 +18,7 @@ const exploreColumns = [
 	[
 		{ label: "Home", href: "#home" },
 		{ label: "About", href: "#about" },
-		{ label: "Impact", href: "#impact" },
+		{ label: "History", href: "#history" },
 	],
 	[
 		{ label: "Sponsors", href: "#sponsors" },
