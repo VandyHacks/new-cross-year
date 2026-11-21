@@ -3,7 +3,8 @@ import GetInvolved from "@/components/get-involved";
 import VinylHeader from "@/components/vinyl/header";
 import VinylHero from "@/components/vinyl/hero";
 import RecordPlayerFooter from "@/components/vinyl/record-player-footer";
-import { AboutSlide, ImpactSlide } from "@/components/vinyl/slides";
+import { AboutSlide } from "@/components/vinyl/slides";
+import HistorySlide from "@/components/vinyl/history";
 import SponsorWall from "@/components/vinyl/sponsor-wall";
 import VinylStage, { Slide } from "@/components/vinyl/stage";
 import StageRecord from "@/components/vinyl/stage-record";
@@ -25,8 +26,8 @@ export default function Home() {
 				<Slide slide="about">
 					<AboutSlide />
 				</Slide>
-				<Slide slide="impact">
-					<ImpactSlide />
+				<Slide slide="history">
+					<HistorySlide />
 				</Slide>
 				<Slide slide="sponsors">
 					<SponsorWall />

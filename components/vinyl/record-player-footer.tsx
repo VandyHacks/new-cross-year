@@ -190,7 +190,7 @@ const iconLinkClassName =
 const explore = [
 	{ label: "Home", href: "#home" },
 	{ label: "About", href: "#about" },
-	{ label: "Impact", href: "#impact" },
+	{ label: "History", href: "#history" },
 	{ label: "Sponsors", href: "#sponsors" },
 	{ label: "Team", href: "#team" },
 	{ label: "FAQ", href: "#faq" },
