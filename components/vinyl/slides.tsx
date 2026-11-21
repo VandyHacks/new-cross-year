@@ -1,17 +1,9 @@
 "use client";
 
-import {
-	animate,
-	motion,
-	useInView,
-	useMotionValue,
-	useReducedMotion,
-} from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
-import { Children, type ReactNode, useEffect, useRef } from "react";
+import { Children, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import Counter from "@/components/counter";
-import { metrics } from "@/components/stats";
 import Arc from "@/components/vinyl/arc";
 
 // Heading (first child) pinned at a shared offset; body centred below, or pinned just
@@ -192,71 +184,6 @@ export function AboutSlide() {
 						</FadeUp>
 					</div>
 				</Arc>
-			</SlideBody>
-		</section>
-	);
-}
-
-// --- Impact ---------------------------------------------------------------
-
-function Metric({ metric, index }: { metric: (typeof metrics)[number]; index: number }) {
-	const ref = useRef<HTMLDivElement>(null);
-	const inView = useInView(ref, { once: true, amount: 0.6 });
-	const reducedMotion = useReducedMotion();
-	const value = useMotionValue(reducedMotion ? metric.value : 0);
-
-	useEffect(() => {
-		if (!inView || reducedMotion) return;
-		const controls = animate(value, metric.value, {
-			duration: 1.6,
-			delay: 0.15 + index * 0.12,
-			ease: [0.16, 1, 0.3, 1],
-		});
-		return () => controls.stop();
-	}, [inView, reducedMotion, value, metric.value, index]);
-
-	return (
-		<Arc>
-			<motion.div
-				ref={ref}
-				className="group flex items-baseline gap-[clamp(14px,2vw,32px)] border-b border-white/8 py-[clamp(8px,1.6svh,18px)]"
-				initial={reducedMotion ? false : { opacity: 0, x: -60 }}
-				whileInView={{ opacity: 1, x: 0 }}
-				viewport={{ once: true, amount: 0.6 }}
-				transition={{ duration: 0.7, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-			>
-				<p className="m-0 w-[5.6em] shrink-0 font-heading text-[clamp(30px,5.4svh,64px)] leading-none tracking-[-0.04em] text-vh-purple-300 tabular-nums transition-colors group-hover:text-white">
-					<span className="sr-only">
-						{metric.prefix}
-						{metric.value.toLocaleString("en-US")}
-						{metric.suffix}
-					</span>
-					<span aria-hidden="true" className="inline-flex">
-						{metric.prefix}
-						<Counter value={value} max={metric.value} />
-						{metric.suffix}
-					</span>
-				</p>
-				<p className="type-body-sm text-[clamp(12px,1.2vw,17px)] text-vh-text-soft">
-					{metric.label}
-				</p>
-			</motion.div>
-		</Arc>
-	);
-}
-
-export function ImpactSlide() {
-	return (
-		<section id="impact" aria-labelledby="impact-title">
-			<SlideBody>
-				<SlideHeading id="impact-title">
-					Impact
-				</SlideHeading>
-				<div className="flex flex-col">
-					{metrics.map((metric, i) => (
-						<Metric key={metric.label} metric={metric} index={i} />
-					))}
-				</div>
 			</SlideBody>
 		</section>
 	);

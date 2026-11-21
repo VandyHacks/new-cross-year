@@ -17,7 +17,7 @@ import { CTA } from "@/lib/event";
 // `slide` marks the link that's highlighted while that slide is on screen.
 const links: { label: string; href: string; slide?: string }[] = [
 	{ label: "About", href: "#about", slide: "about" },
-	{ label: "Impact", href: "#impact", slide: "impact" },
+	{ label: "History", href: "#history", slide: "history" },
 	{ label: "Sponsors", href: "#sponsors", slide: "sponsors" },
 	{ label: "Team", href: "#team", slide: "team" },
 	{ label: "FAQ", href: "#faq", slide: "faq" },

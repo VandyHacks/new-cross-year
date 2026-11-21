@@ -23,7 +23,7 @@ import {
 export const SLIDES = [
 	{ key: "home", label: "Home" },
 	{ key: "about", label: "About" },
-	{ key: "impact", label: "Impact" },
+	{ key: "history", label: "History" },
 	{ key: "sponsors", label: "Sponsors" },
 	{ key: "team", label: "Team" },
 	{ key: "faq", label: "FAQ" },
@@ -96,7 +96,8 @@ const SETTLE_ZONE = 0.22;
 export const TAB_EVENT = "vinyl:get-involved-tab";
 
 function slideForHash(hash: string): SlideKey | null {
-	const id = hash.slice(1).split("/")[0];
+	const rawId = hash.slice(1).split("/")[0];
+ const id = rawId === "impact" ? "history" : rawId;
 	return SLIDES.find((s) => s.key === id)?.key ?? null;
 }
 
