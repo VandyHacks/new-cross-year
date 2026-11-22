@@ -251,7 +251,7 @@ export default function Footer() {
 							<li>
 								<a
 									className={iconLinkClassName}
-									href="https://vandyhacks.devpost.com/"
+									href="https://devpost.com/hackathons?organization=VandyHacks"
 									target="_blank"
 									rel="noopener noreferrer"
 									aria-label="VandyHacks on Devpost (opens in a new tab)"

@@ -1,13 +1,15 @@
-/**
- * Source: user-supplied VandyHacks Track Record.xlsx, Summary!A2:M13,
- * cross-checked against the matching PDF. Counts cover the 12 numbered
- * editions; the separate 2020 Summer Edition is outside this dataset.
- * Only the facts used by the promotional timeline are retained here.
- */
+/** Source: VandyHacks Track Record.xlsx (Summary!A2:M13), cross-checked vs PDF.
+ *  Covers the 12 numbered editions; only timeline facts are kept. */
 export type Hackathon = {
 	edition: string;
 	year: number;
+	/** Projects submitted — verified for every edition. */
 	projects: number;
+	/** Optional verified stats; omit entirely (never zero/guess) when unknown. */
+	participants?: number;
+	sponsors?: number;
+	teams?: number;
+	prizes?: number;
 	devpost: string;
 	/** Public artwork path; null uses the VandyHacks logo. */
 	artwork: string | null;
@@ -18,14 +20,14 @@ export type Hackathon = {
 export const hackathons: readonly Hackathon[] = [
 	{
 		edition: "I",
-		artwork: null,
+		artwork: "/history/i.png",
 		year: 2015,
 		projects: 35,
 		devpost: "https://vandyhacks.devpost.com/",
 	},
 	{
 		edition: "II",
-		artwork: null,
+		artwork: "/history/ii.png",
 		year: 2015,
 		projects: 36,
 		devpost: "https://vandyhacks2.devpost.com/",
@@ -46,14 +48,15 @@ export const hackathons: readonly Hackathon[] = [
 	},
 	{
 		edition: "V",
-		artwork: null,
+		artwork: "/history/v.png",
 		year: 2018,
 		projects: 96,
 		devpost: "https://vandyhacksv.devpost.com/",
 	},
 	{
 		edition: "VI",
-		artwork: "/history/vi-devpost.png",
+		artwork: "/history/vi.png",
+		artworkLightBackground: true,
 		year: 2019,
 		projects: 88,
 		devpost: "https://vandyhacksvi.devpost.com/",
@@ -96,7 +99,7 @@ export const hackathons: readonly Hackathon[] = [
 	},
 	{
 		edition: "XII",
-		artwork: null,
+		artwork: "/history/xii.png",
 		year: 2026,
 		projects: 34,
 		devpost: "https://vandyhacks-xii.devpost.com/",

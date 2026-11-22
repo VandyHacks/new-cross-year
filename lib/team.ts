@@ -1,7 +1,5 @@
-// Exec team shown in the Team gallery.
-// TODO: Replace the placeholders with real names, roles, headshots (4:5
-// crop, same background) and LinkedIn URLs from the organizers. Drop the
-// images in public/team/ and point `image` at them.
+// Exec team for the Team gallery. TODO: swap remaining placeholders for real
+// headshots (4:5 crop, same bg) + LinkedIn; images go in public/team/.
 export type TeamMember = {
 	name: string;
 	role: string;
@@ -85,7 +83,12 @@ export const teamGroups: TeamGroup[] = [
 		id: "experience",
 		label: "Experience",
 		members: [
-			{ name: "Ji", role: "Experience", image: "/team/placeholder-3.svg" },
+			{
+				name: "Ji",
+				role: "Experience",
+				image: "/team/jiyoo.png",
+				linkedin: "https://www.linkedin.com/in/jiyoopark1",
+			},
 			{
 				name: "Hanan",
 				role: "Experience",
@@ -146,7 +149,12 @@ export const teamGroups: TeamGroup[] = [
 				image: "/team/maya.jpg",
 				linkedin: "https://www.linkedin.com/in/maya-poghosyan",
 			},
-			{ name: "Jessica", role: "Partnerships", image: "/team/placeholder-8.svg" },
+			{
+				name: "Jessica",
+				role: "Partnerships",
+				image: "/team/jessica.png",
+				linkedin: "https://www.linkedin.com/in/jessicawang-vanderbilt",
+			},
 		],
 	},
 	{

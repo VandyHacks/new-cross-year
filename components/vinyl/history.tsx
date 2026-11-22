@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import {
 	motion,
 	useMotionValueEvent,
@@ -10,7 +10,7 @@ import {
 } from "motion/react";
 import { type CSSProperties, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { hackathons } from "@/lib/hackathons";
+import { type Hackathon, hackathons } from "@/lib/hackathons";
 import { SlideBody, SlideHeading } from "@/components/vinyl/slides";
 import { useMediaQuery } from "@/components/vinyl/stage";
 
@@ -19,13 +19,26 @@ const milestones = [...hackathons].reverse().map((event) => ({
 	event,
 }));
 
+// Record's right rim ≈ 0.35 × viewport-height (see stage-record.tsx geometry);
+// the clef and staff lines start here so they flow out of the vinyl.
+const RECORD_RIM_RATIO = 0.35;
+// Pinned-runway scroll length as a multiple of the horizontal travel; higher
+// makes the notes move slower per unit of scroll.
+const SCROLL_SPAN = 1;
+
+const NOTE_OFFSETS = [0, 56, -32, 32, -16, 72];
+const NOTE_COLORS = ["#c8a2ff", "#9dbbff", "#e7b8ee"];
+
 export default function HistorySlide() {
 	const runwayRef = useRef<HTMLDivElement>(null);
 	const viewportRef = useRef<HTMLDivElement>(null);
 	const railRef = useRef<HTMLOListElement>(null);
+	const staffRef = useRef<HTMLDivElement>(null);
 	const reducedMotion = useReducedMotion();
+	// Pinning drives the scroll-linked timeline; `fitsViewport` falls back to
+	// native horizontal scroll when the content can't fit.
 	const hasRoomToPin = useMediaQuery(
-		"(min-width: 768px) and (min-height: 700px), (min-height: 800px)",
+		"(min-width: 768px) and (min-height: 560px), (min-height: 800px)",
 	);
 	const [fitsViewport, setFitsViewport] = useState(true);
 	const pinned = hasRoomToPin && fitsViewport && !reducedMotion;
@@ -45,6 +58,22 @@ export default function HistorySlide() {
 			runwayRef.current?.querySelector<HTMLElement>(".impact-slide");
 		const content = frame?.firstElementChild as HTMLElement | null;
 		const measure = () => {
+			const staff = staffRef.current;
+			if (staff) {
+				const staffLeft = staff.getBoundingClientRect().left;
+				const rimX = RECORD_RIM_RATIO * window.innerHeight;
+				// Pull the clef to the rim and anchor the lines to the screen's
+				// left edge so they run behind the vinyl (desktop only).
+				const overhang =
+					window.innerWidth >= 1024
+						? Math.max(0, staffLeft - rimX)
+						: 0;
+				staff.style.setProperty("--staff-overhang", `${overhang}px`);
+				staff.style.setProperty(
+					"--staff-left",
+					`${Math.max(0, staffLeft)}px`,
+				);
+			}
 			setTravel(Math.max(0, rail.scrollWidth - viewport.clientWidth));
 			if (frame && content) {
 				const topPadding = Number.parseFloat(
@@ -60,7 +89,11 @@ export default function HistorySlide() {
 		observer.observe(rail);
 		if (content) observer.observe(content);
 		measure();
-		return () => observer.disconnect();
+		window.addEventListener("resize", measure);
+		return () => {
+			observer.disconnect();
+			window.removeEventListener("resize", measure);
+		};
 	}, []);
 
 	// CSS changes the rail between native horizontal overflow and a transform.
@@ -76,7 +109,8 @@ export default function HistorySlide() {
 		const runway = runwayRef.current;
 		const viewport = viewportRef.current;
 		const chapter = railRef.current?.children[index] as
-			HTMLElement | undefined;
+			| HTMLElement
+			| undefined;
 		if (!runway || !viewport || !chapter) return;
 		const behavior = reducedMotion ? "instant" : "smooth";
 		if (pinned) {
@@ -113,46 +147,29 @@ export default function HistorySlide() {
 				style={
 					pinned
 						? {
-								height: `calc(100svh + ${Math.round(travel * 0.65)}px)`,
+								height: `calc(100svh + ${Math.round(travel * SCROLL_SPAN)}px)`,
 							}
 						: undefined
 				}
 			>
 				<div className="impact-sticky">
 					<SlideBody fit className="impact-slide history-slide">
-						<SlideHeading
-							id="history-title"
-							wrapperClassName="mb-5"
-						>
-							History
+						<SlideHeading id="history-title">
+							Past Editions
 						</SlideHeading>
 						<div className="impact-history">
-							<p className="history-intro">
-								Every year, a new sound.{" "}
-								<span>The same spirit of building.</span>
-							</p>
-							<div className="impact-scroll-toolbar">
-								<p>
-									{pinned
-										? "Scroll down to play through the years"
-										: "Swipe through the years"}
-									<ArrowDown size={14} aria-hidden="true" />
-								</p>
-								<a href="#sponsors">
-									Skip history{" "}
-									<ArrowDown size={12} aria-hidden="true" />
-								</a>
-							</div>
-							<div className="history-staff">
+							<div ref={staffRef} className="history-staff">
 								<div
+									className="history-lines"
+									aria-hidden="true"
+								/>
+								<motion.div
 									className="history-clef"
 									aria-hidden="true"
+									style={pinned ? { x } : undefined}
 								>
 									<span>𝄞</span>
-									<span className="history-time">
-										4<br />4
-									</span>
-								</div>
+								</motion.div>
 								<div
 									ref={viewportRef}
 									className="impact-scroll-viewport history-viewport"
@@ -166,68 +183,14 @@ export default function HistorySlide() {
 										style={pinned ? { x } : undefined}
 									>
 										{milestones.map((chapter, index) => (
-											<li
+											<Milestone
 												key={chapter.edition}
-												className="history-note"
-												style={
-													{
-														"--note-offset":
-															[
-																0, 56, -32, 32,
-																-16, 72,
-															][index % 6] + "px",
-														"--note-color": [
-															"#c8a2ff",
-															"#9dbbff",
-															"#e7b8ee",
-														][index % 3],
-													} as CSSProperties
-												}
-											>
-												<a
-													className="history-note-link"
-													href={chapter.event.devpost}
-													target="_blank"
-													rel="noopener noreferrer"
-													aria-label={`VandyHacks ${chapter.edition}, ${chapter.event.year} — view on Devpost (opens in a new tab)`}
-													onFocus={() => {
-														if (
-															pinned &&
-															index !== active
-														)
-															goToChapter(index);
-													}}
-												>
-													<span className="history-note-art">
-														<HistoryArtwork
-															event={
-																chapter.event
-															}
-														/>
-														<ArrowUpRight
-															className="history-note-open"
-															size={20}
-															aria-hidden="true"
-														/>
-													</span>
-													<span className="history-note-year">
-														{chapter.event.year}
-													</span>
-													<span className="history-note-edition">
-														VandyHacks{" "}
-														{chapter.edition}
-													</span>
-													{chapter.event.year ===
-														2015 && (
-														<span className="history-note-season">
-															{chapter.edition ===
-															"I"
-																? "Spring"
-																: "Fall"}
-														</span>
-													)}
-												</a>
-											</li>
+												event={chapter.event}
+												index={index}
+												pinned={pinned}
+												active={active}
+												goToChapter={goToChapter}
+											/>
 										))}
 									</motion.ol>
 								</div>
@@ -239,23 +202,80 @@ export default function HistorySlide() {
 		</section>
 	);
 }
-function HistoryArtwork({ event }: { event: (typeof hackathons)[number] }) {
-	const [failed, setFailed] = useState(false);
+
+function Milestone({
+	event,
+	index,
+	pinned,
+	active,
+	goToChapter,
+}: {
+	event: Hackathon;
+	index: number;
+	pinned: boolean;
+	active: number;
+	goToChapter: (index: number) => void;
+}) {
 	return (
-		<Image
-			src={failed || !event.artwork ? "/logo-trimmed.png" : event.artwork}
-			alt=""
-			fill
-			sizes="(max-width:767px) 132px, 164px"
-			className="history-artwork"
+		<li
+			className="history-note"
 			style={
-				event.artworkLightBackground && event.artwork && !failed
-					? { backgroundColor: "white" }
-					: undefined
+				{
+					"--note-offset": `${NOTE_OFFSETS[index % 6]}px`,
+					"--note-color": NOTE_COLORS[index % 3],
+				} as CSSProperties
 			}
-			onError={() => {
-				if (!failed) setFailed(true);
-			}}
-		/>
+		>
+			<a
+				className="history-note-link"
+				href={event.devpost}
+				target="_blank"
+				rel="noopener noreferrer"
+				aria-label={`VandyHacks ${event.edition}, ${event.year} — view on Devpost (opens in a new tab)`}
+				onFocus={() => {
+					if (pinned && index !== active) goToChapter(index);
+				}}
+			>
+				<span className="history-note-art">
+					<HistoryArtwork event={event} />
+					<span className="history-note-flag">{event.edition}</span>
+					<ArrowUpRight
+						className="history-note-open"
+						size={20}
+						aria-hidden="true"
+					/>
+				</span>
+				<span className="history-note-year">{event.year}</span>
+			</a>
+		</li>
+	);
+}
+
+// Zoom for editions whose artwork has wide empty margins around the mark.
+const ART_SCALE: Record<string, number> = { I: 1.45, II: 1.3, XII: 1.7 };
+
+function HistoryArtwork({ event }: { event: Hackathon }) {
+	const [failed, setFailed] = useState(false);
+	const artwork = !failed && event.artwork ? event.artwork : null;
+	const scale = artwork ? (ART_SCALE[event.edition] ?? 1) : 1;
+	// White backing for artwork designed on white (keeps transparent areas white).
+	const lightBg = artwork != null && event.artworkLightBackground;
+	return (
+		<span
+			className="history-artwork-clip"
+			style={lightBg ? { backgroundColor: "white" } : undefined}
+		>
+			<Image
+				src={artwork ?? "/logo-trimmed.png"}
+				alt=""
+				fill
+				sizes="(max-width:767px) 132px, 164px"
+				className="history-artwork"
+				style={scale !== 1 ? { transform: `scale(${scale})` } : undefined}
+				onError={() => {
+					if (!failed) setFailed(true);
+				}}
+			/>
+		</span>
 	);
 }
