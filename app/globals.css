@@ -346,15 +346,7 @@ html:has(.vinyl-stage) {
 	position: relative;
 	overflow: hidden;
 	border-radius: 9999px;
-	background:
-		repeating-radial-gradient(
-			circle at center,
-			#07070d 0,
-			#07070d 1.5px,
-			#15141f 2.2px,
-			#07070d 3px
-		),
-		#07070d;
+	background: #07070d;
 	box-shadow:
 		0 0 0 1px rgb(200 162 255 / 0.18),
 		0 30px 80px rgb(0 0 0 / 0.6),
@@ -1112,12 +1104,12 @@ html.is-paused .scroll-note {
 .history-viewport { margin-top:0; }
 .history-score { position:relative; display:flex; flex-direction:row; width:max-content; height:460px; margin:0; padding:0 26px; list-style:none; isolation:isolate; }
 /* Continuous five-line staff, full-bleed from behind the vinyl to the right edge. */
-.history-lines { position:absolute; top:0; bottom:0; left:calc(-1 * var(--staff-left,0px)); width:100vw; pointer-events:none; z-index:0; background-repeat:repeat-x; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='460' viewBox='0 0 600 460'%3E%3Cg fill='none' stroke='%23a77ae9' stroke-opacity='.32' stroke-width='1.5'%3E%3Cpath d='M0 160C100 140 200 180 300 160S500 140 600 160M0 188C100 168 200 208 300 188S500 168 600 188M0 216C100 196 200 236 300 216S500 196 600 216M0 244C100 224 200 264 300 244S500 224 600 244M0 272C100 252 200 292 300 272S500 252 600 272'/%3E%3C/g%3E%3C/svg%3E"); }
+.history-lines { position:absolute; top:0; bottom:0; left:calc(-1 * var(--staff-left,0px)); width:100vw; pointer-events:none; z-index:0; background-repeat:repeat-x; background-size:var(--staff-tile,600px) 460px; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='460' viewBox='0 0 600 460' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='%23a77ae9' stroke-opacity='.32' stroke-width='1.5'%3E%3Cpath d='M0 160C100 140 200 180 300 160S500 140 600 160M0 188C100 168 200 208 300 188S500 168 600 188M0 216C100 196 200 236 300 216S500 196 600 216M0 244C100 224 200 264 300 244S500 224 600 244M0 272C100 252 200 292 300 272S500 252 600 272'/%3E%3C/g%3E%3C/svg%3E"); }
 /* Oversized clef pulled to the record rim at the start of the staff. */
 .history-clef { position:relative; z-index:2; display:flex; flex:none; width:260px; margin-left:calc(-1 * var(--staff-overhang,0px)); align-items:center; justify-content:center; color:var(--color-vh-purple-300); will-change:transform; }
 .history-clef > span:first-child { font-family:"Cambria Math","Segoe UI Symbol",serif; font-size:480px; line-height:1; margin-top:-14px; }
 .history-note { position:relative; flex:none; width:300px; }
-.history-note-link { position:absolute; top:calc(140px + var(--note-offset)); left:40px; display:flex; width:184px; flex-direction:column; align-items:center; color:var(--color-vh-text); text-align:center; border-radius:8px; transition:transform 240ms ease-out; }
+.history-note-link { position:absolute; top:calc(134px + var(--note-offset)); left:40px; display:flex; width:184px; flex-direction:column; align-items:center; color:var(--color-vh-text); text-align:center; border-radius:8px; transition:transform 240ms ease-out; }
 .history-note-link:hover { transform:translateY(-7px); }
 .history-note-art { position:relative; display:block; width:164px; height:164px; border:2px solid var(--note-color); border-radius:50%; background:var(--color-vh-navy-900); }
 .history-note-art::before { content:""; position:absolute; bottom:50%; right:-2px; width:3px; height:144px; background:var(--note-color); z-index:-1; }
@@ -1135,7 +1127,7 @@ html.is-paused .scroll-note {
  .history-score { height:420px; }
  .history-lines { background-position-y:-10px; }
  .history-note { width:228px; }
- .history-note-link { left:24px; width:160px; top:calc(130px + var(--note-offset)); }
+ .history-note-link { left:24px; width:160px; top:calc(140px + var(--note-offset)); }
  .history-note-art { width:132px; height:132px; }
  .history-note-year { font-size:21px; }
  .history-note-art::before { height:124px; }
@@ -1148,7 +1140,7 @@ html.is-paused .scroll-note {
 @media (max-height:780px) and (min-width:768px) {
  .history-score { height:380px; }
  .history-lines { background-position-y:-40px; }
- .history-note-link { top:calc(104px + var(--note-offset)); }
+ .history-note-link { top:calc(110px + var(--note-offset)); }
  .history-note-art { width:132px; height:132px; }
  .history-note-art::before { height:110px; }
  .history-note-flag { bottom:calc(50% + 80px); height:32px; font-size:14px; }
@@ -1163,3 +1155,16 @@ html.is-paused .scroll-note {
 .history-viewport::-webkit-scrollbar { display:none; }
 @media(max-width:767px) { .history-staff > .history-clef { height:420px; width:150px; } .history-staff .history-clef > span:first-child {font-size:290px;} }
 @media(max-height:780px) and (min-width:768px) { .history-staff > .history-clef {height:380px;} }
+
+/* ElevenLabs skyline clip: feather the top into the hero sky and the bottom
+   into the page so the video's edges never show. */
+.skyline-video {
+	mask-image: linear-gradient(to bottom, transparent 0%, #000 28%, #000 78%, transparent 100%);
+}
+
+/* Footer Broadway backdrop: fade in from the page above, dimmed so the
+   headline and CTAs stay the brightest thing on screen. */
+.footer-backdrop {
+	opacity: 0.75;
+	mask-image: linear-gradient(to bottom, transparent 0%, #000 25%, #000 80%, transparent 100%);
+}

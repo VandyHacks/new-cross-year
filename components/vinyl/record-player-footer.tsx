@@ -61,6 +61,21 @@ function Tonearm({ angle }: { angle: MotionValue<number> }) {
 	);
 }
 
+// ElevenLabs-generated brushed indigo aluminium, blended over the deck's own
+// gradient so the plinth reads as real hardware without changing its colour.
+function DeckMetal({ className }: { className: string }) {
+	return (
+		<Image
+			src="/footer/deck-metal.png"
+			alt=""
+			aria-hidden="true"
+			fill
+			sizes="(min-width: 1024px) 1180px, 100vw"
+			className={`pointer-events-none object-cover opacity-50 ${className}`}
+		/>
+	);
+}
+
 // The tonearm is drawn in a second deck sharing the same grid cell but outside the
 // real deck's perspective context, so it can sit above the pinned record (z-25 > z-20).
 function Deck({ year }: { year: number }) {
@@ -91,6 +106,7 @@ function Deck({ year }: { year: number }) {
 			<div className="deck relative col-start-1 row-start-1">
 				<div ref={ref} className="deck-top turntable">
 					<div aria-hidden="true" className="absolute inset-0 rounded-t-[3cqh] border border-b-0 border-white/12 bg-[linear-gradient(180deg,#0e1430_0%,#18214a_70%,#1d2756_100%)] shadow-[inset_0_2px_0_rgb(255_255_255/0.06)]" />
+					<DeckMetal className="rounded-t-[3cqh]" />
 					{/* Platter ring the record sits on. */}
 					<div aria-hidden="true" className="platter absolute top-[4cqh] left-1/2 size-[92cqh] -translate-x-1/2 rounded-full" />
 					{/* data-platter stays mounted for the pinned record to measure; disc inside is mobile-only. */}
@@ -100,21 +116,20 @@ function Deck({ year }: { year: number }) {
 						</div>
 					</div>
 				</div>
-				<div className="relative rounded-b-[20px] border border-t-0 border-white/12 bg-[linear-gradient(180deg,#1b2552_0%,#121a3c_18%,#0c1230_100%)] px-[clamp(20px,3vw,44px)] pt-[clamp(36px,4svh,54px)] pb-4 shadow-[inset_0_1px_0_rgb(200_162_255/0.35),0_30px_60px_rgb(0_0_0/0.6)]">
-					<Screw className="top-3 left-3" />
-					<Screw className="top-3 right-3" />
-					<div className="grid grid-cols-2 gap-x-8 gap-y-4 lg:grid-cols-[1.2fr_1.6fr_1.2fr]">
+				<div className="relative rounded-b-[20px] border border-t-0 border-white/12 bg-[linear-gradient(180deg,#1b2552_0%,#121a3c_18%,#0c1230_100%)] px-[clamp(20px,3vw,44px)] pt-6 pb-3 lg:pt-[clamp(36px,4svh,54px)] lg:pb-4 shadow-[inset_0_1px_0_rgb(200_162_255/0.35),0_30px_60px_rgb(0_0_0/0.6)]">
+					<DeckMetal className="rounded-b-[20px]" />
+					<div className="relative grid grid-cols-2 gap-x-8 gap-y-3 lg:gap-y-4 lg:grid-cols-[1.2fr_1.6fr_1.2fr]">
 						<div className="col-span-2 flex items-center gap-4 lg:col-span-1">
-							<Image src="/logo-trimmed.png" alt="VandyHacks" width={261} height={231} className="h-12 w-auto" />
+							<Image src="/logo-trimmed.png" alt="VandyHacks" width={261} height={231} className="h-9 w-auto lg:h-12" />
 							<p className="type-body-sm text-vh-subtle">
 								VandyHacks,
 								<br />
 								{EVENT.venue}
 							</p>
 						</div>
-						<nav aria-label="Footer">
+						<nav aria-label="Footer" className="col-span-2 lg:col-span-1">
 							<h2 className={labelClassName}>Explore</h2>
-							<ul className="grid grid-cols-3 gap-x-6 gap-y-1.5">
+							<ul className="grid grid-cols-3 gap-x-4 gap-y-1 lg:gap-x-6 lg:gap-y-1.5">
 								{explore.map((link) => (
 									<li key={link.href}>
 										<a className={linkClassName} href={link.href}>
@@ -129,7 +144,7 @@ function Deck({ year }: { year: number }) {
 							<a className={linkClassName} href={`mailto:${EVENT.email}`}>
 								{EVENT.email}
 							</a>
-							<ul className="mt-3 flex gap-2">
+							<ul className="mt-2 flex gap-2 lg:mt-3">
 								{socials.map(({ label, href, Icon }) => (
 									<li key={label}>
 										<a
@@ -146,7 +161,7 @@ function Deck({ year }: { year: number }) {
 							</ul>
 						</div>
 					</div>
-					<div className="mt-4 flex flex-col gap-2 border-t border-white/10 pt-3 text-[12px] text-vh-faint sm:flex-row sm:items-center sm:justify-between">
+					<div className="relative mt-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-white/10 pt-3 text-[12px] text-vh-faint">
 						<p>© {year} VandyHacks</p>
 						<a
 							className="rounded-sm underline-offset-4 hover:underline"
@@ -162,11 +177,6 @@ function Deck({ year }: { year: number }) {
 						</a>
 					</div>
 				</div>
-				{/* Feet. */}
-				<div className="flex justify-between px-[8%]" aria-hidden="true">
-					<span className="h-2.5 w-14 rounded-b-md bg-[#05081a]" />
-					<span className="h-2.5 w-14 rounded-b-md bg-[#05081a]" />
-				</div>
 			</div>
 			{/* Tonearm overlay: aligned deck above the record so the arm rests on top. */}
 			<div aria-hidden="true" className="deck relative col-start-1 row-start-1 pointer-events-none z-[25]">
@@ -180,12 +190,12 @@ function Deck({ year }: { year: number }) {
 
 const linkClassName =
 	"type-body-sm inline-block rounded-sm text-vh-text-soft underline-offset-4 transition-colors hover:text-white hover:underline hover:decoration-vh-purple-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300";
-const labelClassName = "type-label mb-3 text-[10px] text-vh-purple-300";
+const labelClassName = "type-label mb-1.5 text-[10px] text-vh-purple-300 lg:mb-3";
 // Get Involved CTA pill buttons above the turntable.
 const ctaButtonClassName =
 	"type-button inline-flex min-w-[8rem] items-center justify-center rounded-lg border border-vh-purple-300/50 bg-vh-purple-700/10 px-4 py-2 text-[clamp(12px,1.2vw,14px)] text-vh-purple-100 transition-[color,background-color,border-color,box-shadow] duration-200 hover:border-vh-purple-300 hover:bg-vh-purple-700/25 hover:text-white hover:shadow-[0_0_18px_rgba(200,162,255,0.35)] focus-visible:border-vh-purple-300 focus-visible:text-white focus-visible:shadow-[0_0_18px_rgba(200,162,255,0.35)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300";
 const iconLinkClassName =
-	"inline-flex size-9 shrink-0 items-center justify-center rounded-md border border-white/15 bg-black/20 text-vh-text-soft shadow-[inset_0_1px_0_rgb(255_255_255/0.06)] transition-colors hover:border-vh-purple-300 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300";
+	"inline-flex size-8 shrink-0 lg:size-9 items-center justify-center rounded-md border border-white/15 bg-black/20 text-vh-text-soft shadow-[inset_0_1px_0_rgb(255_255_255/0.06)] transition-colors hover:border-vh-purple-300 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-vh-purple-300";
 
 const explore = [
 	{ label: "Home", href: "#home" },
@@ -210,16 +220,6 @@ const socials = [
 	{ label: "GitHub", href: "https://github.com/VandyHacks", Icon: GitHubIcon },
 ];
 
-// Corner screws on the front panel.
-function Screw({ className }: { className: string }) {
-	return (
-		<span
-			aria-hidden="true"
-			className={`absolute size-2.5 rounded-full bg-[radial-gradient(circle_at_35%_35%,#c3c8dc,#3b4466_70%)] after:absolute after:inset-x-0.5 after:top-1/2 after:h-px after:-translate-y-1/2 after:rotate-45 after:bg-black/50 ${className}`}
-		/>
-	);
-}
-
 // The page ends on a record player: the tilted deck is where the record lands.
 export default function RecordPlayerFooter() {
 	const year = new Date().getFullYear();
@@ -229,6 +229,17 @@ export default function RecordPlayerFooter() {
 			id="footer"
 			className="relative flex min-h-svh flex-col justify-end overflow-hidden px-[clamp(16px,4vw,72px)] pt-20 lg:pt-16"
 		>
+			{/* ElevenLabs-generated view down Lower Broadway: the night the hero
+			    skyline starts ends here. Feathered into the page above. */}
+			<div aria-hidden="true" className="footer-backdrop pointer-events-none absolute inset-x-0 top-0 h-[78%]">
+				<Image
+					src="/footer/broadway.png"
+					alt=""
+					fill
+					sizes="100vw"
+					className="object-cover object-bottom"
+				/>
+			</div>
 			<div
 				aria-hidden="true"
 				className="pointer-events-none absolute inset-0 [background:radial-gradient(90%_60%_at_50%_100%,rgba(113,56,199,0.32),rgba(49,92,170,0.14)_45%,transparent_75%)]"
