@@ -128,7 +128,9 @@ export default function VinylHeader() {
 						})}
 					</nav>
 
-					<a className={`${primaryButtonClassName} hidden sm:inline-flex`} href={CTA.interest}>
+					{/* max-sm:hidden, not "hidden sm:inline-flex": the shared button class
+					    already sets inline-flex, which would win over a plain "hidden". */}
+					<a className={`${primaryButtonClassName} max-sm:hidden`} href={CTA.interest}>
 						Get Notified
 					</a>
 					<button

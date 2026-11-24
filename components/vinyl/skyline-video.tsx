@@ -90,7 +90,9 @@ export default function SkylineVideo({ className = "" }: { className?: string })
 				alt=""
 				fill
 				sizes="100vw"
+				// The poster is the page's largest paint, so fetch it first.
 				loading="eager"
+				fetchPriority="high"
 				className="object-cover object-bottom"
 			/>
 			{showVideo && (

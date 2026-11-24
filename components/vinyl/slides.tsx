@@ -99,11 +99,14 @@ function PhotoCard({
 	alt,
 	className = "",
 	position,
+	sizes,
 }: {
 	src: string;
 	alt: string;
 	className?: string;
 	position?: string;
+	// Rendered width, so phones don't download a 750px image for a 180px card.
+	sizes: string;
 }) {
 	return (
 		<div
@@ -113,7 +116,7 @@ function PhotoCard({
 				src={src}
 				alt={alt}
 				fill
-				sizes="(max-width: 768px) 90vw, 30vw"
+				sizes={sizes}
 				style={position ? { objectPosition: position } : undefined}
 				className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
 			/>
@@ -162,23 +165,26 @@ export function AboutSlide() {
 							<div className="relative mx-auto hidden aspect-square w-full max-w-[440px] md:block">
 								<PhotoCard
 									{...GROUP}
+									sizes="400px"
 									className="absolute top-0 right-0 z-10 w-[90%] rotate-[-1.5deg] aspect-[4/3]"
 								/>
 								<PhotoCard
 									{...COLLAB}
+									sizes="230px"
 									className="absolute right-[1%] bottom-[3%] z-20 w-[52%] rotate-[2deg] aspect-[4/3]"
 								/>
 								<PhotoCard
 									{...GUITAR}
+									sizes="200px"
 									className="absolute bottom-0 left-0 z-30 w-[44%] aspect-[3/4]"
 								/>
 							</div>
 							{/* Mobile: clean stacked layout. */}
 							<div className="flex flex-col gap-3 md:hidden">
-								<PhotoCard {...GROUP} className="relative aspect-[16/10]" />
+								<PhotoCard {...GROUP} sizes="90vw" className="relative aspect-[16/10]" />
 								<div className="grid grid-cols-2 gap-3">
-									<PhotoCard {...GUITAR} className="relative aspect-[3/4]" />
-									<PhotoCard {...COLLAB} className="relative aspect-[3/4]" />
+									<PhotoCard {...GUITAR} sizes="45vw" className="relative aspect-[3/4]" />
+									<PhotoCard {...COLLAB} sizes="45vw" className="relative aspect-[3/4]" />
 								</div>
 							</div>
 						</FadeUp>
