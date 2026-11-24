@@ -1,0 +1,20 @@
+<!-- Admin sign-in email. Links to our own /auth/confirm (RedirectTo, set by
+     sendMagicLink) with a token hash instead of Supabase's PKCE redirect, so
+     the link works in any browser or mail app. -->
+<div style="font-family: Arial, Helvetica, sans-serif; max-width: 480px; color: #1a1530;">
+	<h2 style="margin: 0 0 16px;">Sign in to VandyHacks admin</h2>
+	<p style="margin: 0 0 24px; line-height: 1.5;">
+		Click the button below, then press <strong>Sign in</strong> on the page
+		that opens. This link works once and expires in 1 hour.
+	</p>
+	<p style="margin: 0 0 24px;">
+		<a
+			href="{{ .RedirectTo }}?token_hash={{ .TokenHash }}&type=email"
+			style="display: inline-block; background: #7138c7; color: #ffffff; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: bold;"
+			>Open sign-in page</a
+		>
+	</p>
+	<p style="margin: 0; font-size: 13px; color: #6b6585; line-height: 1.5;">
+		If you didn't request this, you can ignore this email.
+	</p>
+</div>

@@ -64,7 +64,10 @@ export async function sendMagicLink(formData: FormData) {
 		const { error: otpError } = await session.auth.signInWithOtp({
 			email: parsed.data,
 			options: {
-				emailRedirectTo: `${await siteOrigin()}/auth/callback`,
+				// The email template turns this into /auth/confirm?token_hash=…,
+				// which works in any browser (unlike the PKCE /auth/callback flow,
+				// which fails when the link opens in a mail app or another browser).
+				emailRedirectTo: `${await siteOrigin()}/auth/confirm`,
 				shouldCreateUser: false,
 			},
 		});
@@ -78,6 +81,25 @@ export async function sendMagicLink(formData: FormData) {
 		}
 	}
 	redirect("/admin/login?sent=1");
+}
+
+// Second half of the magic link: /auth/confirm shows a button that posts
+// here. Verifying on a click (not on page load) keeps mail-scanner link
+// previews from using up the one-time token before the admin gets to it.
+export async function confirmMagicLink(formData: FormData) {
+	const tokenHash = String(formData.get("token_hash") ?? "");
+	const session = await getSessionClient();
+	if (!tokenHash || !session) redirect("/admin/login?error=callback");
+
+	const { error } = await session.auth.verifyOtp({
+		type: "email",
+		token_hash: tokenHash,
+	});
+	if (error) {
+		console.error("Magic link verification failed", error.code ?? error);
+		redirect("/admin/login?error=callback");
+	}
+	redirect("/admin");
 }
 
 export async function signOut() {
