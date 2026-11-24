@@ -3,7 +3,7 @@ import { Michroma, Space_Mono, Inter, Zen_Dots } from "next/font/google";
 import "./globals.css";
 import { cn } from "cn";
 import { EVENT } from "@/lib/event";
-import { siteUrl } from "@/lib/site";
+import { allowIndexing, siteUrl } from "@/lib/site";
 
 const description = `Code, collaborate, learn, and build at ${EVENT.name}, Vanderbilt's collegiate hackathon, ${EVENT.dateLabel} in ${EVENT.city}.`;
 
@@ -19,6 +19,7 @@ export const metadata: Metadata = {
 		url: "/",
 	},
 	twitter: { card: "summary_large_image", title: EVENT.name, description },
+	...(allowIndexing ? {} : { robots: { index: false, follow: false } }),
 };
 const michroma = Michroma({
 	subsets: ["latin"],

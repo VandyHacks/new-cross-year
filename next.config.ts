@@ -18,6 +18,12 @@ const securityHeaders = [
 	},
 ];
 
+// Until launch, tell search engines not to index anything (pages, images,
+// files). Set ALLOW_INDEXING=true in the production env to lift it.
+if (process.env.ALLOW_INDEXING !== "true") {
+	securityHeaders.push({ key: "X-Robots-Tag", value: "noindex, nofollow" });
+}
+
 const nextConfig: NextConfig = {
 	poweredByHeader: false,
 	experimental: {

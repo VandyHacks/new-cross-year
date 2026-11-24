@@ -1,0 +1,3 @@
+# Keep local tooling out of `vercel deploy` uploads. .claude/ can hold whole
+# git worktrees from other sessions (with their own env files and builds).
+.claude
