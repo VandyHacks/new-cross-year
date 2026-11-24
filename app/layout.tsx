@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Michroma, Space_Mono, Inter, Zen_Dots } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { cn } from "cn";
 import { EVENT } from "@/lib/event";
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
 		>
 			<body className="w-full bg-vh-navy-950 font-sans leading-[normal] bg-[radial-gradient(125%_125%_at_50%_0%,_#080d20_48%,_#171432_100%)] text-vh-text selection:bg-vh-purple-300 selection:text-vh-navy-950">
 				{children}
+				<Analytics />
 			</body>
 		</html>
 	);
