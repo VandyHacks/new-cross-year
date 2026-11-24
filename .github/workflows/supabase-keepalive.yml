@@ -20,14 +20,26 @@ jobs:
           SUPABASE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
         run: |
           set -euo pipefail
-          # A REST query forces a real database round trip. RLS may return an
-          # empty list or a permission error; any non-5xx answer means the DB is up.
-          status=$(curl -s -o /dev/null -w "%{http_code}" --retry 3 --retry-delay 10 \
+          # A REST query forces a real database round trip. Only two answers
+          # prove Postgres ran it: a 200 (RLS may make the list empty), or a
+          # PostgREST error carrying a Postgres SQLSTATE such as 42501
+          # (permission denied). A gateway 401/403 for a bad key never reaches
+          # the database, so it must fail the job.
+          body=$(mktemp)
+          status=$(curl -s -o "$body" -w "%{http_code}" --retry 3 --retry-delay 10 \
             "$SUPABASE_URL/rest/v1/admins?select=email&limit=1" \
             -H "apikey: $SUPABASE_KEY" \
-            -H "Authorization: Bearer $SUPABASE_KEY")
+            -H "Authorization: Bearer $SUPABASE_KEY") || true
           echo "HTTP $status"
-          if [ "$status" -ge 500 ] || [ "$status" -eq 000 ]; then
-            echo "Supabase did not respond healthy" >&2
-            exit 1
+          if [ "$status" = "200" ]; then
+            exit 0
           fi
+          # SQLSTATE codes are five chars; PostgREST's own codes start "PGRST".
+          if grep -Eq '"code":"[0-9A-Z]{5}"' "$body" && ! grep -q '"code":"PGRST' "$body"; then
+            echo "Postgres answered with an error, so the database is awake:"
+            cat "$body"
+            exit 0
+          fi
+          echo "Supabase did not reach the database:" >&2
+          cat "$body" >&2
+          exit 1
