@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
-import { siteUrl } from "@/lib/site";
+import { allowIndexing, siteUrl } from "@/lib/site";
 
+// Crawling stays allowed even while the site is hidden: the noindex header and
+// meta tag only work if crawlers can fetch the page and see them.
 export default function robots(): MetadataRoute.Robots {
 	return {
 		rules: {
@@ -8,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
 			allow: "/",
 			disallow: ["/admin", "/auth"],
 		},
-		sitemap: `${siteUrl}/sitemap.xml`,
+		...(allowIndexing ? { sitemap: `${siteUrl}/sitemap.xml` } : {}),
 	};
 }

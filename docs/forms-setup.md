@@ -66,7 +66,8 @@ host's environment settings (production).
 | `SUPABASE_SERVICE_ROLE_KEY`                              | Project Settings → API | The **secret** key (`sb_secret_…`). Server only. Never prefix with `NEXT_PUBLIC_`. |
 | `IP_HASH_SALT`                                           | any long random string | Used to hash IPs for rate limiting (no raw IPs are stored).                        |
 | `NEXT_PUBLIC_SITE_URL`                                   | your production URL    | Optional; used in sign-in links. Falls back to the request host.                   |
-| `RESEND_API_KEY`, `EMAIL_FROM`, `NOTIFY_EMAIL_TO`        | resend.com             | Optional email notifications (below).                                              |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`       | Zoho Mail              | Optional email notifications (below). `SMTP_PASS` is a Zoho app password.          |
+| `EMAIL_FROM`, `NOTIFY_EMAIL_TO`                          | —                      | Sender (must be `SMTP_USER` or its alias) and where notifications go.              |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` | Cloudflare Turnstile   | Optional CAPTCHA (below).                                                          |
 
 Restart `npm run dev` after changing env vars. Never commit `.env.local`
@@ -86,14 +87,16 @@ the auth user itself the first time an allowlisted email asks for a link.
 Having a Supabase auth user is not enough to get in: every admin page, action
 and export re-checks the `admins` table on the server. To revoke access,
 delete the row. Supabase's built-in mailer is heavily rate-limited, so for real
-use configure **Authentication → SMTP** (Resend works) before launch.
+use configure **Authentication → SMTP** (Zoho, via `[auth.email.smtp]` in
+`supabase/config.toml`) before launch.
 
 ## 4. Notification emails (optional)
 
-With `RESEND_API_KEY` set, submitters get a confirmation, and judge/sponsor
-submissions also notify `NOTIFY_EMAIL_TO` (reply-to is the submitter).
-`EMAIL_FROM` must use a domain verified in Resend. Email failures are logged
-and never block a submission.
+With `SMTP_USER` and `SMTP_PASS` set, submitters get a confirmation, and
+judge/sponsor submissions also notify `NOTIFY_EMAIL_TO` (reply-to is the
+submitter). Mail goes through Zoho SMTP (`smtppro.zoho.com:465`), and
+`EMAIL_FROM` must be the `SMTP_USER` mailbox or one of its aliases. Email
+failures are logged and never block a submission.
 
 ## 5. Spam protection
 
@@ -128,6 +131,6 @@ Verified against a local fake of the Supabase auth and REST endpoints:
 validation, honeypot, duplicates, rate limiting, the admin gate (anonymous,
 signed-in non-admin, admin), status/notes edits, CSV export, and the magic-link
 allowlist. **Not yet verified against a real Supabase project, real magic-link
-email delivery, Resend, or Turnstile.** Do a full pass once credentials exist:
+email delivery, Zoho SMTP, or Turnstile.** Do a full pass once credentials exist:
 submit each form, check the row in Supabase, sign in to `/admin`, edit a row,
 and export a CSV.

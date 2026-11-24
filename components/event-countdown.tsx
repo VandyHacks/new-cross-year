@@ -95,7 +95,7 @@ function PlayerIcons({
 	return (
 		<div className="-mt-1 flex items-center justify-center gap-[clamp(22px,5vw,44px)] opacity-80">
 			{/* Skip back */}
-			<svg className={iconClassName} viewBox="0 0 24 24" fill="currentColor">
+			<svg className={iconClassName} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
 				<path d="M3 5h2v14H3z M13 5v14l-8-7z M22 5v14l-14-7z" />
 			</svg>
 			{/* Pause / play toggle */}
@@ -105,7 +105,7 @@ function PlayerIcons({
 				aria-label={paused ? "Resume countdown" : "Pause countdown"}
 				className="cursor-pointer transition-transform hover:scale-110 active:scale-95"
 			>
-				<svg className={iconClassName} viewBox="0 0 24 24" fill="currentColor">
+				<svg className={iconClassName} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
 					{paused ? (
 						<path d="M7 4v16l13-8z" />
 					) : (
@@ -114,7 +114,7 @@ function PlayerIcons({
 				</svg>
 			</button>
 			{/* Skip forward */}
-			<svg className={iconClassName} viewBox="0 0 24 24" fill="currentColor">
+			<svg className={iconClassName} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
 				<path d="M19 5h2v14h-2z M11 5v14l8-7z M2 5v14l8-7z" />
 			</svg>
 		</div>
@@ -264,9 +264,11 @@ export default function EventCountdown() {
 			</p>
 			<div
 				className="mx-auto flex w-[min(82vw,26rem)] flex-col gap-3 rounded-xl border border-white/10 bg-vh-purple-300/30 px-[clamp(16px,3vw,28px)] py-3.5 shadow-[inset_0_1px_0_rgb(255_255_255/0.06),0_0_24px_rgb(113_56_199/0.25)] backdrop-blur-md"
-				aria-hidden="true"
 			>
-				<div className="mt-2 mb-1 flex items-start justify-center gap-[clamp(10px,2vw,20px)]">
+				{/* The ticking digits, label and bar are visual only (the sr-only line
+				    above carries the date). The pause button below stays exposed, since
+				    a focusable control must never sit inside aria-hidden. */}
+				<div className="mt-2 mb-1 flex items-start justify-center gap-[clamp(10px,2vw,20px)]" aria-hidden="true">
 					<Unit
 						label="Days"
 						value={parts?.days ?? null}
@@ -294,13 +296,13 @@ export default function EventCountdown() {
 				</div>
 	
 				{/* Message in between countdown and bar */}
-				<div className="flex justify-center">
+				<div className="flex justify-center" aria-hidden="true">
 						<span className="type-label text-[13px] text-white">
 							{BAR_TOP_LABEL}
 						</span>
 					</div>
 
-				<div>
+				<div aria-hidden="true">
 					{/* Progress bar */}
 					{now !== null && (
 						<ProgressBar target={percent} intro={animate} onScrub={setScrub} />

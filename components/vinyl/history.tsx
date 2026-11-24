@@ -273,21 +273,26 @@ function Milestone({
 				href={event.devpost}
 				target="_blank"
 				rel="noopener noreferrer"
-				aria-label={`VandyHacks ${event.edition}, ${event.year} — view on Devpost (opens in a new tab)`}
 				onFocus={() => {
 					if (pinned && index !== active) goToChapter(index);
 				}}
 			>
 				<span className="history-note-art">
 					<HistoryArtwork event={event} />
-					<span className="history-note-flag">{event.edition}</span>
+					{/* The link's name is built from its visible text plus sr-only words,
+					    so voice-control users can say what they see ("XII 2026"). */}
+					<span className="history-note-flag">
+						<span className="sr-only">VandyHacks </span>
+						{event.edition}
+					</span>
 					<ArrowUpRight
 						className="history-note-open"
 						size={20}
 						aria-hidden="true"
 					/>
-				</span>
+				</span>{" "}
 				<span className="history-note-year">{event.year}</span>
+				<span className="sr-only"> — view on Devpost (opens in a new tab)</span>
 			</a>
 		</li>
 	);
