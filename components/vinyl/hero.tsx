@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import EventCountdown from "@/components/event-countdown";
-import Skyline from "@/components/vinyl/skyline";
+import SkylineVideo from "@/components/vinyl/skyline-video";
 import { CTA, EVENT } from "@/lib/event";
 import ScrollNotes from "@/components/vinyl/scroll-notes";
 
@@ -30,7 +30,7 @@ export default function VinylHero() {
 				aria-hidden="true"
 			/>
 			<div className="hero-stars pointer-events-none absolute inset-0 -z-10" aria-hidden="true" />
-			<Skyline className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[60svh] w-full overflow-visible" />
+			<SkylineVideo className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[60svh] w-full overflow-visible" />
 			
 
 			{/* Music note graphics*/}

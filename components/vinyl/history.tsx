@@ -3,6 +3,7 @@
 import { ArrowUpRight } from "lucide-react";
 import {
 	motion,
+	useMotionValue,
 	useMotionValueEvent,
 	useReducedMotion,
 	useScroll,
@@ -26,7 +27,10 @@ const RECORD_RIM_RATIO = 0.35;
 // makes the notes move slower per unit of scroll.
 const SCROLL_SPAN = 1;
 
-const NOTE_OFFSETS = [0, 56, -32, 32, -16, 72];
+// Vertical positions in half-steps of the staff (14px = line → next space),
+// so every note head sits exactly on a line or in a space.
+const STAFF_HALF_STEP = 14;
+const NOTE_STEPS = [0, 4, -2, 2, -1, 5];
 const NOTE_COLORS = ["#c8a2ff", "#9dbbff", "#e7b8ee"];
 
 export default function HistorySlide() {
@@ -49,6 +53,20 @@ export default function HistorySlide() {
 		offset: ["start start", "end end"],
 	});
 	const x = useTransform(scrollYProgress, [0, 1], [0, -travel]);
+	// The staff scrolls with the notes: its wave is phase-locked so each note
+	// head lands on the same (flat) point of the curve.
+	const linesRef = useRef<HTMLDivElement>(null);
+	const nativeX = useMotionValue(0);
+	const pinnedFlag = useMotionValue(0);
+	const staffPhase = useMotionValue(0);
+	const linesX = useTransform(
+		[x, nativeX, pinnedFlag, staffPhase],
+		([px, nx, isPinned, phase]: number[]) =>
+			`${(isPinned ? px : nx) + phase}px`,
+	);
+	useEffect(() => {
+		pinnedFlag.set(pinned ? 1 : 0);
+	}, [pinned, pinnedFlag]);
 
 	useEffect(() => {
 		const viewport = viewportRef.current;
@@ -74,6 +92,25 @@ export default function HistorySlide() {
 					`${Math.max(0, staffLeft)}px`,
 				);
 			}
+			const lines = linesRef.current;
+			const firstNote = rail.firstElementChild as HTMLElement | null;
+			const firstArt =
+				firstNote?.querySelector<HTMLElement>(".history-note-art");
+			if (lines && firstNote && firstArt) {
+				// One wave period per note; the tile holds two periods.
+				const period = firstNote.offsetWidth;
+				lines.style.setProperty("--staff-tile", `${period * 2}px`);
+				// Note centre at rest (rail unshifted), relative to the lines box.
+				const art = firstArt.getBoundingClientRect();
+				const railLeft = rail.getBoundingClientRect().left;
+				const restCenter =
+					viewport.getBoundingClientRect().left +
+					(art.left + art.width / 2 - railLeft);
+				// The wave crosses its baseline every half period, starting at 0.
+				staffPhase.set(
+					restCenter - lines.getBoundingClientRect().left,
+				);
+			}
 			setTravel(Math.max(0, rail.scrollWidth - viewport.clientWidth));
 			if (frame && content) {
 				const topPadding = Number.parseFloat(
@@ -94,12 +131,13 @@ export default function HistorySlide() {
 			observer.disconnect();
 			window.removeEventListener("resize", measure);
 		};
-	}, []);
+	}, [staffPhase]);
 
 	// CSS changes the rail between native horizontal overflow and a transform.
 	useEffect(() => {
 		if (viewportRef.current) viewportRef.current.scrollLeft = 0;
-	}, [pinned, travel]);
+		nativeX.set(0);
+	}, [pinned, travel, nativeX]);
 
 	useMotionValueEvent(scrollYProgress, "change", (value) => {
 		if (pinned) setActive(Math.round(value * (milestones.length - 1)));
@@ -130,7 +168,9 @@ export default function HistorySlide() {
 	}
 
 	function onNativeScroll() {
-		if (pinned || !viewportRef.current || !travel) return;
+		if (pinned || !viewportRef.current) return;
+		nativeX.set(-viewportRef.current.scrollLeft);
+		if (!travel) return;
 		setActive(
 			Math.round(
 				(viewportRef.current.scrollLeft / travel) *
@@ -159,9 +199,11 @@ export default function HistorySlide() {
 						</SlideHeading>
 						<div className="impact-history">
 							<div ref={staffRef} className="history-staff">
-								<div
+								<motion.div
+									ref={linesRef}
 									className="history-lines"
 									aria-hidden="true"
+									style={{ backgroundPositionX: linesX }}
 								/>
 								<motion.div
 									className="history-clef"
@@ -221,7 +263,7 @@ function Milestone({
 			className="history-note"
 			style={
 				{
-					"--note-offset": `${NOTE_OFFSETS[index % 6]}px`,
+					"--note-offset": `${NOTE_STEPS[index % NOTE_STEPS.length] * STAFF_HALF_STEP}px`,
 					"--note-color": NOTE_COLORS[index % 3],
 				} as CSSProperties
 			}

@@ -1,0 +1,33 @@
+name: Supabase keepalive
+
+# Free-tier Supabase projects pause after 7 days of inactivity.
+# This pings the database twice a week so the project never pauses.
+on:
+  schedule:
+    - cron: "0 12 * * 1,4" # Mon + Thu, 12:00 UTC
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Query Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+          # A REST query forces a real database round trip. RLS may return an
+          # empty list or a permission error; any non-5xx answer means the DB is up.
+          status=$(curl -s -o /dev/null -w "%{http_code}" --retry 3 --retry-delay 10 \
+            "$SUPABASE_URL/rest/v1/admins?select=email&limit=1" \
+            -H "apikey: $SUPABASE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_KEY")
+          echo "HTTP $status"
+          if [ "$status" -ge 500 ] || [ "$status" -eq 000 ]; then
+            echo "Supabase did not respond healthy" >&2
+            exit 1
+          fi

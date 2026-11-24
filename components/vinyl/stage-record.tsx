@@ -29,6 +29,9 @@ const PLAY_SPEED = 90; // idle playback speed on the turntable (deg/s)
 // Page-load entrance: slide in from this far off-screen left.
 const ENTRANCE_SLIDE = 0.4;
 const ENTRANCE_DURATION = 2.1;
+// Fixed header (px) and how far below it the record fades back in.
+const HEADER_HEIGHT = 60;
+const HEADER_FADE = 72;
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 const easeInOut = (t: number) =>
@@ -112,6 +115,15 @@ export default function StageRecord() {
 	const entranceStarted = useRef(false);
 	const entranceX = useTransform(entrance, (e) => -ENTRANCE_SLIDE * vh * e);
 
+	// Fade the record out under the header instead of a hard cut at its edge.
+	// Tracks the header's slide-in (smooth 0 → 0.3), so the landing page
+	// shows the full record.
+	const headerMask = useTransform(smooth, (p) => {
+		const k = clamp01(p / 0.3);
+		const edge = HEADER_HEIGHT * k;
+		return `linear-gradient(to bottom, transparent ${edge * 0.5}px, black ${edge + HEADER_FADE * k}px)`;
+	});
+
 	// Driven by scroll-locked `progress` (not the laggy spring) so the record and
 	// the live platter it lerps toward move on one clock — no jumping on reverse.
 	const place = () => {
@@ -187,8 +199,9 @@ export default function StageRecord() {
 	const d0 = DIAMETER * vh;
 
 	return (
-		<div
+		<motion.div
 			className="pointer-events-none fixed inset-0 z-20 hidden lg:block"
+			style={{ maskImage: headerMask, WebkitMaskImage: headerMask }}
 			aria-hidden="true"
 		>
 			<motion.div className="absolute inset-0" style={{ x: entranceX }}>
@@ -223,6 +236,6 @@ export default function StageRecord() {
 				))}
 			</motion.div>
 			</motion.div>
-		</div>
+		</motion.div>
 	);
 }
