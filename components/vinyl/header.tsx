@@ -187,7 +187,7 @@ export default function VinylHeader() {
 							))}
 							<li className="mt-4 px-3">
 								<a className={primaryButtonClassName} href={CTA.interest} onClick={() => setMenuOpen(false)}>
-									Apply Now
+									Get Notified
 								</a>
 							</li>
 						</ul>

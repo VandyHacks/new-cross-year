@@ -14,7 +14,9 @@ const DAY = HOUR * 24;
 // Progress bar range. The start is not shown on screen; the end is.
 // Months are 0-indexed in JavaScript: 7 = August, 3 = April.
 const BAR_START = new Date(2026, 2, 22).getTime(); // 03/22/26 ->last day of last year's Hackathon
-const BAR_END = new Date(2027, 3, 9).getTime(); // 04/02/27 -> this year's Hackathon start date
+// Counts down to the event start (a fixed Central-time moment, so every
+// visitor sees the same zero), not to midnight in the viewer's time zone.
+const BAR_END = EVENT.start.getTime();
 const BAR_TOP_LABEL = `${EVENT.name} · ${EVENT.dateLabel}`;
 
 function remainingParts(now: number) {
