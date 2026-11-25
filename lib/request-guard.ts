@@ -44,6 +44,25 @@ export function hashValue(value: string) {
 
 let warnedTurnstile = false;
 
+// Cloudflare reports the hostname the challenge was solved on. When the site
+// URL is configured (production), only accept tokens solved on that host or
+// its www. variant, so a token from another site sharing the key is refused.
+// Local dev and previews leave NEXT_PUBLIC_SITE_URL unset and skip this.
+function hostnameAllowed(hostname: string | undefined) {
+	const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+	if (!siteUrl) return true;
+	let expected: string;
+	try {
+		expected = new URL(siteUrl).hostname.replace(/^www\./, "");
+	} catch {
+		return true;
+	}
+	const actual = hostname?.toLowerCase().replace(/^www\./, "");
+	if (actual === expected) return true;
+	console.warn(`Turnstile token solved on unexpected host: ${hostname}`);
+	return false;
+}
+
 // Turnstile is enforced only when BOTH keys are set: the site key renders the
 // widget (it is inlined into the browser bundle at build time) and the secret
 // verifies its token. With just the secret, no visitor could ever get a token
@@ -79,8 +98,20 @@ export async function passesTurnstile(formData: FormData, ip: string) {
 				}),
 			},
 		);
-		const result = (await response.json()) as { success?: boolean };
-		return result.success === true;
+		const result = (await response.json()) as {
+			success?: boolean;
+			hostname?: string;
+			"error-codes"?: string[];
+		};
+		if (result.success !== true) {
+			const codes = result["error-codes"] ?? [];
+			// A bad or missing secret fails every submission, so make it loud.
+			if (codes.some((code) => code.includes("secret"))) {
+				console.error("Turnstile rejected the secret key", codes);
+			}
+			return false;
+		}
+		return hostnameAllowed(result.hostname);
 	} catch (error) {
 		console.error("Turnstile verification failed", error);
 		return false;
