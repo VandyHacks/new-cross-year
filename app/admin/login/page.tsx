@@ -55,8 +55,8 @@ export default async function LoginPage({
 							role="status"
 							className="type-body mt-6 text-vh-text-soft"
 						>
-							If that email is on the admin list, a sign-in link
-							is on its way. It expires shortly, so use it soon.
+							A sign-in link is on its way. It expires shortly, so
+							use it soon.
 						</p>
 					) : (
 						<form action={sendMagicLink} className="mt-6">
