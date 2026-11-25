@@ -23,9 +23,6 @@ const TURNSTILE_MAX = 2048;
 // Values echoed back to the form on error are capped so a bloated request
 // isn't reflected in full.
 const ECHO_MAX = 4000;
-// The sponsor form has no unique email, so cap how often one address gets a
-// confirmation email; otherwise it could be used to mail-bomb a stranger.
-const CONFIRMATION_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 type Table = "interest_signups" | "judge_applications" | "sponsor_inquiries";
 
@@ -224,6 +221,10 @@ const detailRows = (rows: [string, string][]) =>
 		)
 		.join("")}</table>`;
 
+// Submitters only see the on-page confirmation; we never email the address
+// they typed in, so the forms can't be used to send mail to a stranger.
+// Judge/mentor and sponsor submissions still notify the team inbox.
+
 export async function submitInterest(
 	_prev: FormState,
 	formData: FormData,
@@ -234,14 +235,6 @@ export async function submitInterest(
 		formData,
 		successMessage:
 			"You're on the list! We'll email you when applications open.",
-		afterInsert: (data) =>
-			sendEmail({
-				to: data.email,
-				subject: `You're on the ${EVENT.name} list`,
-				html: emailShell(
-					`<p>Hi ${escapeHtml(data.name)},</p><p>Thanks for your interest in ${escapeHtml(EVENT.name)} (${escapeHtml(EVENT.dateLabel)}). We'll email you as soon as applications open.</p>`,
-				),
-			}),
 	});
 }
 
@@ -255,34 +248,24 @@ export async function submitJudge(
 		formData,
 		successMessage:
 			"Thank you! We've received your interest and will follow up with next steps.",
-		afterInsert: async (data) => {
-			await Promise.all([
-				sendEmail({
-					to: data.email,
-					subject: `Thanks for offering to help at ${EVENT.name}`,
-					html: emailShell(
-						`<p>Hi ${escapeHtml(data.name)},</p><p>Thanks for offering to ${data.role === "both" ? "judge and mentor" : data.role} at ${escapeHtml(EVENT.name)}. We'll follow up with next steps soon.</p>`,
-					),
-				}),
-				sendEmail({
-					to: notifyTo,
-					replyTo: data.email,
-					subject: `New judge/mentor interest: ${data.name}`,
-					html: emailShell(
-						detailRows([
-							["Name", data.name],
-							["Email", data.email],
-							["Organization", data.organization],
-							["Title", data.title],
-							["Role", data.role],
-							["Expertise", data.expertise],
-							["Availability", data.availability],
-							["LinkedIn", data.linkedin],
-						]),
-					),
-				}),
-			]);
-		},
+		afterInsert: (data) =>
+			sendEmail({
+				to: notifyTo,
+				replyTo: data.email,
+				subject: `New judge/mentor interest: ${data.name}`,
+				html: emailShell(
+					detailRows([
+						["Name", data.name],
+						["Email", data.email],
+						["Organization", data.organization],
+						["Title", data.title],
+						["Role", data.role],
+						["Expertise", data.expertise],
+						["Availability", data.availability],
+						["LinkedIn", data.linkedin],
+					]),
+				),
+			}),
 	});
 }
 
@@ -296,49 +279,25 @@ export async function submitSponsor(
 		formData,
 		successMessage:
 			"Thanks for reaching out! Our sponsorship team will be in touch soon.",
-		afterInsert: async (data) => {
-			// Only the first inquiry from an address in a day gets a
-			// confirmation; the team notification always goes out.
-			const db = getServiceClient();
-			const since = new Date(
-				Date.now() - CONFIRMATION_WINDOW_MS,
-			).toISOString();
-			const { count } = db
-				? await db
-						.from("sponsor_inquiries")
-						.select("id", { count: "exact", head: true })
-						.eq("email", data.email)
-						.gte("created_at", since)
-				: { count: null };
-			const confirm = (count ?? 0) <= 1;
+		afterInsert: (data) => {
 			const tier =
 				sponsorTiers.find((item) => item.value === data.tier_interest)
 					?.label ?? data.tier_interest;
-			await Promise.all([
-				confirm &&
-					sendEmail({
-						to: data.email,
-						subject: `Thanks for your interest in sponsoring ${EVENT.name}`,
-						html: emailShell(
-							`<p>Hi ${escapeHtml(data.contact_name)},</p><p>Thanks for your interest in sponsoring ${escapeHtml(EVENT.name)}. Our team will be in touch soon.</p>`,
-						),
-					}),
-				sendEmail({
-					to: notifyTo,
-					replyTo: data.email,
-					subject: `New sponsor inquiry: ${data.company}`,
-					html: emailShell(
-						detailRows([
-							["Company", data.company],
-							["Contact", data.contact_name],
-							["Email", data.email],
-							["Phone", data.phone],
-							["Tier", tier],
-							["Message", data.message],
-						]),
-					),
-				}),
-			]);
+			return sendEmail({
+				to: notifyTo,
+				replyTo: data.email,
+				subject: `New sponsor inquiry: ${data.company}`,
+				html: emailShell(
+					detailRows([
+						["Company", data.company],
+						["Contact", data.contact_name],
+						["Email", data.email],
+						["Phone", data.phone],
+						["Tier", tier],
+						["Message", data.message],
+					]),
+				),
+			});
 		},
 	});
 }
