@@ -4,8 +4,9 @@
 export const EVENT = {
 	name: "VandyHacks XIII",
 	edition: "XIII",
-	start: new Date("2027-04-02T18:00:00-05:00"),
-	end: new Date("2027-04-04T14:00:00-05:00"),
+	// Central Daylight Time (UTC-5) in April. Keep in sync with dateLabel.
+	start: new Date("2027-04-09T18:00:00-05:00"),
+	end: new Date("2027-04-11T14:00:00-05:00"),
 	dateLabel: "April 9–11, 2027",
 	venue: "Vanderbilt University",
 	city: "Nashville, TN",
