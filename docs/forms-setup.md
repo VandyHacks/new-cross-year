@@ -93,7 +93,7 @@ use configure **Authentication → SMTP** (Zoho, via `[auth.email.smtp]` in
 ## 4. Notification emails (optional)
 
 Submitters only see the on-page confirmation. With `SMTP_USER` and `SMTP_PASS` set, judge/sponsor submissions
-notify `NOTIFY_EMAIL_TO` (reply-to is the submitter). Mail goes through Zoho SMTP (`smtppro.zoho.com:465`), and
+notify `NOTIFY_EMAIL_TO` (reply-to is the submitter). Mail goes through Zoho SMTP (`smtp.zoho.com:465`), and
 `EMAIL_FROM` must be the `SMTP_USER` mailbox or one of its aliases. Email
 failures are logged and never block a submission.
 

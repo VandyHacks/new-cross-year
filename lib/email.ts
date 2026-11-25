@@ -4,7 +4,7 @@ import { createTransport, type Transporter } from "nodemailer";
 // Form emails over SMTP (Zoho Mail). A no-op when SMTP_USER/SMTP_PASS are not
 // set, and failures are logged rather than thrown — a mail hiccup must never
 // make a successful submission look like it failed.
-const host = process.env.SMTP_HOST || "smtppro.zoho.com";
+const host = process.env.SMTP_HOST || "smtp.zoho.com";
 const port = Number(process.env.SMTP_PORT || 465);
 const user = process.env.SMTP_USER;
 const pass = process.env.SMTP_PASS;
