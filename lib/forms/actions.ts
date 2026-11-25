@@ -1,7 +1,5 @@
 "use server";
 
-import { createHash } from "node:crypto";
-import { headers } from "next/headers";
 import { after } from "next/server";
 import { z } from "zod";
 import { escapeHtml, notifyTo, sendEmail } from "@/lib/email";
@@ -13,85 +11,16 @@ import {
 	sponsorTiers,
 } from "@/lib/forms/schemas";
 import type { FormState } from "@/lib/forms/types";
+import { clientIp, hashValue, passesTurnstile } from "@/lib/request-guard";
 import { getServiceClient } from "@/lib/supabase/service";
 
 const RATE_LIMIT = { max: 5, windowMs: 60 * 60 * 1000 };
 const HONEYPOT_FIELD = "website";
-const TURNSTILE_FIELD = "cf-turnstile-response";
-// Cloudflare documents tokens as at most 2048 characters.
-const TURNSTILE_MAX = 2048;
 // Values echoed back to the form on error are capped so a bloated request
 // isn't reflected in full.
 const ECHO_MAX = 4000;
 
 type Table = "interest_signups" | "judge_applications" | "sponsor_inquiries";
-
-// The leftmost X-Forwarded-For entry is whatever the client sent, so trusting
-// it would let a bot pick a fresh rate-limit bucket per request. Prefer the
-// header your edge sets and overwrites (CLIENT_IP_HEADER, e.g.
-// `cf-connecting-ip` behind Cloudflare), then platform headers, then the
-// entry appended by the nearest proxy.
-async function clientIp() {
-	const h = await headers();
-	const trusted = process.env.CLIENT_IP_HEADER;
-	return (
-		(trusted ? h.get(trusted)?.trim() : undefined) ||
-		h.get("x-nf-client-connection-ip") ||
-		h.get("x-real-ip") ||
-		h.get("x-forwarded-for")?.split(",").at(-1)?.trim() ||
-		"unknown"
-	);
-}
-
-let warnedNoSalt = false;
-
-function hashIp(ip: string) {
-	if (!process.env.IP_HASH_SALT && !warnedNoSalt) {
-		warnedNoSalt = true;
-		console.warn(
-			"IP_HASH_SALT is not set: stored IP hashes are unsalted and reversible.",
-		);
-	}
-	return createHash("sha256")
-		.update(`${process.env.IP_HASH_SALT ?? ""}:${ip}`)
-		.digest("hex")
-		.slice(0, 32);
-}
-
-let warnedNoTurnstile = false;
-
-async function passesTurnstile(token: string, ip: string) {
-	const secret = process.env.TURNSTILE_SECRET_KEY;
-	if (!secret) {
-		if (process.env.NODE_ENV === "production" && !warnedNoTurnstile) {
-			warnedNoTurnstile = true;
-			console.warn(
-				"TURNSTILE_SECRET_KEY is not set: forms rely on the honeypot and rate limit only.",
-			);
-		}
-		return true;
-	}
-	if (!token || token.length > TURNSTILE_MAX) return false;
-	try {
-		const response = await fetch(
-			"https://challenges.cloudflare.com/turnstile/v0/siteverify",
-			{
-				method: "POST",
-				signal: AbortSignal.timeout(8000),
-				body: new URLSearchParams({
-					secret,
-					response: token,
-					...(ip !== "unknown" ? { remoteip: ip } : {}),
-				}),
-			},
-		);
-		const result = (await response.json()) as { success?: boolean };
-		return result.success === true;
-	} catch (error) {
-		console.error("Turnstile verification failed", error);
-		return false;
-	}
-}
 
 type Submission<S extends z.ZodObject> = {
 	table: Table;
@@ -124,14 +53,12 @@ async function submit<S extends z.ZodObject>({
 	);
 	const honeypotValue = formData.get(HONEYPOT_FIELD);
 	const honeypot = typeof honeypotValue === "string" && honeypotValue.trim();
-	const tokenValue = formData.get(TURNSTILE_FIELD);
-	const turnstileToken = typeof tokenValue === "string" ? tokenValue : "";
 
 	// Bots fill the hidden field; pretend it worked so they don't adapt.
 	if (honeypot) return { status: "success", message: successMessage };
 
 	const ip = await clientIp();
-	if (!(await passesTurnstile(turnstileToken, ip))) {
+	if (!(await passesTurnstile(formData, ip))) {
 		return {
 			status: "error",
 			message: "We couldn't verify you're human. Please try again.",
@@ -164,7 +91,7 @@ async function submit<S extends z.ZodObject>({
 		};
 	}
 
-	const ipHash = hashIp(ip);
+	const ipHash = hashValue(ip);
 	const since = new Date(Date.now() - RATE_LIMIT.windowMs).toISOString();
 	const { count, error: countError } = await db
 		.from(table)

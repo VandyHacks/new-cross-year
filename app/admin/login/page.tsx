@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import SetupNotice from "@/components/admin/setup-notice";
+import TurnstileField from "@/components/forms/turnstile-field";
 import { sendMagicLink, signOut } from "@/lib/admin/actions";
 import { getAdminState } from "@/lib/admin/auth";
 import { primaryButtonClassName } from "@/lib/button-styles";
@@ -7,6 +8,8 @@ import { primaryButtonClassName } from "@/lib/button-styles";
 const errors: Record<string, string> = {
 	email: "Enter a valid email address.",
 	forbidden: "That account isn't on the admin list.",
+	captcha: "We couldn't verify you're human. Please try again.",
+	rate: "Too many sign-in requests from your network. Try again in 15 minutes.",
 	callback: "That sign-in link was invalid or expired. Request a new one.",
 	server: "Something went wrong. Please try again.",
 };
@@ -82,6 +85,9 @@ export default async function LoginPage({
 									{error}
 								</p>
 							)}
+							<div className="mt-5">
+								<TurnstileField />
+							</div>
 							<button
 								type="submit"
 								className={`${primaryButtonClassName} mt-5`}

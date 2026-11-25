@@ -90,6 +90,10 @@ Steps:
       `additional_redirect_urls` (keep the localhost entries for dev). Then
       `npx supabase config push`, review the diff, and confirm. Use the CLI,
       not the dashboard, so the repo stays the source of truth.
+- [ ] Apply migrations with `npm run db:push` **before** deploying code that
+      needs them. `/admin/login` requires the `admin_login_attempts` table
+      (`20261125000000_admin_login_attempts.sql`); without it sign-in shows
+      "Something went wrong".
 - [ ] Add the other organizers to `/admin/admins`.
 - [ ] Delete leftover test rows from `/admin` (e.g. "Setup Test (delete me)").
 - [ ] Free-tier projects **pause after a week of inactivity**. Upgrade to Pro
