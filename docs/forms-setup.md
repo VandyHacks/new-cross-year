@@ -124,12 +124,3 @@ from.
 Server Actions and `/admin` need a server runtime (Netlify with its Next.js
 support, or Vercel). A static export will not work.
 
-## What was and wasn't tested
-
-Verified against a local fake of the Supabase auth and REST endpoints:
-validation, honeypot, duplicates, rate limiting, the admin gate (anonymous,
-signed-in non-admin, admin), status/notes edits, CSV export, and the magic-link
-allowlist. **Not yet verified against a real Supabase project, real magic-link
-email delivery, Zoho SMTP, or Turnstile.** Do a full pass once credentials exist:
-submit each form, check the row in Supabase, sign in to `/admin`, edit a row,
-and export a CSV.
